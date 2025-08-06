@@ -1,0 +1,268 @@
+:root {
+  --primary-color: #2563eb; /* blue-600 */
+  --primary-hover-color: #1d4ed8; /* blue-700 */
+  --secondary-color: #f97316; /* orange-500 */
+  --secondary-hover-color: #ea580c; /* orange-600 */
+  --text-color: #111827; /* gray-900 */
+  --text-light-color: #4b5563; /* gray-600 */
+  --background-color: #f9fafb; /* gray-50 */
+  --white: #ffffff;
+  --error-color: #ef4444; /* red-500 */
+  --success-color: #10b981; /* green-500 */
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+
+/* Center the login container vertically and horizontally */
+.login-pf body {
+  background: #2196F3; /* Solid blue background */
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* Position the login container */
+.login-pf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Style the card */
+.card-pf {
+  background: var(--white);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  max-width: 450px;
+  width: 100%;
+  margin: 2rem auto;
+  position: relative;
+}
+
+/* Header styling */
+#kc-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  position: relative;
+}
+
+/* Form title */
+#kc-page-title {
+  font-size: 2rem; /* Larger font size for "Login" title */
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Labels for input fields */
+.control-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* Input fields */
+.form-control {
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem; /* Slightly less rounded corners */
+  border: 1px solid #ccc; /* Lighter border color */
+  width: 100%;
+  font-size: 1rem;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.form-control::placeholder {
+  color: #999; /* Placeholder color */
+}
+
+.form-control:focus {
+  border-color: #2196F3; /* Blue border on focus */
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2); /* Blue shadow on focus */
+  outline: none;
+}
+
+/* Login button */
+#kc-form-buttons {
+  margin-top: 2rem;
+}
+
+.btn-primary {
+  width: 100%;
+  background-color: #2196F3; /* Solid blue button */
+  border-color: #2196F3;
+  color: var(--white);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem; /* Slightly less rounded corners */
+  font-size: 1rem;
+  transition: background-color 0.2s;
+  text-transform: uppercase; /* Uppercase text for button */
+}
+
+.btn-primary:hover {
+  background-color: #1976D2; /* Darker blue on hover */
+  border-color: #1976D2;
+}
+
+/* Checkbox styling */
+.checkbox label {
+  margin-left: 0.25rem; /* Adjust spacing */
+  font-size: 0.875rem;
+  color: var(--text-color); /* Darker text color */
+}
+
+/* Forgot password and sign up links */
+.login-pf-signup {
+  margin: 1.5rem 0 0;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.login-pf-signup a,
+.forgot-password a {
+  color: #2196F3; /* Blue links */
+  text-decoration: none;
+}
+
+.login-pf-signup a:hover,
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+/* Registration container */
+#kc-registration-container {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+/* Login options (remember me and forgot password) */
+.form-group.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.forgot-password {
+  text-align: right;
+}
+
+.forgot-password a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+/* Error message styling */
+.error-message {
+  color: var(--error-color);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-hover-color);
+  border-color: var(--secondary-hover-color);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-control {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db; /* gray-300 */
+  width: 100%;
+  font-size: 1rem;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  outline: none;
+}
+
+.alert-error {
+  background-color: #fee2e2; /* red-100 */
+  border: 1px solid #fecaca; /* red-200 */
+  color: var(--error-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.alert-success {
+  background-color: #d1fae5; /* green-100 */
+  border: 1px solid #a7f3d0; /* green-200 */
+  color: var(--success-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.login-pf-page .login-pf-signup {
+  margin: 1.5rem 0 0;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.login-pf-page .login-pf-signup a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.login-pf-page .login-pf-signup a:hover {
+  text-decoration: underline;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.checkbox label {
+  margin-left: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-light-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-pf {
+    padding: 1.5rem;
+    margin: 0 1rem;
+  }
+  
+  #kc-header-wrapper {
+    font-size: 1.25rem;
+  }
+  
+  #kc-header-wrapper::before {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-size: 1rem;
+  }
+}
