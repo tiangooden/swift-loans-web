@@ -2,15 +2,16 @@ import { interest_and_fees, Prisma } from '../../generated/prisma';
 import { prisma } from '../config/prisma';
 
 export class InterestAndFeesRepository {
-  async create(data: Prisma.interest_and_feesCreateInput): Promise<interest_and_fees> {
+  
+  static async create(data: Prisma.interest_and_feesCreateInput): Promise<interest_and_fees> {
     return prisma.interest_and_fees.create({ data });
   }
 
-  async findById(id: number): Promise<interest_and_fees | null> {
+  static async findById(id: number): Promise<interest_and_fees | null> {
     return prisma.interest_and_fees.findUnique({ where: { id } });
   }
 
-  async findMany(params: {
+  static async findMany(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.interest_and_feesWhereUniqueInput;
@@ -21,7 +22,7 @@ export class InterestAndFeesRepository {
     return prisma.interest_and_fees.findMany({ skip, take, cursor, where, orderBy });
   }
 
-  async update(params: {
+  static async update(params: {
     where: Prisma.interest_and_feesWhereUniqueInput;
     data: Prisma.interest_and_feesUpdateInput;
   }): Promise<interest_and_fees> {
@@ -29,7 +30,7 @@ export class InterestAndFeesRepository {
     return prisma.interest_and_fees.update({ where, data });
   }
 
-  async delete(where: Prisma.interest_and_feesWhereUniqueInput): Promise<interest_and_fees> {
+  static async delete(where: Prisma.interest_and_feesWhereUniqueInput): Promise<interest_and_fees> {
     return prisma.interest_and_fees.delete({ where });
   }
 }

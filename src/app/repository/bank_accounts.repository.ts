@@ -3,15 +3,15 @@ import { prisma } from '../config/prisma';
 
 export class BankAccountsRepository {
 
-  async create(data: Prisma.bank_accountsCreateInput): Promise<bank_accounts> {
+  static async create(data: Prisma.bank_accountsCreateInput): Promise<bank_accounts> {
     return prisma.bank_accounts.create({ data });
   }
 
-  async findById(id: number): Promise<bank_accounts | null> {
+  static async findById(id: number): Promise<bank_accounts | null> {
     return prisma.bank_accounts.findUnique({ where: { id } });
   }
 
-  async findMany(params: {
+  static async findMany(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.bank_accountsWhereUniqueInput;
@@ -28,7 +28,7 @@ export class BankAccountsRepository {
     });
   }
 
-  async update(params: {
+  static async update(params: {
     where: Prisma.bank_accountsWhereUniqueInput;
     data: Prisma.bank_accountsUpdateInput;
   }): Promise<bank_accounts> {
@@ -36,7 +36,7 @@ export class BankAccountsRepository {
     return prisma.bank_accounts.update({ where, data });
   }
 
-  async delete(where: Prisma.bank_accountsWhereUniqueInput): Promise<bank_accounts> {
+  static async delete(where: Prisma.bank_accountsWhereUniqueInput): Promise<bank_accounts> {
     return prisma.bank_accounts.delete({ where });
   }
 }

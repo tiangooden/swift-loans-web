@@ -2,15 +2,16 @@ import { loans, Prisma } from '../../generated/prisma';
 import { prisma } from '../config/prisma';
 
 export class LoansRepository {
-  async create(data: Prisma.loansCreateInput): Promise<loans> {
+  
+  static async create(data: Prisma.loansCreateInput): Promise<loans> {
     return prisma.loans.create({ data });
   }
 
-  async findById(id: number): Promise<loans | null> {
+  static async findById(id: number): Promise<loans | null> {
     return prisma.loans.findUnique({ where: { id } });
   }
 
-  async findMany(params: {
+  static async findMany(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.loansWhereUniqueInput;
@@ -21,7 +22,7 @@ export class LoansRepository {
     return prisma.loans.findMany({ skip, take, cursor, where, orderBy });
   }
 
-  async update(params: {
+  static async update(params: {
     where: Prisma.loansWhereUniqueInput;
     data: Prisma.loansUpdateInput;
   }): Promise<loans> {
@@ -29,7 +30,7 @@ export class LoansRepository {
     return prisma.loans.update({ where, data });
   }
 
-  async delete(where: Prisma.loansWhereUniqueInput): Promise<loans> {
+  static async delete(where: Prisma.loansWhereUniqueInput): Promise<loans> {
     return prisma.loans.delete({ where });
   }
 }

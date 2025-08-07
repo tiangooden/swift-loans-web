@@ -2,15 +2,16 @@ import { notifications, Prisma } from '../../generated/prisma';
 import { prisma } from '../config/prisma';
 
 export class NotificationsRepository {
-  async create(data: Prisma.notificationsCreateInput): Promise<notifications> {
+  
+  static async create(data: Prisma.notificationsCreateInput): Promise<notifications> {
     return prisma.notifications.create({ data });
   }
 
-  async findById(id: number): Promise<notifications | null> {
+  static async findById(id: number): Promise<notifications | null> {
     return prisma.notifications.findUnique({ where: { id } });
   }
 
-  async findMany(params: {
+  static async findMany(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.notificationsWhereUniqueInput;
@@ -21,7 +22,7 @@ export class NotificationsRepository {
     return prisma.notifications.findMany({ skip, take, cursor, where, orderBy });
   }
 
-  async update(params: {
+  static async update(params: {
     where: Prisma.notificationsWhereUniqueInput;
     data: Prisma.notificationsUpdateInput;
   }): Promise<notifications> {
@@ -29,7 +30,7 @@ export class NotificationsRepository {
     return prisma.notifications.update({ where, data });
   }
 
-  async delete(where: Prisma.notificationsWhereUniqueInput): Promise<notifications> {
+  static async delete(where: Prisma.notificationsWhereUniqueInput): Promise<notifications> {
     return prisma.notifications.delete({ where });
   }
 }

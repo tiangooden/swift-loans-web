@@ -2,15 +2,16 @@ import { repayments, Prisma } from '../../generated/prisma';
 import { prisma } from '../config/prisma';
 
 export class RepaymentsRepository {
-  async create(data: Prisma.repaymentsCreateInput): Promise<repayments> {
+
+  static async create(data: Prisma.repaymentsCreateInput): Promise<repayments> {
     return prisma.repayments.create({ data });
   }
 
-  async findById(id: number): Promise<repayments | null> {
+  static async findById(id: number): Promise<repayments | null> {
     return prisma.repayments.findUnique({ where: { id } });
   }
 
-  async findMany(params: {
+  static async findMany(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.repaymentsWhereUniqueInput;
@@ -21,7 +22,7 @@ export class RepaymentsRepository {
     return prisma.repayments.findMany({ skip, take, cursor, where, orderBy });
   }
 
-  async update(params: {
+  static async update(params: {
     where: Prisma.repaymentsWhereUniqueInput;
     data: Prisma.repaymentsUpdateInput;
   }): Promise<repayments> {
@@ -29,8 +30,7 @@ export class RepaymentsRepository {
     return prisma.repayments.update({ where, data });
   }
 
-  async delete(where: Prisma.repaymentsWhereUniqueInput): Promise<repayments> {
+  static async delete(where: Prisma.repaymentsWhereUniqueInput): Promise<repayments> {
     return prisma.repayments.delete({ where });
   }
-
 }

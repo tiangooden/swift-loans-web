@@ -3,15 +3,15 @@ import { prisma } from '../config/prisma';
 
 export class CapitalRepository {
 
-  async create(data: Prisma.capitalCreateInput): Promise<capital> {
+  static async create(data: Prisma.capitalCreateInput): Promise<capital> {
     return prisma.capital.create({ data });
   }
 
-  async findById(id: number): Promise<capital | null> {
+  static async findById(id: number): Promise<capital | null> {
     return prisma.capital.findUnique({ where: { id } });
   }
 
-  async findMany(params: {
+  static async findMany(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.capitalWhereUniqueInput;
@@ -28,7 +28,7 @@ export class CapitalRepository {
     });
   }
 
-  async update(params: {
+  static async update(params: {
     where: Prisma.capitalWhereUniqueInput;
     data: Prisma.capitalUpdateInput;
   }): Promise<capital> {
@@ -36,7 +36,7 @@ export class CapitalRepository {
     return prisma.capital.update({ where, data });
   }
 
-  async delete(where: Prisma.capitalWhereUniqueInput): Promise<capital> {
+  static async delete(where: Prisma.capitalWhereUniqueInput): Promise<capital> {
     return prisma.capital.delete({ where });
   }
 }

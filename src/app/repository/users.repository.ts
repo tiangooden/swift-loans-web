@@ -2,6 +2,7 @@ import { users, Prisma } from '../../generated/prisma';
 import { prisma } from '../config/prisma';
 
 export class UsersRepository {
+
   static async create(data: Prisma.usersCreateInput): Promise<users> {
     return prisma.users.create({ data });
   }

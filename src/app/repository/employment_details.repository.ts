@@ -2,15 +2,16 @@ import { employment_details, Prisma } from '../../generated/prisma';
 import { prisma } from '../config/prisma';
 
 export class EmploymentDetailsRepository {
-  async create(data: Prisma.employment_detailsCreateInput): Promise<employment_details> {
+
+  static async create(data: Prisma.employment_detailsCreateInput): Promise<employment_details> {
     return prisma.employment_details.create({ data });
   }
 
-  async findById(user_id: number): Promise<employment_details | null> {
+  static async findById(user_id: number): Promise<employment_details | null> {
     return prisma.employment_details.findUnique({ where: { user_id } });
   }
 
-  async findMany(params: {
+  static async findMany(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.employment_detailsWhereUniqueInput;
@@ -21,7 +22,7 @@ export class EmploymentDetailsRepository {
     return prisma.employment_details.findMany({ skip, take, cursor, where, orderBy });
   }
 
-  async update(params: {
+  static async update(params: {
     where: Prisma.employment_detailsWhereUniqueInput;
     data: Prisma.employment_detailsUpdateInput;
   }): Promise<employment_details> {
@@ -29,8 +30,7 @@ export class EmploymentDetailsRepository {
     return prisma.employment_details.update({ where, data });
   }
 
-  async delete(where: Prisma.employment_detailsWhereUniqueInput): Promise<employment_details> {
+  static async delete(where: Prisma.employment_detailsWhereUniqueInput): Promise<employment_details> {
     return prisma.employment_details.delete({ where });
   }
-
 }
