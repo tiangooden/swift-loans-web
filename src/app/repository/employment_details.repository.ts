@@ -1,36 +1,36 @@
 import { employment_details, Prisma } from '../../generated/prisma';
 import { prisma } from '../config/prisma';
 
-export class EmploymentDetailsRepository {
+export const EmploymentDetailsRepository = {
 
-  static async create(data: Prisma.employment_detailsCreateInput): Promise<employment_details> {
+  create: async (data: Prisma.employment_detailsCreateInput): Promise<employment_details> => {
     return prisma.employment_details.create({ data });
-  }
+  },
 
-  static async findById(user_id: number): Promise<employment_details | null> {
+  findById: async (user_id: number): Promise<employment_details | null> => {
     return prisma.employment_details.findUnique({ where: { user_id } });
-  }
+  },
 
-  static async findMany(params: {
+  findMany: async (params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.employment_detailsWhereUniqueInput;
     where?: Prisma.employment_detailsWhereInput;
     orderBy?: Prisma.employment_detailsOrderByWithRelationInput;
-  }): Promise<employment_details[]> {
+  }): Promise<employment_details[]> => {
     const { skip, take, cursor, where, orderBy } = params;
     return prisma.employment_details.findMany({ skip, take, cursor, where, orderBy });
-  }
+  },
 
-  static async update(params: {
+  update: async (params: {
     where: Prisma.employment_detailsWhereUniqueInput;
     data: Prisma.employment_detailsUpdateInput;
-  }): Promise<employment_details> {
+  }): Promise<employment_details> => {
     const { where, data } = params;
     return prisma.employment_details.update({ where, data });
-  }
+  },
 
-  static async delete(where: Prisma.employment_detailsWhereUniqueInput): Promise<employment_details> {
+  delete: async (where: Prisma.employment_detailsWhereUniqueInput): Promise<employment_details> => {
     return prisma.employment_details.delete({ where });
   }
 }

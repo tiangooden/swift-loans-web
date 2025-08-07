@@ -7,5 +7,5 @@ export const UserService = {
         return UsersRepository.create({ identity })
     },
 
-    getAllUsers: () => UsersRepository.findMany({})
+    getAllUsers: async () => await UsersRepository.findMany({})
 }
