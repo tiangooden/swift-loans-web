@@ -1,0 +1,206 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model bank_accounts {
+  id             Int       @id @default(autoincrement())
+  user_id        Int?
+  bank_name      String?   @db.VarChar(255)
+  account_number String?   @db.VarChar(50)
+  account_type   String?   @db.VarChar(50)
+  is_primary     Boolean?  @default(false)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+  users          users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([is_primary], map: "idx_bank_accounts_is_primary")
+  @@index([user_id], map: "idx_bank_accounts_user_id")
+  @@index([user_id, is_primary], map: "idx_bank_accounts_user_id_is_primary")
+}
+
+model capital {
+  id           Int       @id @default(autoincrement())
+  capital_type String    @db.VarChar(100)
+  amount       Decimal   @db.Decimal(14, 2)
+  currency     String?   @default("USD") @db.VarChar(10)
+  description  String?
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+  updated_at   DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([capital_type], map: "idx_capital_capital_type")
+  @@index([currency], map: "idx_capital_currency")
+}
+
+model documents {
+  id            Int       @id @default(autoincrement())
+  user_id       Int?
+  document_type String?   @db.VarChar(100)
+  file_url      String?
+  verified      Boolean?  @default(false)
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  updated_at    DateTime? @default(now()) @db.Timestamp(6)
+  users         users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([document_type], map: "idx_documents_document_type")
+  @@index([user_id], map: "idx_documents_user_id")
+  @@index([verified], map: "idx_documents_verified")
+}
+
+model employment_details {
+  user_id         Int       @id
+  employer_name   String?   @db.VarChar(255)
+  job_title       String?   @db.VarChar(100)
+  employment_type String?   @db.VarChar(50)
+  monthly_income  Decimal?  @db.Decimal(12, 2)
+  payday_day      Int?
+  created_at      DateTime? @default(now()) @db.Timestamp(6)
+  updated_at      DateTime? @default(now()) @db.Timestamp(6)
+  users           users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([employment_type], map: "idx_employment_details_employment_type")
+}
+
+model interest_and_fees {
+  id          Int       @id @default(autoincrement())
+  loan_id     Int?
+  type        String?   @db.VarChar(50)
+  amount      Decimal?  @db.Decimal(12, 2)
+  description String?
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @default(now()) @db.Timestamp(6)
+  loans       loans?    @relation(fields: [loan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([loan_id], map: "idx_interest_and_fees_loan_id")
+  @@index([type], map: "idx_interest_and_fees_type")
+}
+
+model loan_applications {
+  id               Int           @id @default(autoincrement())
+  user_id          Int?
+  amount_requested Decimal?      @db.Decimal(12, 2)
+  term_in_days     Int?
+  purpose          String?
+  status           String?       @default("pending")
+  decision_reason  String?
+  submitted_at     DateTime?     @default(now()) @db.Timestamp(6)
+  decided_at       DateTime?     @db.Timestamp(6)
+  created_at       DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?     @default(now()) @db.Timestamp(6)
+  users            users?        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  loan_offers      loan_offers[]
+
+  @@index([status], map: "idx_loan_applications_status")
+  @@index([submitted_at], map: "idx_loan_applications_submitted_at")
+  @@index([user_id], map: "idx_loan_applications_user_id")
+}
+
+model loan_offers {
+  id                Int                @id @default(autoincrement())
+  application_id    Int?
+  principal         Decimal?           @db.Decimal(12, 2)
+  interest_rate     Decimal?           @db.Decimal(5, 2)
+  fee_amount        Decimal?           @db.Decimal(12, 2)
+  repayment_date    DateTime?          @db.Date
+  total_due         Decimal?           @db.Decimal(12, 2)
+  offer_status      String?            @default("offered")
+  created_at        DateTime?          @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?          @default(now()) @db.Timestamp(6)
+  loan_applications loan_applications? @relation(fields: [application_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  loans             loans[]
+
+  @@index([application_id], map: "idx_loan_offers_application_id")
+  @@index([offer_status], map: "idx_loan_offers_offer_status")
+}
+
+model loans {
+  id                Int                 @id @default(autoincrement())
+  user_id           Int?
+  loan_offer_id     Int?
+  status            String?             @default("active")
+  disbursed_at      DateTime?           @db.Timestamp(6)
+  due_date          DateTime?           @db.Date
+  total_amount      Decimal?            @db.Decimal(12, 2)
+  balance_remaining Decimal?            @db.Decimal(12, 2)
+  created_at        DateTime?           @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?           @default(now()) @db.Timestamp(6)
+  interest_and_fees interest_and_fees[]
+  loan_offers       loan_offers?        @relation(fields: [loan_offer_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users             users?              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  repayments        repayments[]
+
+  @@index([due_date], map: "idx_loans_due_date")
+  @@index([loan_offer_id], map: "idx_loans_loan_offer_id")
+  @@index([status], map: "idx_loans_status")
+  @@index([user_id], map: "idx_loans_user_id")
+}
+
+model notifications {
+  id         Int       @id @default(autoincrement())
+  user_id    Int?
+  title      String?   @db.VarChar(255)
+  message    String?
+  read       Boolean?  @default(false)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([created_at], map: "idx_notifications_created_at")
+  @@index([read], map: "idx_notifications_read")
+  @@index([user_id], map: "idx_notifications_user_id")
+}
+
+model repayments {
+  id                    Int       @id @default(autoincrement())
+  loan_id               Int?
+  amount_paid           Decimal?  @db.Decimal(12, 2)
+  payment_date          DateTime? @db.Timestamp(6)
+  payment_method        String?   @db.VarChar(50)
+  transaction_reference String?   @db.VarChar(100)
+  created_at            DateTime? @default(now()) @db.Timestamp(6)
+  updated_at            DateTime? @default(now()) @db.Timestamp(6)
+  loans                 loans?    @relation(fields: [loan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([loan_id], map: "idx_repayments_loan_id")
+  @@index([payment_date], map: "idx_repayments_payment_date")
+  @@index([transaction_reference], map: "idx_repayments_transaction_reference")
+}
+
+model system_settings {
+  key         String    @id @db.VarChar(100)
+  value       String?
+  description String?
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model users {
+  id                 Int                 @id @default(autoincrement())
+  identity           String              @unique @db.VarChar(255)
+  first_name         String?             @db.VarChar(100)
+  middle_name        String?             @db.VarChar(100)
+  last_name          String?             @db.VarChar(100)
+  dob                DateTime?           @db.Date
+  phone_number       String?             @db.VarChar(20)
+  trn                String?             @db.VarChar(50)
+  street_address     String?
+  city               String?             @db.VarChar(100)
+  country            String?             @db.VarChar(100)
+  status             String?             @default("active")
+  created_at         DateTime?           @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?           @default(now()) @db.Timestamp(6)
+  bank_accounts      bank_accounts[]
+  documents          documents[]
+  employment_details employment_details?
+  loan_applications  loan_applications[]
+  loans              loans[]
+  notifications      notifications[]
+
+  @@index([created_at], map: "idx_users_created_at")
+  @@index([identity], map: "idx_users_identity")
+  @@index([status], map: "idx_users_status")
+}

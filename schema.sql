@@ -147,3 +147,58 @@ CREATE TABLE capital (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- USERS
+CREATE INDEX idx_users_identity ON users(identity);
+CREATE INDEX idx_users_status ON users(status);
+CREATE INDEX idx_users_created_at ON users(created_at);
+
+-- EMPLOYMENT DETAILS
+-- Primary key already covers user_id, but consider this if querying by employment_type
+CREATE INDEX idx_employment_details_employment_type ON employment_details(employment_type);
+
+-- BANK ACCOUNTS
+CREATE INDEX idx_bank_accounts_user_id ON bank_accounts(user_id);
+CREATE INDEX idx_bank_accounts_is_primary ON bank_accounts(is_primary);
+CREATE INDEX idx_bank_accounts_user_id_is_primary ON bank_accounts(user_id, is_primary);
+
+-- LOAN APPLICATIONS
+CREATE INDEX idx_loan_applications_user_id ON loan_applications(user_id);
+CREATE INDEX idx_loan_applications_status ON loan_applications(status);
+CREATE INDEX idx_loan_applications_submitted_at ON loan_applications(submitted_at);
+
+-- LOAN OFFERS
+CREATE INDEX idx_loan_offers_application_id ON loan_offers(application_id);
+CREATE INDEX idx_loan_offers_offer_status ON loan_offers(offer_status);
+
+-- LOANS
+CREATE INDEX idx_loans_user_id ON loans(user_id);
+CREATE INDEX idx_loans_loan_offer_id ON loans(loan_offer_id);
+CREATE INDEX idx_loans_status ON loans(status);
+CREATE INDEX idx_loans_due_date ON loans(due_date);
+
+-- REPAYMENTS
+CREATE INDEX idx_repayments_loan_id ON repayments(loan_id);
+CREATE INDEX idx_repayments_payment_date ON repayments(payment_date);
+CREATE INDEX idx_repayments_transaction_reference ON repayments(transaction_reference);
+
+-- INTEREST AND FEES
+CREATE INDEX idx_interest_and_fees_loan_id ON interest_and_fees(loan_id);
+CREATE INDEX idx_interest_and_fees_type ON interest_and_fees(type);
+
+-- DOCUMENTS
+CREATE INDEX idx_documents_user_id ON documents(user_id);
+CREATE INDEX idx_documents_document_type ON documents(document_type);
+CREATE INDEX idx_documents_verified ON documents(verified);
+
+-- NOTIFICATIONS
+CREATE INDEX idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX idx_notifications_read ON notifications(read);
+CREATE INDEX idx_notifications_created_at ON notifications(created_at);
+
+-- SYSTEM SETTINGS
+-- No additional index needed; 'key' is already the PRIMARY KEY
+
+-- CAPITAL
+CREATE INDEX idx_capital_capital_type ON capital(capital_type);
+CREATE INDEX idx_capital_currency ON capital(currency);

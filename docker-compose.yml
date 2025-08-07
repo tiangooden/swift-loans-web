@@ -65,8 +65,8 @@ services:
     command: start-dev
     ports:
       - '8080:8080'
-    volumes:
-      - ./keycloak/theme:/opt/keycloak/themes/swift-loans
+    # volumes:
+    #   - ./keycloak/swift-loans-theme:/opt/keycloak/themes/swift-loans
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: keycloak-db

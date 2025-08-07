@@ -1,7 +1,11 @@
 import { ArrowRight, CheckCircle, Clock, Shield, DollarSign, Star, Users } from "lucide-react";
 import Link from "next/link";
+import { UserService } from './services/user.service';
 
-export default function Home() {
+export default async function Home() {
+  const users =await UserService.getAllUsers();
+  console.log('users', users);
+  
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <main className="flex-1">
