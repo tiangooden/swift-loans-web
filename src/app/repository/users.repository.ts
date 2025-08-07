@@ -1,20 +1,20 @@
-import { PrismaClient, users, Prisma } from '../../generated/prisma';
+import { users, Prisma } from '../../generated/prisma';
 import { prisma } from '../config/prisma';
 
 export class UsersRepository {
-  async create(data: Prisma.usersCreateInput): Promise<users> {
+  static async create(data: Prisma.usersCreateInput): Promise<users> {
     return prisma.users.create({ data });
   }
 
-  async findById(id: number): Promise<users | null> {
+  static async findById(id: number): Promise<users | null> {
     return prisma.users.findUnique({ where: { id } });
   }
 
-  async findByIdentity(identity: string): Promise<users | null> {
+  static async findByIdentity(identity: string): Promise<users | null> {
     return prisma.users.findUnique({ where: { identity } });
   }
 
-  async findMany(params: {
+  static async findMany(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.usersWhereUniqueInput;
@@ -25,7 +25,7 @@ export class UsersRepository {
     return prisma.users.findMany({ skip, take, cursor, where, orderBy });
   }
 
-  async update(params: {
+  static async update(params: {
     where: Prisma.usersWhereUniqueInput;
     data: Prisma.usersUpdateInput;
   }): Promise<users> {
@@ -33,7 +33,7 @@ export class UsersRepository {
     return prisma.users.update({ where, data });
   }
 
-  async delete(where: Prisma.usersWhereUniqueInput): Promise<users> {
+  static async delete(where: Prisma.usersWhereUniqueInput): Promise<users> {
     return prisma.users.delete({ where });
   }
 }

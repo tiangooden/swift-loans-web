@@ -1,4 +1,4 @@
-import { PrismaClient, bank_accounts, Prisma } from '../../generated/prisma';
+import { bank_accounts, Prisma } from '../../generated/prisma';
 import { prisma } from '../config/prisma';
 
 export class BankAccountsRepository {

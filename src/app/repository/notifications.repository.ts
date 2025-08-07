@@ -1,6 +1,5 @@
-import { PrismaClient, notifications, Prisma } from '../../generated/prisma';
-
-const prisma = new PrismaClient();
+import { notifications, Prisma } from '../../generated/prisma';
+import { prisma } from '../config/prisma';
 
 export class NotificationsRepository {
   async create(data: Prisma.notificationsCreateInput): Promise<notifications> {

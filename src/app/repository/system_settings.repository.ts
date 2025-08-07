@@ -1,5 +1,4 @@
-import { system_settings } from '@prisma/client';
-import { PrismaClient, Prisma } from '../../generated/prisma';
+import { system_settings, Prisma } from '../../generated/prisma';
 import { prisma } from '../config/prisma';
 
 export class SystemSettingsRepository {

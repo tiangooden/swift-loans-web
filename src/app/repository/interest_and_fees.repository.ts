@@ -1,6 +1,5 @@
-import { PrismaClient, interest_and_fees, Prisma } from '../../generated/prisma';
-
-const prisma = new PrismaClient();
+import { interest_and_fees, Prisma } from '../../generated/prisma';
+import { prisma } from '../config/prisma';
 
 export class InterestAndFeesRepository {
   async create(data: Prisma.interest_and_feesCreateInput): Promise<interest_and_fees> {

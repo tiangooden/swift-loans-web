@@ -1,6 +1,5 @@
-import { PrismaClient, loan_offers, Prisma } from '../../generated/prisma';
-
-const prisma = new PrismaClient();
+import { loan_offers, Prisma } from '../../generated/prisma';
+import { prisma } from '../config/prisma';
 
 export class LoanOffersRepository {
   async create(data: Prisma.loan_offersCreateInput): Promise<loan_offers> {

@@ -1,6 +1,5 @@
-import { PrismaClient, employment_details, Prisma } from '../../generated/prisma';
-
-const prisma = new PrismaClient();
+import { employment_details, Prisma } from '../../generated/prisma';
+import { prisma } from '../config/prisma';
 
 export class EmploymentDetailsRepository {
   async create(data: Prisma.employment_detailsCreateInput): Promise<employment_details> {

@@ -1,6 +1,5 @@
-import { PrismaClient, documents, Prisma } from '../../generated/prisma';
-
-const prisma = new PrismaClient();
+import { documents, Prisma } from '../../generated/prisma';
+import { prisma } from '../config/prisma';
 
 export class DocumentsRepository {
   async create(data: Prisma.documentsCreateInput): Promise<documents> {

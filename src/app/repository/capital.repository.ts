@@ -1,14 +1,14 @@
-import { PrismaClient, capital, Prisma } from '../../generated/prisma';
+import { capital, Prisma } from '../../generated/prisma';
+import { prisma } from '../config/prisma';
 
 export class CapitalRepository {
-  constructor(private prisma: PrismaClient) {}
 
   async create(data: Prisma.capitalCreateInput): Promise<capital> {
-    return this.prisma.capital.create({ data });
+    return prisma.capital.create({ data });
   }
 
   async findById(id: number): Promise<capital | null> {
-    return this.prisma.capital.findUnique({ where: { id } });
+    return prisma.capital.findUnique({ where: { id } });
   }
 
   async findMany(params: {
@@ -19,7 +19,7 @@ export class CapitalRepository {
     orderBy?: Prisma.capitalOrderByWithRelationInput;
   }): Promise<capital[]> {
     const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.capital.findMany({
+    return prisma.capital.findMany({
       skip,
       take,
       cursor,
@@ -33,10 +33,10 @@ export class CapitalRepository {
     data: Prisma.capitalUpdateInput;
   }): Promise<capital> {
     const { where, data } = params;
-    return this.prisma.capital.update({ where, data });
+    return prisma.capital.update({ where, data });
   }
 
   async delete(where: Prisma.capitalWhereUniqueInput): Promise<capital> {
-    return this.prisma.capital.delete({ where });
+    return prisma.capital.delete({ where });
   }
 }
