@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 // import { Link, useLocation } from 'react-router-dom';
 import Link from 'next/link';
 import { Menu, X, DollarSign, Shield } from 'lucide-react';
+import Image from 'next/image';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,9 +17,8 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="bg-blue-600 p-2 rounded-lg">
-                <DollarSign className="h-6 w-6 text-white" />
-              </div>
+                {/* <DollarSign className="h-6 w-6 text-white" /> */}
+                <Image width={50} height={50} src={'/favicon.ico'} alt="Swift Loans" />
               <span className="text-xl font-bold text-gray-900">Swift Loans</span>
             </Link>
           </div>
