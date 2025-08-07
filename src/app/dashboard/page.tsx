@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { User, CreditCard, Clock, CheckCircle, AlertCircle, DollarSign, Calendar } from 'lucide-react';
+import { User, Clock, CheckCircle, AlertCircle, DollarSign, Calendar } from 'lucide-react';
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');

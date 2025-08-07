@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: app
+    restart: unless-stopped
     ports:
       - '3000:3000'
     environment:
@@ -17,7 +18,7 @@ services:
   app-db:
     image: postgres:15
     container_name: app-db
-    restart: always
+    restart: unless-stopped
     ports:
       - '5432:5432'
     environment:
@@ -32,6 +33,7 @@ services:
   app-nginx:
     image: nginx:alpine
     container_name: app-nginx
+    restart: unless-stopped
     ports:
       - '80:80'
     volumes:
@@ -44,7 +46,7 @@ services:
   keycloak-db:
     image: postgres:15
     container_name: keycloak-db
-    restart: always
+    restart: unless-stopped
     ports:
       - '5433:5432'
     environment:
@@ -59,6 +61,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.1
     container_name: keycloak
+    restart: unless-stopped
     command: start-dev
     ports:
       - '8080:8080'
@@ -80,6 +83,7 @@ services:
   keycloak-nginx:
     image: nginx:alpine
     container_name: keycloak-nginx
+    restart: unless-stopped
     ports:
       - '81:80'
     volumes:

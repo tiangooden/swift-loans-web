@@ -71,12 +71,12 @@ const Contact = () => {
                 <h3 className="text-xl font-semibold text-gray-900 ml-3">Email Support</h3>
               </div>
               <p className="text-gray-600 mb-3">
-                Send us an email and we'll respond within 2 hours
+                Send us an email and we&apos;ll respond within 2 hours
               </p>
               <div className="space-y-2">
-                <p className="text-lg font-semibold text-green-600">support@Swift Financials.com</p>
+                <p className="text-lg font-semibold text-green-600">support@Swift Loans.com</p>
                 <p className="text-sm text-gray-500">General inquiries & support</p>
-                <p className="text-lg font-semibold text-green-600">loans@Swift Financials.com</p>
+                <p className="text-lg font-semibold text-green-600">loans@Swift Loans.com</p>
                 <p className="text-sm text-gray-500">Loan applications & status</p>
               </div>
             </div>
@@ -93,7 +93,7 @@ const Contact = () => {
                 Visit us at our headquarters
               </p>
               <div className="space-y-1 text-gray-700">
-                <p className="font-semibold">Swift Financials Financial Services</p>
+                <p className="font-semibold">Swift Loans Financial Services</p>
                 <p>123 Finance Street, Suite 100</p>
                 <p>Financial District, NY 10005</p>
                 <p className="text-sm text-gray-500 mt-2">

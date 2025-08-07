@@ -13,11 +13,11 @@ const FAQ = () => {
       questions: [
         {
           question: 'What is a payday loan?',
-          answer: 'A payday loan is a short-term, small-dollar loan typically due on your next payday. It\'s designed to help cover unexpected expenses or bridge the gap between paychecks. Loan amounts typically range from $100 to $1,500.'
+          answer: 'A payday loan is a short-term, small-dollar loan typically due on your next payday. It&apos;s designed to help cover unexpected expenses or bridge the gap between paychecks. Loan amounts typically range from $100 to $1,500.'
         },
         {
           question: 'How do I qualify for a loan?',
-          answer: 'To qualify for a loan with Swift Financials, you must: (1) Be at least 18 years old, (2) Have a regular source of income, (3) Have an active checking account, (4) Provide a valid phone number and email address, and (5) Be a U.S. citizen or permanent resident.'
+          answer: 'To qualify for a loan with Swift Loans, you must: (1) Be at least 18 years old, (2) Have a regular source of income, (3) Have an active checking account, (4) Provide a valid phone number and email address, and (5) Be a U.S. citizen or permanent resident.'
         },
         {
           question: 'How much can I borrow?',
@@ -30,11 +30,11 @@ const FAQ = () => {
       questions: [
         {
           question: 'How long does the application take?',
-          answer: 'Our online application typically takes 5-10 minutes to complete. You\'ll need basic personal information, employment details, and bank account information. Most applications receive an instant decision.'
+          answer: 'Our online application typically takes 5-10 minutes to complete. You&apos;ll need basic personal information, employment details, and bank account information. Most applications receive an instant decision.'
         },
         {
           question: 'What information do I need to apply?',
-          answer: 'You\'ll need: Personal information (name, address, phone, email), Social Security number, employment information (employer name, income, length of employment), and bank account details (routing and account numbers).'
+          answer: 'You&apos;ll need: Personal information (name, address, phone, email), Social Security number, employment information (employer name, income, length of employment), and bank account details (routing and account numbers).'
         },
         {
           question: 'How quickly will I get approved?',
@@ -62,8 +62,8 @@ const FAQ = () => {
           answer: 'Yes, you can pay off your loan early at any time without penalty. Early payment can help you save on interest charges. You can make payments through your online account or by calling our customer service team.'
         },
         {
-          question: 'What happens if I can\'t repay on time?',
-          answer: 'If you\'re unable to repay on the due date, contact us immediately. We may offer payment plan options or extensions (where permitted by state law). Late payments may incur additional fees and could impact your credit score.'
+          question: 'What happens if I can&apos;t repay on time?',
+          answer: 'If you&apos;re unable to repay on the due date, contact us immediately. We may offer payment plan options or extensions (where permitted by state law). Late payments may incur additional fees and could impact your credit score.'
         }
       ]
     },
@@ -97,7 +97,7 @@ const FAQ = () => {
         },
         {
           question: 'What if my payment fails?',
-          answer: 'If a payment fails due to insufficient funds or other bank issues, you\'ll be notified immediately. A failed payment fee may apply, and you\'ll need to arrange alternative payment. Continued payment failures may result in collection activities.'
+          answer: 'If a payment fails due to insufficient funds or other bank issues, you&apos;ll be notified immediately. A failed payment fee may apply, and you&apos;ll need to arrange alternative payment. Continued payment failures may result in collection activities.'
         }
       ]
     }
@@ -205,7 +205,7 @@ const FAQ = () => {
         {filteredFAQ.length === 0 && searchTerm && (
           <div className="text-center py-12">
             <div className="text-gray-500 text-lg mb-4">
-              No results found for "{searchTerm}"
+              No results found for &quot;{searchTerm}&quot;
             </div>
             <p className="text-gray-400">
               Try searching with different keywords or browse the categories above.
@@ -229,7 +229,7 @@ const FAQ = () => {
               Call 1-800-QUICK-CASH
             </a>
             <a
-              href="mailto:support@Swift Financials.com"
+              href="mailto:support@Swift Loans.com"
               className="border border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors"
             >
               Email Support

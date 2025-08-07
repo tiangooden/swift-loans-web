@@ -74,7 +74,7 @@ export default function Admin() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
-                <p className="text-sm text-gray-500">Swift Financials Management Portal</p>
+                <p className="text-sm text-gray-500">Swift Loans Management Portal</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">

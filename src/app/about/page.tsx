@@ -1,4 +1,5 @@
 import { CheckCircle, Users, DollarSign, Clock, Award, Shield } from "lucide-react";
+import Image from "next/image";
 
 export default function About() {
   return (
@@ -7,10 +8,10 @@ export default function About() {
       <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">About Swift Financials</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">About Swift Loans</h1>
             <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              We're a trusted financial services company dedicated to providing fast, reliable payday loans
-              to help you through life's unexpected expenses.
+              We&apos;re a trusted financial services company dedicated to providing fast, reliable payday loans
+              to help you through life&apos;s unexpected expenses.
             </p>
           </div>
         </div>
@@ -23,11 +24,11 @@ export default function About() {
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
               <p className="text-lg text-gray-600 mb-6">
-                At Swift Financials, we believe that everyone deserves access to financial solutions when they need them most.
-                We've built our company around the core values of transparency, speed, and customer service.
+                At Swift Loans, we believe that everyone deserves access to financial solutions when they need them most.
+                We&apos;ve built our company around the core values of transparency, speed, and customer service.
               </p>
               <p className="text-lg text-gray-600 mb-6">
-                Since our founding in 2015, we've helped over 500,000 customers navigate their financial challenges
+                Since our founding in 2015, we&apos;ve helped over 500,000 customers navigate their financial challenges
                 with responsible lending practices and clear terms.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -50,7 +51,9 @@ export default function About() {
               </div>
             </div>
             <div className="lg:text-center">
-              <img
+              <Image
+                width={800}
+                height={600}
                 src="https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=800"
                 alt="Team collaboration"
                 className="w-full h-96 object-cover rounded-lg shadow-lg"
@@ -134,7 +137,7 @@ export default function About() {
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Customer First</h3>
               <p className="text-gray-600">
-                Our customers are at the heart of everything we do. We're committed to providing
+                Our customers are at the heart of everything we do. We&apos;re committed to providing
                 exceptional service and support.
               </p>
             </div>
@@ -177,11 +180,13 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Leadership Team</h2>
-            <p className="text-lg text-gray-600">Meet the people behind Swift Financials</p>
+            <p className="text-lg text-gray-600">Meet the people behind Swift Loans</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <img
+              <Image
+                width={800}
+                height={600}
                 src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400"
                 alt="CEO"
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
@@ -193,7 +198,9 @@ export default function About() {
               </p>
             </div>
             <div className="text-center">
-              <img
+              <Image
+                width={800}
+                height={600}
                 src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400"
                 alt="CTO"
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
@@ -205,7 +212,9 @@ export default function About() {
               </p>
             </div>
             <div className="text-center">
-              <img
+              <Image
+                width={800}
+                height={600}
                 src="https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=400"
                 alt="COO"
                 className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"

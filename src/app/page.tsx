@@ -1,4 +1,5 @@
-import { Link, ArrowRight, CheckCircle, Clock, Shield, DollarSign, Star, Users } from "lucide-react";
+import { ArrowRight, CheckCircle, Clock, Shield, DollarSign, Star, Users } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -18,14 +19,14 @@ export default function Home() {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Link
-                      to="/apply"
+                      href="/apply"
                       className="bg-orange-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-600 transition-colors inline-flex items-center justify-center space-x-2"
                     >
-                      <span>Apply Now</span>
+                      Apply Now
                       <ArrowRight className="h-5 w-5" />
                     </Link>
                     <Link
-                      to="/about"
+                      href="/about"
                       className="border border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors inline-flex items-center justify-center"
                     >
                       Learn More
@@ -53,18 +54,18 @@ export default function Home() {
                       <div>
                         <label className="block text-sm font-medium mb-2">Loan Amount</label>
                         <select className="w-full p-3 rounded-lg bg-white/20 border border-white/30 text-white">
-                          <option value="300">$300</option>
-                          <option value="500">$500</option>
-                          <option value="750">$750</option>
-                          <option value="1000">$1,000</option>
-                          <option value="1500">$1,500</option>
+                          <option className="bg-blue-200 text-black" value="300">$300</option>
+                          <option className="bg-blue-200 text-black" value="500">$500</option>
+                          <option className="bg-blue-200 text-black" value="750">$750</option>
+                          <option className="bg-blue-200 text-black" value="1000">$1,000</option>
+                          <option className="bg-blue-200 text-black" value="1500">$1,500</option>
                         </select>
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-2">Loan Term</label>
                         <select className="w-full p-3 rounded-lg bg-white/20 border border-white/30 text-white">
-                          <option value="14">14 days</option>
-                          <option value="30">30 days</option>
+                          <option className="bg-blue-200 text-black" value="14">14 days</option>
+                          <option className="bg-blue-200 text-black" value="30">30 days</option>
                         </select>
                       </div>
                       <div className="bg-white/20 p-4 rounded-lg">
@@ -85,7 +86,7 @@ export default function Home() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                  Why Choose Swift Financials?
+                  Why Choose Swift Loans?
                 </h2>
                 <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                   We make getting a payday loan simple, fast, and transparent with industry-leading security.
@@ -116,7 +117,7 @@ export default function Home() {
                   </div>
                   <h3 className="text-xl font-semibold mb-3">Transparent Fees</h3>
                   <p className="text-gray-600">
-                    No hidden fees or surprises. We clearly explain all costs upfront so you know exactly what you'll pay.
+                    No hidden fees or surprises. We clearly explain all costs upfront so you know exactly what you&apos;ll pay.
                   </p>
                 </div>
               </div>
@@ -182,7 +183,7 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-gray-600 mb-4">
-                    "Swift Financials saved me when I had an unexpected car repair. The process was so easy and the money was in my account the same day!"
+                    &quot;Swift Loans saved me when I had an unexpected car repair. The process was so easy and the money was in my account the same day!&quot;
                   </p>
                   <div className="flex items-center">
                     <div className="bg-gray-300 w-10 h-10 rounded-full"></div>
@@ -199,7 +200,7 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-gray-600 mb-4">
-                    "Transparent fees and no hidden charges. I knew exactly what I was paying from the start. Highly recommend!"
+                    &quot;Transparent fees and no hidden charges. I knew exactly what I was paying from the start. Highly recommend!&quot;
                   </p>
                   <div className="flex items-center">
                     <div className="bg-gray-300 w-10 h-10 rounded-full"></div>
@@ -216,7 +217,7 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-gray-600 mb-4">
-                    "The customer service team was incredibly helpful. They walked me through the entire process and answered all my questions."
+                    &quot;The customer service team was incredibly helpful. They walked me through the entire process and answered all my questions.&quot;
                   </p>
                   <div className="flex items-center">
                     <div className="bg-gray-300 w-10 h-10 rounded-full"></div>
@@ -237,13 +238,13 @@ export default function Home() {
                 Ready to Get Started?
               </h2>
               <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                Join thousands of satisfied customers who trust Swift Financials for their short-term lending needs.
+                Join thousands of satisfied customers who trust Swift Loans for their short-term lending needs.
               </p>
               <Link
-                to="/apply"
+                href="/apply"
                 className="bg-orange-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-orange-600 transition-colors inline-flex items-center space-x-2"
               >
-                <span>Apply for Your Loan Today</span>
+                Apply for Your Loan Today
                 <ArrowRight className="h-5 w-5" />
               </Link>
               <div className="mt-8 flex justify-center items-center space-x-8 text-sm">

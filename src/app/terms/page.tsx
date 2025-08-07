@@ -43,8 +43,8 @@ const Terms = () => {
             </h2>
             <div className="space-y-4 text-gray-700">
               <p>
-                These Terms of Service ("Terms") constitute a legally binding agreement between you and Swift Financials Financial Services
-                ("Company," "we," "us," or "our") concerning your use of our website and loan services.
+                These Terms of Service (&quot;Terms&quot;) constitute a legally binding agreement between you and Swift Loans Financial Services
+                (&quot;Company,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) concerning your use of our website and loan services.
               </p>
               <p>
                 By accessing our website, submitting a loan application, or using any of our services, you acknowledge that you have
@@ -206,9 +206,9 @@ const Terms = () => {
                 If you have questions about these Terms or our services, please contact us:
               </p>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p><strong>Swift Financials Financial Services</strong></p>
+                <p><strong>Swift Loans Financial Services</strong></p>
                 <p>Phone: 1-800-QUICK-CASH</p>
-                <p>Email: legal@Swift Financials.com</p>
+                <p>Email: legal@Swift Loans.com</p>
                 <p>Address: 123 Finance Street, Suite 100, Financial District, NY 10005</p>
               </div>
             </div>
@@ -232,7 +232,7 @@ const Terms = () => {
         {/* Footer Notice */}
         <div className="mt-8 text-center text-sm text-gray-500">
           <p>
-            By clicking "I Agree" or submitting a loan application, you acknowledge that you have read and understood
+            By clicking &quot;I Agree&quot; or submitting a loan application, you acknowledge that you have read and understood
             these Terms of Service and agree to be bound by them.
           </p>
         </div>

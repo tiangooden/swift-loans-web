@@ -14,7 +14,7 @@ const Footer = () => {
               <div className="bg-blue-600 p-2 rounded-lg">
                 <DollarSign className="h-6 w-6" />
               </div>
-              <span className="text-xl font-bold">Swift Financials</span>
+              <span className="text-xl font-bold">Swift Loans</span>
             </div>
             <p className="text-gray-400 text-sm">
               Fast, reliable payday loans when you need them most. Licensed and regulated financial services.
@@ -58,7 +58,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Contact</h3>
             <div className="space-y-2 text-gray-400 text-sm">
               <p>📞 1-800-QUICK-CASH</p>
-              <p>✉️ support@Swift Financials.com</p>
+              <p>✉️ support@Swift Loans.com</p>
               <p>🕒 24/7 Customer Support</p>
               <div className="flex items-center space-x-1 mt-4">
                 <Award className="h-4 w-4 text-yellow-500" />
@@ -69,7 +69,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
-          <p>&copy; 2025 Swift Financials Financial Services. All rights reserved.</p>
+          <p>&copy; 2025 Swift Loans Financial Services. All rights reserved.</p>
           <p className="mt-2">Licensed by state regulatory authorities. Member FDIC.</p>
         </div>
       </div>
