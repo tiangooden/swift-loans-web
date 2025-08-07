@@ -130,7 +130,8 @@ CREATE TABLE notifications (
 
 -- SYSTEM SETTINGS
 CREATE TABLE system_settings (
-    key VARCHAR(100) PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
+    key VARCHAR(100) UNIQUE NOT NULL,
     value TEXT,
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
