@@ -1,29 +1,8 @@
-"use client";
 import Link from "next/link";
 import { ArrowRight, CheckCircle, Clock, Shield, DollarSign, Star, Users } from "lucide-react";
-import { useState, useEffect } from 'react';
-import LoanCalculator from "./components/LoanCalculator";
+import LoanCalculator from "./component/LoanCalculator";
 
 export default function Home() {
-  const [loanAmount, setLoanAmount] = useState<number>(10000);
-  const [loanTerm, setLoanTerm] = useState<number>(14);
-  const [totalRepayment, setTotalRepayment] = useState<number>(0);
-
-  const loanAmounts = [
-    10000, 15000, 20000, 25000, 30000
-  ];
-  const loanTerms = [
-    { days: 14, interestRate: 0.25 },
-    { days: 28, interestRate: 0.30 }
-  ];
-
-  useEffect(() => {
-    const selectedTerm = loanTerms.find(term => term.days === loanTerm);
-    if (selectedTerm) {
-      const interest = loanAmount * selectedTerm.interestRate;
-      setTotalRepayment(loanAmount + interest);
-    }
-  }, [loanAmount, loanTerm]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">

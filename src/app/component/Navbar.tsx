@@ -1,13 +1,12 @@
 'use client'
-import React, { useState } from 'react';
-// import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react'
 import Link from 'next/link';
-import { Menu, X, DollarSign, Shield } from 'lucide-react';
+import { Menu, X, Shield } from 'lucide-react';
 import Image from 'next/image';
+import { signIn, signOut } from '../auth';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // const location = useLocation();
 
   const isActive = (x: string) => x == x//(path: string) => location.pathname === path;
 
@@ -17,8 +16,8 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-                {/* <DollarSign className="h-6 w-6 text-white" /> */}
-                <Image width={50} height={50} src={'/favicon.ico'} alt="Swift Loans" />
+              {/* <DollarSign className="h-6 w-6 text-white" /> */}
+              <Image width={50} height={50} src={'/favicon.ico'} alt="Swift Loans" />
               <span className="text-xl font-bold text-gray-900">Swift Loans</span>
             </Link>
           </div>
@@ -62,11 +61,13 @@ const Navbar = () => {
             </Link>
             <Link
               href="/dashboard"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-1"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/dashboard') ? 'text-blue-600' : 'text-gray-600 hover:text-blue-600'
+                }`}
             >
-              <Shield className="h-4 w-4" />
-              <span>Login</span>
+              Dashboard
             </Link>
+            <button onClick={() => signIn('keycloak')}>Sign in</button>
+            <button onClick={() => signOut()}>Sign out</button>
             <Link
               href="/admin"
               className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-1"
