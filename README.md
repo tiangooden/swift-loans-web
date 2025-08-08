@@ -20,4 +20,9 @@ npx prisma init
 npx prisma db pull
 npx prisma generate
 npx prisma db push
-```
+
+KEYCLOAK_CLIENT_ID=swift-loans-web
+KEYCLOAK_CLIENT_SECRET=
+KEYCLOAK_ISSUER=http://localhost:8080/realms/swift-loans
+NEXTAUTH_SECRET=your-random-secret
+NEXTAUTH_URL=http://localhost:3000

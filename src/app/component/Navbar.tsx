@@ -3,10 +3,12 @@ import React, { useState } from 'react'
 import Link from 'next/link';
 import { Menu, X, Shield } from 'lucide-react';
 import Image from 'next/image';
-import { signIn, signOut } from '../auth';
+import { useSession, signIn, signOut } from "next-auth/react"
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = useSession()
 
   const isActive = (x: string) => x == x//(path: string) => location.pathname === path;
 
@@ -66,7 +68,7 @@ const Navbar = () => {
             >
               Dashboard
             </Link>
-            <button onClick={() => signIn('keycloak')}>Sign in</button>
+            <button onClick={() => signIn()}>Sign in</button>
             <button onClick={() => signOut()}>Sign out</button>
             <Link
               href="/admin"
