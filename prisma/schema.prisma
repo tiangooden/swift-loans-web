@@ -15,6 +15,8 @@ model bank_accounts {
   account_number String?   @db.VarChar(50)
   account_type   String?   @db.VarChar(50)
   is_primary     Boolean?  @default(false)
+  is_deleted     Boolean?  @default(false)
+  deleted_at     DateTime? @db.Timestamp(6)
   created_at     DateTime? @default(now()) @db.Timestamp(6)
   updated_at     DateTime? @default(now()) @db.Timestamp(6)
   users          users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -22,6 +24,7 @@ model bank_accounts {
   @@index([is_primary], map: "idx_bank_accounts_is_primary")
   @@index([user_id], map: "idx_bank_accounts_user_id")
   @@index([user_id, is_primary], map: "idx_bank_accounts_user_id_is_primary")
+  @@index([is_deleted], map: "idx_bank_accounts_is_deleted")
 }
 
 model capital {
@@ -30,11 +33,14 @@ model capital {
   amount       Decimal   @db.Decimal(14, 2)
   currency     String?   @default("USD") @db.VarChar(10)
   description  String?
+  is_deleted   Boolean?  @default(false)
+  deleted_at   DateTime? @db.Timestamp(6)
   created_at   DateTime? @default(now()) @db.Timestamp(6)
   updated_at   DateTime? @default(now()) @db.Timestamp(6)
 
   @@index([capital_type], map: "idx_capital_capital_type")
   @@index([currency], map: "idx_capital_currency")
+  @@index([is_deleted], map: "idx_capital_is_deleted")
 }
 
 model documents {
@@ -43,6 +49,8 @@ model documents {
   document_type String?   @db.VarChar(100)
   file_url      String?
   verified      Boolean?  @default(false)
+  is_deleted    Boolean?  @default(false)
+  deleted_at    DateTime? @db.Timestamp(6)
   created_at    DateTime? @default(now()) @db.Timestamp(6)
   updated_at    DateTime? @default(now()) @db.Timestamp(6)
   users         users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -50,6 +58,7 @@ model documents {
   @@index([document_type], map: "idx_documents_document_type")
   @@index([user_id], map: "idx_documents_user_id")
   @@index([verified], map: "idx_documents_verified")
+  @@index([is_deleted], map: "idx_documents_is_deleted")
 }
 
 model employment_details {
@@ -59,11 +68,14 @@ model employment_details {
   employment_type String?   @db.VarChar(50)
   monthly_income  Decimal?  @db.Decimal(12, 2)
   payday_day      Int?
+  is_deleted      Boolean?  @default(false)
+  deleted_at      DateTime? @db.Timestamp(6)
   created_at      DateTime? @default(now()) @db.Timestamp(6)
   updated_at      DateTime? @default(now()) @db.Timestamp(6)
   users           users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([employment_type], map: "idx_employment_details_employment_type")
+  @@index([is_deleted], map: "idx_employment_details_is_deleted")
 }
 
 model interest_and_fees {
@@ -72,12 +84,15 @@ model interest_and_fees {
   type        String?   @db.VarChar(50)
   amount      Decimal?  @db.Decimal(12, 2)
   description String?
+  is_deleted  Boolean?  @default(false)
+  deleted_at  DateTime? @db.Timestamp(6)
   created_at  DateTime? @default(now()) @db.Timestamp(6)
   updated_at  DateTime? @default(now()) @db.Timestamp(6)
   loans       loans?    @relation(fields: [loan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([loan_id], map: "idx_interest_and_fees_loan_id")
   @@index([type], map: "idx_interest_and_fees_type")
+  @@index([is_deleted], map: "idx_interest_and_fees_is_deleted")
 }
 
 model loan_applications {
@@ -90,6 +105,8 @@ model loan_applications {
   decision_reason  String?
   submitted_at     DateTime?     @default(now()) @db.Timestamp(6)
   decided_at       DateTime?     @db.Timestamp(6)
+  is_deleted       Boolean?      @default(false)
+  deleted_at       DateTime?     @db.Timestamp(6)
   created_at       DateTime?     @default(now()) @db.Timestamp(6)
   updated_at       DateTime?     @default(now()) @db.Timestamp(6)
   users            users?        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -98,6 +115,7 @@ model loan_applications {
   @@index([status], map: "idx_loan_applications_status")
   @@index([submitted_at], map: "idx_loan_applications_submitted_at")
   @@index([user_id], map: "idx_loan_applications_user_id")
+  @@index([is_deleted], map: "idx_loan_applications_is_deleted")
 }
 
 model loan_offers {
@@ -109,6 +127,8 @@ model loan_offers {
   repayment_date    DateTime?          @db.Date
   total_due         Decimal?           @db.Decimal(12, 2)
   offer_status      String?            @default("offered")
+  is_deleted        Boolean?           @default(false)
+  deleted_at        DateTime?          @db.Timestamp(6)
   created_at        DateTime?          @default(now()) @db.Timestamp(6)
   updated_at        DateTime?          @default(now()) @db.Timestamp(6)
   loan_applications loan_applications? @relation(fields: [application_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -116,6 +136,7 @@ model loan_offers {
 
   @@index([application_id], map: "idx_loan_offers_application_id")
   @@index([offer_status], map: "idx_loan_offers_offer_status")
+  @@index([is_deleted], map: "idx_loan_offers_is_deleted")
 }
 
 model loans {
@@ -127,6 +148,8 @@ model loans {
   due_date          DateTime?           @db.Date
   total_amount      Decimal?            @db.Decimal(12, 2)
   balance_remaining Decimal?            @db.Decimal(12, 2)
+  is_deleted        Boolean?            @default(false)
+  deleted_at        DateTime?           @db.Timestamp(6)
   created_at        DateTime?           @default(now()) @db.Timestamp(6)
   updated_at        DateTime?           @default(now()) @db.Timestamp(6)
   interest_and_fees interest_and_fees[]
@@ -138,6 +161,7 @@ model loans {
   @@index([loan_offer_id], map: "idx_loans_loan_offer_id")
   @@index([status], map: "idx_loans_status")
   @@index([user_id], map: "idx_loans_user_id")
+  @@index([is_deleted], map: "idx_loans_is_deleted")
 }
 
 model notifications {
@@ -146,6 +170,8 @@ model notifications {
   title      String?   @db.VarChar(255)
   message    String?
   read       Boolean?  @default(false)
+  is_deleted Boolean?  @default(false)
+  deleted_at DateTime? @db.Timestamp(6)
   created_at DateTime? @default(now()) @db.Timestamp(6)
   updated_at DateTime? @default(now()) @db.Timestamp(6)
   users      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -153,6 +179,7 @@ model notifications {
   @@index([created_at], map: "idx_notifications_created_at")
   @@index([read], map: "idx_notifications_read")
   @@index([user_id], map: "idx_notifications_user_id")
+  @@index([is_deleted], map: "idx_notifications_is_deleted")
 }
 
 model repayments {
@@ -162,6 +189,8 @@ model repayments {
   payment_date          DateTime? @db.Timestamp(6)
   payment_method        String?   @db.VarChar(50)
   transaction_reference String?   @db.VarChar(100)
+  is_deleted            Boolean?  @default(false)
+  deleted_at            DateTime? @db.Timestamp(6)
   created_at            DateTime? @default(now()) @db.Timestamp(6)
   updated_at            DateTime? @default(now()) @db.Timestamp(6)
   loans                 loans?    @relation(fields: [loan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -169,6 +198,7 @@ model repayments {
   @@index([loan_id], map: "idx_repayments_loan_id")
   @@index([payment_date], map: "idx_repayments_payment_date")
   @@index([transaction_reference], map: "idx_repayments_transaction_reference")
+  @@index([is_deleted], map: "idx_repayments_is_deleted")
 }
 
 model system_settings {
@@ -176,8 +206,12 @@ model system_settings {
   key         String    @unique @db.VarChar(100)
   value       String?
   description String?
+  is_deleted  Boolean?  @default(false)
+  deleted_at  DateTime? @db.Timestamp(6)
   created_at  DateTime? @default(now()) @db.Timestamp(6)
   updated_at  DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([is_deleted], map: "idx_system_settings_is_deleted")
 }
 
 model users {
@@ -193,6 +227,8 @@ model users {
   city               String?             @db.VarChar(100)
   country            String?             @db.VarChar(100)
   status             String?             @default("active")
+  is_deleted         Boolean?            @default(false)
+  deleted_at         DateTime?           @db.Timestamp(6)
   created_at         DateTime?           @default(now()) @db.Timestamp(6)
   updated_at         DateTime?           @default(now()) @db.Timestamp(6)
   bank_accounts      bank_accounts[]
@@ -205,4 +241,5 @@ model users {
   @@index([created_at], map: "idx_users_created_at")
   @@index([identity], map: "idx_users_identity")
   @@index([status], map: "idx_users_status")
+  @@index([is_deleted], map: "idx_users_is_deleted")
 }

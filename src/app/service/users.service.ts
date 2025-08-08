@@ -1,11 +1,11 @@
 import { UsersRepository } from '../repository/users.repository'
 
 export const UserService = {
-    registerUser: async (identity: string) => {
-        const existing = await UsersRepository.findByIdentity(identity)
-        if (existing) throw new Error('User already exists')
-        return UsersRepository.create({ identity })
+    findByIdentity: async (identity: string) => {
+        let user = await UsersRepository.findByIdentity(identity);
+        if (!user) {
+            user = await UsersRepository.create({ identity });
+        }
+        return user;
     },
-
-    getAllUsers: async () => await UsersRepository.findMany({})
 }

@@ -1,10 +1,29 @@
-import { ArrowRight, CheckCircle, Clock, Shield, DollarSign, Star, Users } from "lucide-react";
+"use client";
 import Link from "next/link";
-import { UserService } from './service/users.service';
+import { ArrowRight, CheckCircle, Clock, Shield, DollarSign, Star, Users } from "lucide-react";
+import { useState, useEffect } from 'react';
+import LoanCalculator from "./components/LoanCalculator";
 
-export default async function Home() {
-  const users = await UserService.getAllUsers();
-  console.log('users', users);
+export default function Home() {
+  const [loanAmount, setLoanAmount] = useState<number>(10000);
+  const [loanTerm, setLoanTerm] = useState<number>(14);
+  const [totalRepayment, setTotalRepayment] = useState<number>(0);
+
+  const loanAmounts = [
+    10000, 15000, 20000, 25000, 30000
+  ];
+  const loanTerms = [
+    { days: 14, interestRate: 0.25 },
+    { days: 28, interestRate: 0.30 }
+  ];
+
+  useEffect(() => {
+    const selectedTerm = loanTerms.find(term => term.days === loanTerm);
+    if (selectedTerm) {
+      const interest = loanAmount * selectedTerm.interestRate;
+      setTotalRepayment(loanAmount + interest);
+    }
+  }, [loanAmount, loanTerm]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -19,7 +38,7 @@ export default async function Home() {
                     Fast Cash When You Need It Most
                   </h1>
                   <p className="text-xl text-blue-100">
-                    Get up to $1,500 in your account as soon as today. Simple application, fast approval, and transparent terms.
+                    Get up to $30,000 in your account as soon as today. Simple application, fast approval, and transparent terms.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Link
@@ -52,34 +71,7 @@ export default async function Home() {
                   </div>
                 </div>
                 <div className="lg:text-right">
-                  <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl">
-                    <h3 className="text-2xl font-bold mb-6">Loan Calculator</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Loan Amount</label>
-                        <select className="w-full p-3 rounded-lg bg-white/20 border border-white/30 text-white">
-                          <option className="bg-blue-200 text-black" value="300">$300</option>
-                          <option className="bg-blue-200 text-black" value="500">$500</option>
-                          <option className="bg-blue-200 text-black" value="750">$750</option>
-                          <option className="bg-blue-200 text-black" value="1000">$1,000</option>
-                          <option className="bg-blue-200 text-black" value="1500">$1,500</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Loan Term</label>
-                        <select className="w-full p-3 rounded-lg bg-white/20 border border-white/30 text-white">
-                          <option className="bg-blue-200 text-black" value="14">14 days</option>
-                          <option className="bg-blue-200 text-black" value="30">30 days</option>
-                        </select>
-                      </div>
-                      <div className="bg-white/20 p-4 rounded-lg">
-                        <div className="flex justify-between items-center">
-                          <span>Total Repayment:</span>
-                          <span className="text-2xl font-bold">$1,150</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <LoanCalculator />
                 </div>
               </div>
             </div>
