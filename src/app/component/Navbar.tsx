@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Link from 'next/link';
-import { Menu, X, Shield, ChevronDown, Home, FileText, Info, HelpCircle, Mail, LayoutDashboard, CreditCard, LogIn, LogOut, User } from 'lucide-react';
+import { Menu, X, Shield, ChevronDown, Home, FileText, Info, HelpCircle, Mail, LayoutDashboard, CreditCard, LogIn, LogOut, User, Briefcase } from 'lucide-react';
 import Image from 'next/image';
 import { useSession, signIn, signOut } from "next-auth/react"
 import { usePathname } from 'next/navigation';
@@ -36,16 +36,6 @@ const Navbar = () => {
             >
               <Home className="h-4 w-4" />
               <span>Home</span>
-            </Link>
-            <Link
-              href="/apply"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${isActive('/apply') ?
-                'bg-blue-600 text-white' :
-                'text-gray-600 hover:text-blue-600'
-                }`}
-            >
-              <FileText className="h-4 w-4" />
-              <span>Apply Now</span>
             </Link>
             <Link
               href="/about"
@@ -87,13 +77,13 @@ const Navbar = () => {
               <LayoutDashboard className="h-4 w-4" />
               <span>Dashboard</span>
             </Link>
-            {/* <Link
+            <Link
               href="/admin"
               className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-1"
             >
               <Shield className="h-4 w-4" />
               Admin
-            </Link> */}
+            </Link>
             {
               !session ?
                 <Link
@@ -117,7 +107,7 @@ const Navbar = () => {
                         onClick={() => setIsDropdownOpen(false)}
                       >
                         <User className="h-4 w-4" />
-                        <span>View Profile</span>
+                        <span>Profile</span>
                       </Link>
                       <Link
                         href="/bank-accounts"
@@ -126,6 +116,21 @@ const Navbar = () => {
                       >
                         <CreditCard className="h-4 w-4" />
                         <span>Bank Accounts</span>
+                      </Link>
+                      <Link
+                        href="/employment"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        <Briefcase className="h-4 w-4" />
+                        <span>Employment</span>
+                      </Link>
+                      <Link href="/loan-applications"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        <FileText className="h-4 w-4" />
+                        <span>Loan Applications</span>
                       </Link>
                       <button
                         onClick={() => {
@@ -168,17 +173,6 @@ const Navbar = () => {
               >
                 <Home className="h-5 w-5" />
                 <span>Home</span>
-              </Link>
-              <Link
-                href="/apply"
-                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/apply') ?
-                  'bg-blue-600 text-white' :
-                  'text-gray-600 hover:text-blue-600'
-                  }`}
-                onClick={() => setIsOpen(false)}
-              >
-                <FileText className="h-5 w-5" />
-                <span>Apply Now</span>
               </Link>
               <Link
                 href="/about"
@@ -224,13 +218,13 @@ const Navbar = () => {
                 <LayoutDashboard className="h-5 w-5" />
                 <span>Dashboard</span>
               </Link>
-              {/* <Link
+              <Link
                 href="/admin"
                 className="block px-3 py-2 rounded-md text-base font-medium bg-gray-600 text-white hover:bg-gray-700"
                 onClick={() => setIsOpen(false)}
               >
                 Admin
-              </Link> */}
+              </Link>
               {
                 !session ?
                   <Link
@@ -254,7 +248,7 @@ const Navbar = () => {
                           onClick={() => setIsDropdownOpen(false)}
                         >
                           <User className="h-5 w-5" />
-                          <span>View Profile</span>
+                          <span>Profile</span>
                         </Link>
                         <Link
                           href="/bank-accounts"
@@ -263,6 +257,21 @@ const Navbar = () => {
                         >
                           <CreditCard className="h-5 w-5" />
                           <span>Bank Accounts</span>
+                        </Link>
+                        <Link
+                          href="/employment"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          <Briefcase className="h-5 w-5" />
+                          <span>Employment</span>
+                        </Link>
+                        <Link href="/loan-applications"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          <FileText className="h-4 w-4" />
+                          <span>Loan Applications</span>
                         </Link>
                         <Link
                           href="/#"
