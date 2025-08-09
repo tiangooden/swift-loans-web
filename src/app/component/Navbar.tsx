@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Link from 'next/link';
-import { Menu, X, Shield, ChevronDown } from 'lucide-react';
+import { Menu, X, Shield, ChevronDown, Home, FileText, Info, HelpCircle, Mail, LayoutDashboard, CreditCard, LogIn, LogOut, User } from 'lucide-react';
 import Image from 'next/image';
 import { useSession, signIn, signOut } from "next-auth/react"
 import { usePathname } from 'next/navigation';
@@ -29,57 +29,63 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-8">
             <Link
               href="/"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/') ?
-                'text-blue-600' :
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${isActive('/') ?
+                'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
                 }`}
             >
-              Home
+              <Home className="h-4 w-4" />
+              <span>Home</span>
             </Link>
             <Link
               href="/apply"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/apply') ?
-                'text-blue-600' :
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${isActive('/apply') ?
+                'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
                 }`}
             >
-              Apply Now
+              <FileText className="h-4 w-4" />
+              <span>Apply Now</span>
             </Link>
             <Link
               href="/about"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/about') ?
-                'text-blue-600' :
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${isActive('/about') ?
+                'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
                 }`}
             >
-              About
+              <Info className="h-4 w-4" />
+              <span>About</span>
             </Link>
             <Link
               href="/faq"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/faq') ?
-                'text-blue-600' :
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${isActive('/faq') ?
+                'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
                 }`}
             >
-              FAQ
+              <HelpCircle className="h-4 w-4" />
+              <span>FAQ</span>
             </Link>
             <Link
               href="/contact"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/contact') ?
-                'text-blue-600' :
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${isActive('/contact') ?
+                'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
                 }`}
             >
-              Contact
+              <Mail className="h-4 w-4" />
+              <span>Contact</span>
             </Link>
             <Link
               href="/dashboard"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive('/dashboard') ?
-                'text-blue-600' :
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 ${isActive('/dashboard') ?
+                'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
                 }`}
             >
-              Dashboard
+              <LayoutDashboard className="h-4 w-4" />
+              <span>Dashboard</span>
             </Link>
             {/* <Link
               href="/admin"
@@ -90,39 +96,46 @@ const Navbar = () => {
             </Link> */}
             {
               !session ?
-                <button onClick={() => signIn()}>Sign in</button> :
+                <Link
+                  href="#"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors text-gray-600 hover:text-blue-600 flex items-center space-x-1`}
+                  onClick={() => signIn()}><LogIn className="h-4 w-4" /><span>Sign in</span></Link> :
                 <div className="relative ml-4">
-                  <button
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  <Link
+                    href="#"
                     className="flex items-center text-gray-600 hover:text-blue-600 focus:outline-none"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
-                    <span>{session.user?.email}</span>
+                    <User className="h-4 w-4 mr-1" />{session.user?.email}
                     <ChevronDown className="ml-1 h-4 w-4" />
-                  </button>
+                  </Link>
                   {isDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                       <Link
                         href="/profile"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                         onClick={() => setIsDropdownOpen(false)}
                       >
-                        View Profile
+                        <User className="h-4 w-4" />
+                        <span>View Profile</span>
                       </Link>
                       <Link
                         href="/bank-accounts"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                         onClick={() => setIsDropdownOpen(false)}
                       >
-                        Bank Accounts
+                        <CreditCard className="h-4 w-4" />
+                        <span>Bank Accounts</span>
                       </Link>
                       <button
                         onClick={() => {
                           signOut();
                           setIsDropdownOpen(false);
                         }}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                       >
-                        Sign Out
+                        <LogOut className="h-4 w-4" />
+                        <span>Sign Out</span>
                       </button>
                     </div>
                   )}
@@ -147,45 +160,69 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50">
               <Link
                 href="/"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-blue-600"
+                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/') ?
+                  'bg-blue-600 text-white' :
+                  'text-gray-600 hover:text-blue-600'
+                  }`}
                 onClick={() => setIsOpen(false)}
               >
-                Home
+                <Home className="h-5 w-5" />
+                <span>Home</span>
               </Link>
               <Link
                 href="/apply"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-blue-600"
+                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/apply') ?
+                  'bg-blue-600 text-white' :
+                  'text-gray-600 hover:text-blue-600'
+                  }`}
                 onClick={() => setIsOpen(false)}
               >
-                Apply Now
+                <FileText className="h-5 w-5" />
+                <span>Apply Now</span>
               </Link>
               <Link
                 href="/about"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-blue-600"
+                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/about') ?
+                  'bg-blue-600 text-white' :
+                  'text-gray-600 hover:text-blue-600'
+                  }`}
                 onClick={() => setIsOpen(false)}
               >
-                About
+                <Info className="h-5 w-5" />
+                <span>About</span>
               </Link>
               <Link
                 href="/faq"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-blue-600"
+                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/faq') ?
+                  'bg-blue-600 text-white' :
+                  'text-gray-600 hover:text-blue-600'
+                  }`}
                 onClick={() => setIsOpen(false)}
               >
-                FAQ
+                <HelpCircle className="h-5 w-5" />
+                <span>FAQ</span>
               </Link>
               <Link
                 href="/contact"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-blue-600"
+                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/contact') ?
+                  'bg-blue-600 text-white' :
+                  'text-gray-600 hover:text-blue-600'
+                  }`}
                 onClick={() => setIsOpen(false)}
               >
-                Contact
+                <Mail className="h-5 w-5" />
+                <span>Contact</span>
               </Link>
               <Link
                 href="/dashboard"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-blue-600"
+                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/dashboard') ?
+                  'bg-blue-600 text-white' :
+                  'text-gray-600 hover:text-blue-600'
+                  }`}
                 onClick={() => setIsOpen(false)}
               >
-                Dashboard
+                <LayoutDashboard className="h-5 w-5" />
+                <span>Dashboard</span>
               </Link>
               {/* <Link
                 href="/admin"
@@ -196,40 +233,48 @@ const Navbar = () => {
               </Link> */}
               {
                 !session ?
-                  <button onClick={() => signIn()}>Sign in</button> :
+                  <Link
+                    href="#"
+                    className={`block px-3 py-2 rounded-md text-base font-medium transition-colors text-gray-600 hover:text-blue-600 flex items-center space-x-2`}
+                    onClick={() => signIn()}><LogIn className="h-5 w-5" /><span>Sign in</span></Link> :
                   <div className="relative ml-4">
-                    <button
-                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    <Link
+                      href="#"
                       className="flex items-center text-gray-600 hover:text-blue-600 focus:outline-none"
+                      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
-                      <span>{session.user?.email}</span>
-                      <ChevronDown className="ml-1 h-4 w-4" />
-                    </button>
+                      <User className="h-5 w-5 mr-1" />{session.user?.email}
+                      <ChevronDown className="ml-1 h-5 w-5" />
+                    </Link>
                     {isDropdownOpen && (
                       <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                         <Link
                           href="/profile"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                           onClick={() => setIsDropdownOpen(false)}
                         >
-                          View Profile
+                          <User className="h-5 w-5" />
+                          <span>View Profile</span>
                         </Link>
                         <Link
                           href="/bank-accounts"
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                           onClick={() => setIsDropdownOpen(false)}
                         >
-                          Bank Accounts
+                          <CreditCard className="h-5 w-5" />
+                          <span>Bank Accounts</span>
                         </Link>
-                        <button
+                        <Link
+                          href="/#"
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                           onClick={() => {
                             signOut();
                             setIsDropdownOpen(false);
                           }}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
-                          Sign Out
-                        </button>
+                          <LogOut className="h-5 w-5" />
+                          <span>Sign Out</span>
+                        </Link>
                       </div>
                     )}
                   </div>
