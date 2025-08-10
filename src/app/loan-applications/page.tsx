@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import LoanApplicationForm from './LoanApplicationForm';
-import { format } from 'date-fns';
 
 interface LoanApplication {
   id: number;
@@ -161,15 +160,15 @@ export default function LoanApplicationsPage() {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {format(new Date(application.submitted_at), 'MMM dd, yyyy')}
+                          {(new Date(application.submitted_at)).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
                             <button
-                              onClick={() => router.push(`/loans/${application?.id}`)}
+                              onClick={() => router.push(`/loan-applications/${application.id}`)}
                               className="text-blue-600 hover:text-blue-900"
                             >
-                              View
+                              View Details
                             </button>
                             <button
                               onClick={() => {
