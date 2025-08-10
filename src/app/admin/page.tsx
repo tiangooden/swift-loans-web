@@ -1,13 +1,32 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Shield, Bell, BarChart3, DollarSign, Users, TrendingUp, Settings, Clock, CheckCircle, AlertTriangle, Plus, Download, Search, Eye, Edit, Trash2, PieChart } from "lucide-react";
 
 export default function Admin() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [loanApplications, setLoanApplications] = useState([]); // State to store fetched loan applications
 
-  // Mock data
+  useEffect(() => {
+    if (activeTab === 'loans') {
+      const fetchLoanApplications = async () => {
+        try {
+          const response = await fetch('/api/admin/loan-applications');
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          setLoanApplications(data);
+        } catch (error) {
+          console.error('Error fetching loan applications:', error);
+        }
+      };
+      fetchLoanApplications();
+    }
+  }, [activeTab]);
+
+  // Mock data - these will be replaced by fetched data
   const stats = {
     totalUsers: 12547,
     activeLoans: 1834,
@@ -17,7 +36,7 @@ export default function Admin() {
     defaultRate: 3.2
   };
 
-  const recentLoans = [
+  const recentLoans = [ // This mock data will be replaced
     { id: 'LC1001', user: 'John Doe', amount: 1000, status: 'active', date: '2025-01-15', dueDate: '2025-02-15' },
     { id: 'LC1002', user: 'Sarah Smith', amount: 750, status: 'pending', date: '2025-01-15', dueDate: '2025-02-14' },
     { id: 'LC1003', user: 'Mike Johnson', amount: 500, status: 'paid', date: '2025-01-14', dueDate: '2025-02-13' },
@@ -55,9 +74,9 @@ export default function Admin() {
     }
   };
 
-  const filteredLoans = recentLoans.filter(loan => {
-    const matchesSearch = loan.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      loan.id.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredLoans = loanApplications.filter((loan: any) => {
+    const matchesSearch = loan.user_id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) || // Type assertion to any to handle undefined user_id
+      loan.id.toString().toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === 'all' || loan.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
@@ -253,101 +272,95 @@ export default function Admin() {
         {/* Loans Tab */}
         {activeTab === 'loans' && (
           <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-gray-900">Loan Management</h2>
-              <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search loans..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="all">All Status</option>
-                  <option value="active">Active</option>
-                  <option value="pending">Pending</option>
-                  <option value="paid">Paid</option>
-                  <option value="overdue">Overdue</option>
-                </select>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
-                  <Download className="h-4 w-4" />
-                  <span>Export</span>
+              <div className="flex space-x-2">
+                <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                  <Plus className="h-5 w-5 mr-2" />
+                  New Loan
+                </button>
+                <button className="flex items-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                  <Download className="h-5 w-5 mr-2" />
+                  Export
                 </button>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Loan ID
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Borrower
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Amount
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Due Date
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredLoans.map((loan) => (
-                      <tr key={loan.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {loan.id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {loan.user}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          ${loan.amount}
-                        </td>
+            <div className="flex items-center space-x-4">
+              <div className="relative flex-grow">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search by borrower or loan ID..."
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <select
+                className="block w-auto px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+              >
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                <option value="funded">Funded</option>
+                <option value="completed">Completed</option>
+                <option value="overdue">Overdue</option>
+              </select>
+            </div>
+
+            <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Loan ID</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Borrower</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted Date</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredLoans.length > 0 ? (
+                    filteredLoans.map((loan: any) => (
+                      <tr key={loan.id?.toString()}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{loan.id}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{loan.user_id}</td> {/* Display user_id for now, ideally fetch user name */}
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${loan.amount_requested?.toLocaleString()}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(loan.status)}`}>
-                            {getStatusIcon(loan.status)}
-                            <span className="ml-1 capitalize">{loan.status}</span>
-                          </div>
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(loan.status)}`}>
+                            {/* {getStatusIcon(loan.status)} {loan.status} */}
+                          </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {loan.dueDate}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-2">
-                            <button className="text-blue-600 hover:text-blue-900">
-                              <Eye className="h-4 w-4" />
-                            </button>
-                            <button className="text-green-600 hover:text-green-900">
-                              <Edit className="h-4 w-4" />
-                            </button>
-                            <button className="text-red-600 hover:text-red-900">
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(loan.submitted_at).toLocaleDateString()}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <a href={`/loan-applications/${loan.id}`} className="text-blue-600 hover:text-blue-900 mr-3">
+                            <Eye className="h-5 w-5 inline-block" /> View
+                          </a>
+                          <a href="#" className="text-indigo-600 hover:text-indigo-900 mr-3">
+                            <Edit className="h-5 w-5 inline-block" /> Edit
+                          </a>
+                          <a href="#" className="text-red-600 hover:text-red-900">
+                            <Trash2 className="h-5 w-5 inline-block" /> Delete
+                          </a>
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        No loan applications found.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
