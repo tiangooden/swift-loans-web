@@ -82,3 +82,38 @@ export async function DELETE(
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }
+
+export async function GET(
+    request: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    try {
+        const { id } = await params; // Await params before destructuring id
+        const session = await getServerSession(authOptions);
+        if (!session?.user?.email) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        const user = await UsersRepository.findByIdentity(session.user.email);
+        if (!user) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
+
+        const loanApplication = await LoanApplicationsRepository.findById(parseInt(id));
+
+        if (!loanApplication) {
+            return NextResponse.json({ error: 'Loan application not found' }, { status: 404 });
+        }
+
+        // Check if the user is the owner of the application or an admin
+        // const isAdmin = user.roles.includes('admin');
+        // if (loanApplication.user_id !== user.id && !isAdmin) {
+        //     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        // }
+
+        return NextResponse.json(loanApplication);
+    } catch (error) {
+        console.error('Error fetching loan application:', error);
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    }
+}

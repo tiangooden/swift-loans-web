@@ -168,7 +168,7 @@ export default function LoanApplicationsPage() {
                               onClick={() => router.push(`/loan-applications/${application.id}`)}
                               className="text-blue-600 hover:text-blue-900"
                             >
-                              View Details
+                              View
                             </button>
                             <button
                               onClick={() => {
