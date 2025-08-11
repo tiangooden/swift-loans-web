@@ -10,16 +10,15 @@ export async function GET(request: NextRequest) {
         if (!session?.user?.email) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-
-        const user = await UsersRepository.findByIdentity(session.user.email);
+        const sessionUser = session.user as any;
+        const { id, provider } = sessionUser;
+        const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
         // if (!user || !user.roles.includes('admin')) {
-            // return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        // return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
         // }
-
         const loanApplications = await LoanApplicationsRepository.findMany({
             orderBy: { submitted_at: 'desc' },
         });
-
         return NextResponse.json(loanApplications);
     } catch (error) {
         console.error('Error fetching loan applications for admin:', error);

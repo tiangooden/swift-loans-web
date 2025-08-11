@@ -14,7 +14,7 @@ export async function PUT(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const user = await UsersRepository.findByIdentity(session.user.email);
+        const user = await UsersRepository.findByProviderId(session.user.email);
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
@@ -58,7 +58,7 @@ export async function DELETE(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const user = await UsersRepository.findByIdentity(session.user.email);
+        const user = await UsersRepository.findByProviderId(session.user.email);
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
@@ -94,7 +94,7 @@ export async function GET(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const user = await UsersRepository.findByIdentity(session.user.email);
+        const user = await UsersRepository.findByProviderId(session.user.email);
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }

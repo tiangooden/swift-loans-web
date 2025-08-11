@@ -4,7 +4,6 @@ import { prisma } from '@/app/config/prisma';
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     const { id } = params;
     const data = await request.json();
-
     try {
         const updatedAccount = await prisma.bank_accounts.update({
             where: { id: parseInt(id) },
@@ -15,7 +14,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
                 is_primary: data.is_primary,
             },
         });
-
         return NextResponse.json(updatedAccount);
     } catch (error) {
         console.error(`Error updating bank account ${id}:`, error);
@@ -25,9 +23,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
     const { id } = params;
-
     try {
-        // Soft delete the bank account
         await prisma.bank_accounts.update({
             where: { id: parseInt(id) },
             data: {
@@ -35,7 +31,6 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
                 deleted_at: new Date(),
             },
         });
-
         return NextResponse.json({ message: 'Bank account deleted successfully' }, { status: 200 });
     } catch (error) {
         console.error(`Error deleting bank account ${id}:`, error);

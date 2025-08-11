@@ -1,16 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/app/config/prisma';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
-export async function GET(request: NextRequest, { params }: { params: { email: string } }) {
-    const { email } = params;
-
-    if (!email) {
-        return NextResponse.json({ error: 'Email is required' }, { status: 400 });
-    }
-
+export async function GET(request: NextRequest) {
+    const session = await getServerSession(authOptions);
     try {
+        if (!session) {
+            throw new Error('Unauthorized - No session found');
+        }
+        const sessionUser = session.user as any;
+        const { id, provider } = sessionUser;
         const user = await prisma.users.findUnique({
-            where: { identity: email },
+            where: { identity: `${provider}|${id}` },
         });
 
         if (!user) {
@@ -24,17 +26,17 @@ export async function GET(request: NextRequest, { params }: { params: { email: s
     }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { email: string } }) {
-    const { email } = params;
+export async function PUT(request: NextRequest) {
+    const session = await getServerSession(authOptions);
     const data = await request.json();
-
-    if (!email) {
-        return NextResponse.json({ error: 'Email is required' }, { status: 400 });
-    }
-
     try {
+        if (!session) {
+            throw new Error('Unauthorized - No session found');
+        }
+        const sessionUser = session.user as any;
+        const { id, provider } = sessionUser;
         const updatedUser = await prisma.users.update({
-            where: { identity: email },
+            where: { identity: `${provider}|${id}` },
             data: {
                 first_name: data.first_name,
                 middle_name: data.middle_name,

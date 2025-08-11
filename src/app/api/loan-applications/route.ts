@@ -4,14 +4,15 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { prisma } from '@/app/config/prisma';
 
 export async function GET() {
+    const session = await getServerSession(authOptions);
     try {
-        const session = await getServerSession(authOptions);
         if (!session?.user?.email) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-
+        const sessionUser = session.user as any;
+        const { id, provider } = sessionUser;
         const user = await prisma.users.findUnique({
-            where: { identity: session?.user?.email },
+            where: { identity: `${provider}|${id}` },
             select: { id: true },
         });
         if (!user) {
@@ -31,14 +32,15 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+    const session = await getServerSession(authOptions);
     try {
-        const session = await getServerSession(authOptions);
         if (!session?.user?.email) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-
+        const sessionUser = session.user as any;
+        const { id, provider } = sessionUser;
         const user = await prisma.users.findUnique({
-            where: { identity: session?.user?.email },
+            where: { identity: `${provider}|${id}` },
             select: { id: true },
         });
         if (!user) {

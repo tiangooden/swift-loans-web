@@ -27,9 +27,10 @@ const ProfilePage = () => {
 
     useEffect(() => {
         const fetchUserProfile = async () => {
+            console.log(session)
             if (status === 'authenticated' && session?.user?.email) {
                 try {
-                    const response = await fetch(`/api/user/${session.user.email}`);
+                    const response = await fetch(`/api/user`);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }

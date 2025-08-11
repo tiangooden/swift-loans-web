@@ -31,7 +31,7 @@ export default function EmploymentPage() {
             try {
                 // Assuming you have a user ID available in the session or can derive it
                 // For simplicity, let's assume we fetch by user's email for now
-                const res = await fetch(`/api/employment/${session.user?.email}`);
+                const res = await fetch(`/api/employment`);
                 if (!res.ok) {
                     if (res.status === 404) {
                         setEmployment({ employer_name: '', job_title: '', employment_type: '', monthly_income: 0, payday_day: 1 });
@@ -61,7 +61,7 @@ export default function EmploymentPage() {
         if (!session?.user?.email) return;
 
         try {
-            const res = await fetch(`/api/employment/${session.user.email}`, {
+            const res = await fetch(`/api/employment`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
