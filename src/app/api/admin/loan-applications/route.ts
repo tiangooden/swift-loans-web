@@ -5,23 +5,20 @@ import { LoanApplicationsRepository } from '@/app/repository/loan_applications.r
 import { UsersRepository } from '@/app/repository/users.repository';
 
 export async function GET(request: NextRequest) {
-    try {
-        const session = await getServerSession(authOptions);
-        if (!session?.user?.email) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
-        const sessionUser = session.user as any;
-        const { id, provider } = sessionUser;
-        const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
-        // if (!user || !user.roles.includes('admin')) {
-        // return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-        // }
-        const loanApplications = await LoanApplicationsRepository.findMany({
-            orderBy: { submitted_at: 'desc' },
-        });
-        return NextResponse.json(loanApplications);
-    } catch (error) {
-        console.error('Error fetching loan applications for admin:', error);
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-    }
+    // const session = await getServerSession(authOptions);
+    // if (!session) {
+    //     return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
+    // }
+    // const { id, provider } = session.user as any;
+    // const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
+    // if (!user) {
+    //     return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    // }
+    // if (!user || !user.roles.includes('admin')) {
+    // return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    // }
+    const loanApplications = await LoanApplicationsRepository.findMany({
+        orderBy: { submitted_at: 'desc' },
+    });
+    return NextResponse.json(loanApplications);
 }

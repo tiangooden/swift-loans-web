@@ -134,7 +134,7 @@ const Navbar = () => {
                       </Link>
                       <button
                         onClick={() => {
-                          signOut();
+                          signOut({ callbackUrl: '/', redirect: true });
                           setIsDropdownOpen(false);
                         }}
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
@@ -277,7 +277,7 @@ const Navbar = () => {
                           href="/#"
                           className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                           onClick={() => {
-                            signOut();
+                            signOut({ callbackUrl: '/', redirect: true });
                             setIsDropdownOpen(false);
                           }}
                         >
