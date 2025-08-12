@@ -1,40 +1,23 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
-import { UsersRepository } from '@/app/repository/users.repository';
 import { EmploymentDetailsRepository } from '@/app/repository/employment_details.repository';
+import getCurrentUser from '@/app/util/get-user';
 
 export async function GET(request: Request) {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-    const { id, provider } = (session as any).user;
-    const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
-    if (!user) {
-        return NextResponse.json({ message: 'User not found' }, { status: 404 });
-    }
+    const user = await getCurrentUser();
     const employmentDetails = await EmploymentDetailsRepository.find({
         where: {
             user_id: user.id,
         },
     });
-    if (!employmentDetails) {
+    if (!employmentDetails || employmentDetails.length === 0) {
+
         return NextResponse.json({ message: 'Employment details not found' }, { status: 404 });
     }
     return NextResponse.json(employmentDetails[0]);
 }
 
 export async function PUT(request: Request) {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
-    }
-    const { id, provider } = session.user as any;
-    const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
-    if (!user) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
+    const user = await getCurrentUser();
     const existingEmployment = await EmploymentDetailsRepository.find({
         where: {
             user_id: user.id,
@@ -42,7 +25,7 @@ export async function PUT(request: Request) {
     });
     let updatedEmployment;
     const body = await request.json();
-    if (existingEmployment) {
+    if (existingEmployment && existingEmployment.length) {
         updatedEmployment = await EmploymentDetailsRepository.update({
             where: {
                 user_id: user.id,

@@ -24,7 +24,7 @@ const BankAccountsPage = () => {
   const fetchBankAccounts = async () => {
     if (status === 'authenticated' && session?.user?.email) {
       try {
-        const response = await fetch(`/api/bank-accounts?email=${session.user.email}`);
+        const response = await fetch(`/api/bank-accounts`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -107,7 +107,6 @@ const BankAccountsPage = () => {
             account={editingAccount}
             onClose={() => setShowForm(false)}
             onSubmitSuccess={handleFormSubmit}
-            userEmail={session.user.email}
           />
         )}
 

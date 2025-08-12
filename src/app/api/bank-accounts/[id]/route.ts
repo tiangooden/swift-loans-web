@@ -4,7 +4,7 @@ import getCurrentUser from '@/app/util/get-user';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     const user = await getCurrentUser();
-    const { id } = params;
+    const { id } = await params;
     const data = await request.json();
     const updatedAccount = await BankAccountsRepository.update({
         where: { id: parseInt(id) },
@@ -20,7 +20,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
     const user = await getCurrentUser();
-    const { id } = params;
+    const { id } = await params;
     await BankAccountsRepository.update({
         where: { id: parseInt(id) },
         data: {

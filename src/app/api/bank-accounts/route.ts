@@ -3,7 +3,6 @@ import { BankAccountsRepository } from '@/app/repository/bank_accounts.repositor
 import getCurrentUser from '@/app/util/get-user';
 
 export async function GET(request: NextRequest) {
-
     const user = await getCurrentUser();
     const bankAccounts = await BankAccountsRepository.find({
         where: { user_id: user.id, is_deleted: false },
@@ -13,9 +12,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     const user = await getCurrentUser();
-    const { accountData } = await request.json();
+    const body = await request.json();
     const newAccount = await BankAccountsRepository.create({
-        ...accountData,
+        ...body,
         user_id: user.id,
     });
     return NextResponse.json(newAccount, { status: 201 });

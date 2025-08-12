@@ -15,10 +15,9 @@ interface BankAccountFormProps {
   account: BankAccount | null;
   onClose: () => void;
   onSubmitSuccess: () => void;
-  userEmail: string;
 }
 
-const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onSubmitSuccess, userEmail }) => {
+const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onSubmitSuccess }) => {
   const [formData, setFormData] = useState<BankAccount>(account || {
     bank_name: '',
     account_number: '',
@@ -41,7 +40,8 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onS
   }, [account]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === 'checkbox' ? checked : value,
@@ -61,7 +61,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onS
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...formData, userEmail }),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {

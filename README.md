@@ -21,6 +21,7 @@ npx prisma migrate dev --name <name> # create+apply migration (dev)
 npx prisma migrate dev --create-only --name <name>  # create but don't apply
 npx prisma migrate deploy            # apply pending migrations (CI/prod)
 npx prisma migrate status            # check migration status
+npx prisma generate
 npx prisma db push                   # push schema (no migration files) - prototyping
 npx prisma db pull                   # introspect DB into schema.prisma
 npx prisma db seed                   # run seed script
