@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 interface UserProfile {
   id: number;
   identity: string;
+  email?: string;
   first_name?: string;
   middle_name?: string;
   last_name?: string;
@@ -38,7 +39,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
     e.preventDefault();
     setMessage(null);
     try {
-      const response = await fetch(`/api/user/${user.identity}`, {
+      const response = await fetch(`/api/user`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -93,6 +94,18 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
             name="last_name"
             id="last_name"
             value={formData.last_name || ''}
+            onChange={handleChange}
+            readOnly={!isEditing}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value={formData.email || ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"

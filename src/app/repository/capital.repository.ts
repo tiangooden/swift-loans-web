@@ -7,11 +7,7 @@ export const CapitalRepository = {
     return prisma.capital.create({ data });
   },
 
-  findById: async (id: number): Promise<capital | null> => {
-    return prisma.capital.findUnique({ where: { id } });
-  },
-
-  findMany: async (params: {
+  find: async (params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.capitalWhereUniqueInput;

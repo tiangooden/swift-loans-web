@@ -7,11 +7,7 @@ export const InterestAndFeesRepository = {
     return prisma.interest_and_fees.create({ data });
   },
 
-  findById: async (id: number): Promise<interest_and_fees | null> => {
-    return prisma.interest_and_fees.findUnique({ where: { id } });
-  },
-
-  findMany: async (params: {
+  find: async (params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.interest_and_feesWhereUniqueInput;

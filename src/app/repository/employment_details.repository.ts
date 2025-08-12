@@ -7,11 +7,7 @@ export const EmploymentDetailsRepository = {
     return prisma.employment_details.create({ data });
   },
 
-  findById: async (user_id: number): Promise<employment_details | null> => {
-    return prisma.employment_details.findUnique({ where: { user_id } });
-  },
-
-  findMany: async (params: {
+  find: async (params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.employment_detailsWhereUniqueInput;

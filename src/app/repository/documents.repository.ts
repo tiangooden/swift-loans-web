@@ -7,11 +7,7 @@ export const DocumentsRepository = {
     return prisma.documents.create({ data });
   },
 
-  findById: async (id: number): Promise<documents | null> => {
-    return prisma.documents.findUnique({ where: { id } });
-  },
-
-  findMany: async (params: {
+  find: async (params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.documentsWhereUniqueInput;

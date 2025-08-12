@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { BankAccountsRepository } from '@/app/repository/bank_accounts.repository';
+import getCurrentUser from '@/app/util/get-user';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+    const user = await getCurrentUser();
     const { id } = params;
     const data = await request.json();
     const updatedAccount = await BankAccountsRepository.update({
@@ -17,6 +19,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+    const user = await getCurrentUser();
     const { id } = params;
     await BankAccountsRepository.update({
         where: { id: parseInt(id) },

@@ -7,10 +7,6 @@ export const LoanApplicationsRepository = {
     return prisma.loan_applications.create({ data });
   },
 
-  findById: async (id: number): Promise<loan_applications | null> => {
-    return prisma.loan_applications.findUnique({ where: { id } });
-  },
-
   findMany: async (params: {
     skip?: number;
     take?: number;

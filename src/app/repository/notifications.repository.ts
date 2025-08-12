@@ -7,10 +7,6 @@ export const NotificationsRepository = {
     return prisma.notifications.create({ data });
   },
 
-  findById: async (id: number): Promise<notifications | null> => {
-    return prisma.notifications.findUnique({ where: { id } });
-  },
-
   findMany: async (params: {
     skip?: number;
     take?: number;

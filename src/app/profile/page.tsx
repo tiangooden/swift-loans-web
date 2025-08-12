@@ -7,6 +7,7 @@ import ProfileForm from './ProfileForm';
 interface UserProfile {
     id: number;
     identity: string;
+    email?: string;
     first_name?: string;
     middle_name?: string;
     last_name?: string;
@@ -27,7 +28,6 @@ const ProfilePage = () => {
 
     useEffect(() => {
         const fetchUserProfile = async () => {
-            console.log(session)
             if (status === 'authenticated' && session?.user?.email) {
                 try {
                     const response = await fetch(`/api/user`);

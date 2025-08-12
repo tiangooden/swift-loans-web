@@ -7,10 +7,6 @@ export const SystemSettingsRepository = {
         return prisma.system_settings.create({ data });
     },
 
-    findById: async (id: number): Promise<system_settings | null> => {
-        return prisma.system_settings.findUnique({ where: { id } });
-    },
-
     findMany: async (params: {
         skip?: number;
         take?: number;

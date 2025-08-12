@@ -8,7 +8,6 @@ export const LoansRepository = {
   },
 
   findById: async (id: number): Promise<loans | null> => {
-
     return prisma.loans.findUnique({ where: { id } });
   },
 

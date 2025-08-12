@@ -217,6 +217,7 @@ model system_settings {
 model users {
   id                 Int                 @id @default(autoincrement())
   identity           String              @unique @db.VarChar(255)
+  email              String?             @unique @db.VarChar(255)
   first_name         String?             @db.VarChar(100)
   middle_name        String?             @db.VarChar(100)
   last_name          String?             @db.VarChar(100)
@@ -241,5 +242,6 @@ model users {
   @@index([created_at], map: "idx_users_created_at")
   @@index([identity], map: "idx_users_identity")
   @@index([status], map: "idx_users_status")
+  @@index([email], map: "idx_users_email")
   @@index([is_deleted], map: "idx_users_is_deleted")
 }

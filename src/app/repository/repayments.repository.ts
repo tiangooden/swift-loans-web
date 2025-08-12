@@ -7,10 +7,6 @@ export const RepaymentsRepository = {
     return prisma.repayments.create({ data });
   },
 
-  findById: async (id: number): Promise<repayments | null> => {
-    return prisma.repayments.findUnique({ where: { id } });
-  },
-
   findMany: async (params: {
     skip?: number;
     take?: number;

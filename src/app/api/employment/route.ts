@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     if (!user) {
         return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
-    const employmentDetails = await EmploymentDetailsRepository.findMany({
+    const employmentDetails = await EmploymentDetailsRepository.find({
         where: {
             user_id: user.id,
         },
@@ -35,7 +35,7 @@ export async function PUT(request: Request) {
     if (!user) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
-    const existingEmployment = await EmploymentDetailsRepository.findMany({
+    const existingEmployment = await EmploymentDetailsRepository.find({
         where: {
             user_id: user.id,
         },

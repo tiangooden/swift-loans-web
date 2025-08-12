@@ -7,11 +7,7 @@ export const BankAccountsRepository = {
     return prisma.bank_accounts.create({ data });
   },
 
-  findById: async (id: number): Promise<bank_accounts | null> => {
-    return prisma.bank_accounts.findUnique({ where: { id } });
-  },
-
-  findMany: async (params: {
+  find: async (params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.bank_accountsWhereUniqueInput;
