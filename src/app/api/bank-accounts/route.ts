@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { BankAccountsRepository } from '@/app/repository/bank_accounts.repository';
+import { BankAccountsRepository } from '@/app/bank-accounts/bank_accounts.repository';
 import getCurrentUser from '@/app/util/get-user';
 
 export async function GET(request: NextRequest) {
