@@ -1,5 +1,5 @@
 import { loan_applications, Prisma } from '../../generated/prisma';
-import { prisma } from '../config/prisma';
+import { prisma } from '../shared/prisma';
 
 export const LoanApplicationsRepository = {
 

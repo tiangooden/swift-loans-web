@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { BankAccountsRepository } from '@/app/bank-accounts/bank_accounts.repository';
-import getCurrentUser from '@/app/util/get-user';
+import getCurrentUser from '@/app/shared/get-user';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     const user = await getCurrentUser();

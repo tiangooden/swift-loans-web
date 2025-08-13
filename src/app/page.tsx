@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, CheckCircle, Clock, Shield, DollarSign, Star, Users } from "lucide-react";
-import LoanCalculator from "./component/LoanCalculator";
+import LoanCalculator from "./shared/component/LoanCalculator";
 
 export default function Home() {
 

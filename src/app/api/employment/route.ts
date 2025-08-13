@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { EmploymentDetailsRepository } from '@/app/employment/employment_details.repository';
-import getCurrentUser from '@/app/util/get-user';
+import getCurrentUser from '@/app/shared/get-user';
 
 export async function GET(request: Request) {
     const user = await getCurrentUser();

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { UsersRepository } from '@/app/profile/users.repository';
 import { LoanApplicationsRepository } from '@/app/loan-applications/loan_applications.repository';
-import getCurrentUser from '@/app/util/get-user';
+import getCurrentUser from '@/app/shared/get-user';
 
 export async function GET() {
     const user = await getCurrentUser();
