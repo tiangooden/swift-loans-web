@@ -56,6 +56,57 @@ const Dashboard = () => {
           <p className="text-gray-600">Welcome back, {userData.name}</p>
         </div>
 
+        {/* Navigation Tiles */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <a href="/profile" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer group">
+            <div className="flex items-center">
+              <div className="bg-blue-100 p-3 rounded-full group-hover:bg-blue-200 transition-colors">
+                <User className="h-6 w-6 text-blue-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-semibold text-gray-900">Profile</h3>
+                <p className="text-sm text-gray-600">Manage your personal information</p>
+              </div>
+            </div>
+          </a>
+
+          <a href="/bank-accounts" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer group">
+            <div className="flex items-center">
+              <div className="bg-green-100 p-3 rounded-full group-hover:bg-green-200 transition-colors">
+                <DollarSign className="h-6 w-6 text-green-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-semibold text-gray-900">Bank Accounts</h3>
+                <p className="text-sm text-gray-600">Link and manage your bank accounts</p>
+              </div>
+            </div>
+          </a>
+
+          <a href="/employment" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer group">
+            <div className="flex items-center">
+              <div className="bg-purple-100 p-3 rounded-full group-hover:bg-purple-200 transition-colors">
+                <Calendar className="h-6 w-6 text-purple-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-semibold text-gray-900">Employment</h3>
+                <p className="text-sm text-gray-600">Update your employment details</p>
+              </div>
+            </div>
+          </a>
+
+          <a href="/loan-applications" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer group">
+            <div className="flex items-center">
+              <div className="bg-orange-100 p-3 rounded-full group-hover:bg-orange-200 transition-colors">
+                <CheckCircle className="h-6 w-6 text-orange-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-semibold text-gray-900">Loan Applications</h3>
+                <p className="text-sm text-gray-600">Apply for new loans and track status</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
         {/* Current Loan Alert */}
         {currentLoan.status === 'active' && (
           <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 mb-8">

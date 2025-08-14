@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { EmploymentDetailsRepository } from '@/app/employment/employment_details.repository';
+import { EmploymentDetailsRepository } from '@/app/repository/employment_details.repository';
 import getCurrentUser from '@/app/shared/get-user';
 
 export async function GET(request: Request) {

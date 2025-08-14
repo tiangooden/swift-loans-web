@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { LoanApplicationsRepository } from '../../../loan-applications/loan_applications.repository';
-import { UsersRepository } from '../../../profile/users.repository';
+import { LoanApplicationsRepository } from '../../../repository/loan_applications.repository';
+import { UsersRepository } from '../../../repository/users.repository';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     const session = await getServerSession(authOptions);
