@@ -33,7 +33,7 @@ export function MobileMenu({ session }: MobileMenuProps) {
               className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/') ?
                 'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
-              }`}
+                }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <Home className="h-5 w-5" />
@@ -44,7 +44,7 @@ export function MobileMenu({ session }: MobileMenuProps) {
               className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/about') ?
                 'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
-              }`}
+                }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <Info className="h-5 w-5" />
@@ -55,7 +55,7 @@ export function MobileMenu({ session }: MobileMenuProps) {
               className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/faq') ?
                 'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
-              }`}
+                }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <HelpCircle className="h-5 w-5" />
@@ -66,7 +66,7 @@ export function MobileMenu({ session }: MobileMenuProps) {
               className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/contact') ?
                 'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
-              }`}
+                }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <Mail className="h-5 w-5" />
@@ -77,7 +77,7 @@ export function MobileMenu({ session }: MobileMenuProps) {
               className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/dashboard') ?
                 'bg-blue-600 text-white' :
                 'text-gray-600 hover:text-blue-600'
-              }`}
+                }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <LayoutDashboard className="h-5 w-5" />
@@ -85,12 +85,15 @@ export function MobileMenu({ session }: MobileMenuProps) {
             </Link>
             <Link
               href="/admin"
-              className="block px-3 py-2 rounded-md text-base font-medium bg-gray-600 text-white hover:bg-gray-700"
+              className={`block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2 ${isActive('/admin') ?
+                'bg-blue-600 text-white' :
+                'text-gray-600 hover:text-blue-600'
+                }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Admin
             </Link>
-            
+
             {session ? (
               <div className="relative ml-4">
                 <button

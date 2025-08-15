@@ -59,7 +59,7 @@ export default async function Navbar() {
             </Link>
             <Link
               href="/admin"
-              className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-1"
+              className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-gray-600 hover:text-blue-600"
             >
               <Shield className="h-4 w-4" />
               Admin
