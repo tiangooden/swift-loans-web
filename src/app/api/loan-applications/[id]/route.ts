@@ -60,7 +60,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 }
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-    const { id: loanId } = params;
+    const { id: loanId } = await params;
     const session = await getServerSession(authOptions);
     if (!session) {
         return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });

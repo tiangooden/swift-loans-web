@@ -74,13 +74,10 @@ export default function LoanApplicationDetailsPage() {
         try {
             const [applicationResponse, offersResponse] = await Promise.all([
                 fetch(`/api/loan-applications/${params.id}`),
-                fetch(`/api/loan-applications/${params.id}/offers`)
+                fetch(`/api/loan-applications/${params.id}/loan-offers`)
             ]);
-
             if (applicationResponse.ok) {
                 const appData = await applicationResponse.json();
-                console.log('Application data:', appData);
-
                 setApplication(appData);
             }
 
