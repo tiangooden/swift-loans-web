@@ -19,9 +19,10 @@ export const LoanApplicationsRepository = {
     cursor?: Prisma.loan_applicationsWhereUniqueInput;
     where?: Prisma.loan_applicationsWhereInput;
     orderBy?: Prisma.loan_applicationsOrderByWithRelationInput;
+    include?: Prisma.loan_applicationsInclude;
   }): Promise<loan_applications[]> => {
-    const { skip, take, cursor, where, orderBy } = params;
-    return prisma.loan_applications.findMany({ skip, take, cursor, where, orderBy });
+    const { skip, take, cursor, where, orderBy, include } = params;
+    return prisma.loan_applications.findMany({ skip, take, cursor, where, orderBy, include });
   },
 
   update: async (params: {
@@ -34,5 +35,25 @@ export const LoanApplicationsRepository = {
 
   delete: async (where: Prisma.loan_applicationsWhereUniqueInput): Promise<loan_applications> => {
     return prisma.loan_applications.delete({ where });
+  },
+
+  softDelete: async (id: number): Promise<loan_applications> => {
+    return prisma.loan_applications.update({
+      where: { id },
+      data: {
+        is_deleted: true,
+        deleted_at: new Date()
+      }
+    });
+  },
+
+  restore: async (id: number): Promise<loan_applications> => {
+    return prisma.loan_applications.update({
+      where: { id },
+      data: {
+        is_deleted: false,
+        deleted_at: null
+      }
+    });
   }
 }
