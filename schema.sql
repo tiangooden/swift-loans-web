@@ -5,6 +5,7 @@ CREATE TABLE users (
     first_name VARCHAR(100),
     middle_name VARCHAR(100),
     last_name VARCHAR(100),
+    email VARCHAR(50),
     dob DATE,
     phone_number VARCHAR(20),
     trn VARCHAR(50), -- e.g. SSN/NIN/TRN
@@ -20,7 +21,8 @@ CREATE TABLE users (
 
 -- EMPLOYMENT DETAILS
 CREATE TABLE employment_details (
-    user_id INTEGER PRIMARY KEY REFERENCES users(id),
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE,
     employer_name VARCHAR(255),
     job_title VARCHAR(100),
     employment_type VARCHAR(50), -- e.g. full_time, part_time
@@ -177,11 +179,13 @@ CREATE TABLE capital (
 
 -- USERS
 CREATE INDEX idx_users_identity ON users(identity);
+CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_status ON users(status);
 CREATE INDEX idx_users_created_at ON users(created_at);
 CREATE INDEX idx_users_is_deleted ON users(is_deleted);
 
 -- EMPLOYMENT DETAILS
+CREATE INDEX idx_employment_details_user_id ON employment_details(user_id);
 CREATE INDEX idx_employment_details_employment_type ON employment_details(employment_type);
 CREATE INDEX idx_employment_details_is_deleted ON employment_details(is_deleted);
 

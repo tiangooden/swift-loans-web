@@ -11,9 +11,15 @@ export default async function getCurrentUser() {
 
     }
     const { id, provider } = session.user as any;
-    const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
+    let user = await UsersRepository.findByProviderId(`${provider}|${id}`);
     if (!user) {
-        // return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        user = await UsersRepository.create({
+            identity: `${provider}|${id}`,
+            email: session?.user?.email,
+            first_name: session?.user?.name ?
+                session.user.name.charAt(0).toUpperCase() + session.user.name.slice(1) :
+                '',
+        });
         throw new NotFoundError('User not found');
     }
     return user;

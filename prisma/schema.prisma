@@ -62,7 +62,8 @@ model documents {
 }
 
 model employment_details {
-  user_id         Int       @id
+  id              Int       @id @default(autoincrement())
+  user_id         Int?      @unique
   employer_name   String?   @db.VarChar(255)
   job_title       String?   @db.VarChar(100)
   employment_type String?   @db.VarChar(50)
@@ -72,10 +73,10 @@ model employment_details {
   deleted_at      DateTime? @db.Timestamp(6)
   created_at      DateTime? @default(now()) @db.Timestamp(6)
   updated_at      DateTime? @default(now()) @db.Timestamp(6)
-  users           users     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([employment_type], map: "idx_employment_details_employment_type")
   @@index([is_deleted], map: "idx_employment_details_is_deleted")
+  @@index([user_id], map: "idx_employment_details_user_id")
 }
 
 model interest_and_fees {
@@ -215,33 +216,32 @@ model system_settings {
 }
 
 model users {
-  id                 Int                 @id @default(autoincrement())
-  identity           String              @unique @db.VarChar(255)
-  email              String?             @unique @db.VarChar(255)
-  first_name         String?             @db.VarChar(100)
-  middle_name        String?             @db.VarChar(100)
-  last_name          String?             @db.VarChar(100)
-  dob                DateTime?           @db.Date
-  phone_number       String?             @db.VarChar(20)
-  trn                String?             @db.VarChar(50)
-  street_address     String?
-  city               String?             @db.VarChar(100)
-  country            String?             @db.VarChar(100)
-  status             String?             @default("active")
-  is_deleted         Boolean?            @default(false)
-  deleted_at         DateTime?           @db.Timestamp(6)
-  created_at         DateTime?           @default(now()) @db.Timestamp(6)
-  updated_at         DateTime?           @default(now()) @db.Timestamp(6)
-  bank_accounts      bank_accounts[]
-  documents          documents[]
-  employment_details employment_details?
-  loan_applications  loan_applications[]
-  loans              loans[]
-  notifications      notifications[]
+  id                Int                 @id @default(autoincrement())
+  identity          String              @unique @db.VarChar(255)
+  first_name        String?             @db.VarChar(100)
+  middle_name       String?             @db.VarChar(100)
+  last_name         String?             @db.VarChar(100)
+  email             String?             @db.VarChar(50)
+  dob               DateTime?           @db.Date
+  phone_number      String?             @db.VarChar(20)
+  trn               String?             @db.VarChar(50)
+  street_address    String?
+  city              String?             @db.VarChar(100)
+  country           String?             @db.VarChar(100)
+  status            String?             @default("active")
+  is_deleted        Boolean?            @default(false)
+  deleted_at        DateTime?           @db.Timestamp(6)
+  created_at        DateTime?           @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?           @default(now()) @db.Timestamp(6)
+  bank_accounts     bank_accounts[]
+  documents         documents[]
+  loan_applications loan_applications[]
+  loans             loans[]
+  notifications     notifications[]
 
   @@index([created_at], map: "idx_users_created_at")
   @@index([identity], map: "idx_users_identity")
   @@index([status], map: "idx_users_status")
-  @@index([email], map: "idx_users_email")
   @@index([is_deleted], map: "idx_users_is_deleted")
+  @@index([email], map: "idx_users_email")
 }

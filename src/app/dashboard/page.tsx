@@ -8,8 +8,8 @@ const Dashboard = async () => {
   try {
     const user = await getCurrentUser();
     userData = {
-      name: user.first_name && user.last_name 
-        ? `${user.first_name} ${user.last_name}` 
+      name: user.first_name  
+        ? `${user.first_name}` 
         : 'User',
       email: user.email || '',
       phone: user.phone_number || '',
@@ -21,6 +21,7 @@ const Dashboard = async () => {
         : 'Member'
     };
   } catch (error) {
+    console.error('Error fetching user data:', error);
     // Redirect to login if not authenticated
     redirect('/api/auth/signin');
   }
