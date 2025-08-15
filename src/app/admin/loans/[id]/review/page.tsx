@@ -10,7 +10,7 @@ interface LoanApplication {
   amount_requested: number;
   term_in_days: number;
   status: string;
-  submitted_at: string;
+  created_at: string;
   purpose: string;
   employment_status: string;
   monthly_income: number;
@@ -19,28 +19,27 @@ interface LoanApplication {
     first_name: string;
     last_name: string;
     email: string;
-    phone: string;
-    address: string;
+    phone_number: string;
+    street_address: string;
     city: string;
     state: string;
     zip_code: string;
     date_of_birth: string;
     ssn: string;
-    bank_accounts: {
+    bank_accounts: [{
       bank_name: string;
       account_type: string;
       account_number: string;
       routing_number: string;
       is_primary: boolean;
-    } | null;
-    employment: {
+    }] | null;
+    employment_details: {
       employer_name: string;
       job_title: string;
       start_date: string;
-      monthly_salary: number;
+      monthly_income: number;
       employment_type: string;
-      supervisor_name: string;
-      supervisor_phone: string;
+      payday_day: string;
     } | null;
   };
 }
@@ -100,7 +99,7 @@ export default function LoanReviewPage() {
       });
 
       if (!response.ok) throw new Error('Action failed');
-      
+
       router.push('/admin/loans');
     } catch (error) {
       console.error('Error performing action:', error);
@@ -186,7 +185,7 @@ export default function LoanReviewPage() {
                     {application.status.replace('_', ' ').toUpperCase()}
                   </span>
                   <span className="ml-4 text-sm text-gray-600">
-                    Submitted: {new Date(application.submitted_at).toLocaleDateString()}
+                    Submitted: {new Date(application.created_at).toLocaleDateString()}
                   </span>
                 </div>
               </div>
@@ -239,11 +238,11 @@ export default function LoanReviewPage() {
                       </div>
                       <div>
                         <label className="text-sm font-medium text-gray-500">Phone</label>
-                        <p className="text-gray-900">{application.users.phone}</p>
+                        <p className="text-gray-900">{application.users.phone_number}</p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-gray-500">Address</label>
-                        <p className="text-gray-900">{application.users.address}, {application.users.city}, {application.users.state} {application.users.zip_code}</p>
+                        <p className="text-gray-900">{application.users.street_address}, {application.users.city}, {application.users.state} {application.users.zip_code}</p>
                       </div>
                     </div>
                   </div>
@@ -257,40 +256,51 @@ export default function LoanReviewPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-gray-500">Employer</label>
-                        <p className="text-gray-900">{application.users.employment?.employer_name || 'N/A'}</p>
+                        <p className="text-gray-900">{application.users.employment_details?.employer_name || 'N/A'}</p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-gray-500">Job Title</label>
-                        <p className="text-gray-900">{application.users.employment?.job_title || 'N/A'}</p>
+                        <p className="text-gray-900">{application.users.employment_details?.job_title || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Employment Type</label>
+                        <p className="text-gray-900">{application.users.employment_details?.employment_type}</p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-gray-500">Monthly Salary</label>
-                        <p className="text-gray-900">${application.users.employment?.monthly_salary?.toLocaleString() || 'N/A'}</p>
+                        <p className="text-gray-900">${application.users.employment_details?.monthly_income || 'N/A'}</p>
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-gray-500">Start Date</label>
-                        <p className="text-gray-900">{application.users.employment?.start_date ? new Date(application.users.employment.start_date).toLocaleDateString() : 'N/A'}</p>
+                        <label className="text-sm font-medium text-gray-500">Pay Day</label>
+                        <p className="text-gray-900">{application.users.employment_details?.payday_day ?
+                          new Date(application.users.employment_details.payday_day).toLocaleDateString() : 'N/A'}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Bank Account */}
-                  <div className="bg-gray-50 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                      <CreditCard className="h-5 w-5 mr-2" />
-                      Bank Account
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Bank Name</label>
-                        <p className="text-gray-900">{application.users.bank_accounts?.bank_name || 'N/A'}</p>
+                  {
+                    application.users.bank_accounts?.map(({ bank_name, account_number }, key) =>
+                      <div key={key} className="bg-gray-50 rounded-lg p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                          <CreditCard className="h-5 w-5 mr-2" />
+                          Bank Account
+                        </h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Bank Name</label>
+                            <p className="text-gray-900">{bank_name || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Account Number</label>
+                            <p className="text-gray-900">
+                              {account_number ? `****${account_number.slice(-4)}` : 'N/A'}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Account Number</label>
-                        <p className="text-gray-900">{application.users.bank_accounts?.account_number ? `****${application.users.bank_accounts.account_number.slice(-4)}` : 'N/A'}</p>
-                      </div>
-                    </div>
-                  </div>
+                    )
+                  }
                 </div>
 
                 {/* Right Column - Actions & Summary */}
@@ -326,7 +336,7 @@ export default function LoanReviewPage() {
                         <Check className="h-4 w-4 mr-2" />
                         Approve
                       </button>
-                      
+
                       <button
                         onClick={() => handleAction('reject')}
                         disabled={actionLoading}
@@ -335,7 +345,7 @@ export default function LoanReviewPage() {
                         <X className="h-4 w-4 mr-2" />
                         Reject
                       </button>
-                      
+
                       <button
                         onClick={() => setShowCounterOffer(!showCounterOffer)}
                         disabled={actionLoading}

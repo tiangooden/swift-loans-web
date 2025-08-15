@@ -1,14 +1,9 @@
 import { LoanApplicationsRepository } from '@/app/repository/loan_applications.repository';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
-
-    // Fetch loan application with related user, employment, and bank account data
     const application = await LoanApplicationsRepository.findMany({
       where: { id: parseInt(id) },
       include: {
@@ -27,6 +22,8 @@ export async function GET(
                 employer_name: true,
                 job_title: true,
                 employment_type: true,
+                monthly_income: true,
+                payday_day: true,
               }
             },
             bank_accounts: {
@@ -51,48 +48,7 @@ export async function GET(
         { status: 404 }
       );
     }
-
-    console.log(application);
-
-    // Transform the data to match expected format with nested structure
-    const formattedApplication = {
-      id: app.id,
-      amount_requested: app.amount_requested,
-      term_in_days: app.term_in_days,
-      status: app.status,
-      submitted_at: app.created_at,
-      purpose: app.purpose,
-      users: {
-        first_name: app.users.first_name,
-        last_name: app.users.last_name,
-        email: app.users.email,
-        phone: app.users.phone_number,
-        address: app.users.street_address,
-        city: app.users.city,
-        state: app.users.state,
-        zip_code: app.users.zip_code,
-        dob: app.users.dob,
-        trn: app.users.trn,
-        employment: app.users.employment_details ? {
-          employer_name: app.users.employment_details.employer_name,
-          job_title: app.users.employment_details.job_title,
-          start_date: app.users.employment_details.start_date,
-          monthly_salary: app.users.employment_details.monthly_salary,
-          employment_type: app.users.employment_details.employment_type,
-          supervisor_name: app.users.employment_details.supervisor_name,
-          supervisor_phone: app.users.employment_details.supervisor_phone
-        } : null,
-        bank_accounts: app.users.bank_accounts.length > 0 ? {
-          bank_name: app.users.bank_accounts[0].bank_name,
-          account_type: app.users.bank_accounts[0].account_type,
-          account_number: app.users.bank_accounts[0].account_number,
-          routing_number: app.users.bank_accounts[0].routing_number,
-          is_primary: app.users.bank_accounts[0].is_primary
-        } : null
-      }
-    };
-
-    return NextResponse.json(formattedApplication);
+    return NextResponse.json(app);
   } catch (error) {
     console.error('Error fetching loan application:', error);
     return NextResponse.json(
