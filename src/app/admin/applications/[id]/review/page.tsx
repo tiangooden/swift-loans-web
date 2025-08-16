@@ -1,122 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+'use client'
 import { Check, X, DollarSign, Clock, User, Mail, Phone, MapPin, Briefcase, Building, CreditCard, Calendar, AlertCircle } from 'lucide-react';
 import AdminNav from '@/app/admin/components/AdminNav';
-
-interface LoanApplication {
-  id: string;
-  amount_requested: number;
-  term_in_days: number;
-  status: string;
-  created_at: string;
-  purpose: string;
-  employment_status: string;
-  monthly_income: number;
-  credit_score: number;
-  users: {
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone_number: string;
-    street_address: string;
-    city: string;
-    state: string;
-    zip_code: string;
-    date_of_birth: string;
-    ssn: string;
-    bank_accounts: [{
-      bank_name: string;
-      account_type: string;
-      account_number: string;
-      routing_number: string;
-      is_primary: boolean;
-    }] | null;
-    employment_details: {
-      employer_name: string;
-      job_title: string;
-      start_date: string;
-      monthly_income: number;
-      employment_type: string;
-      payday_day: string;
-    } | null;
-  };
-}
-
-interface LoanOffer {
-  id: string;
-  amount_offered: number;
-  interest_rate: number;
-  term_in_days: number;
-  monthly_payment: number;
-  total_interest: number;
-  total_amount: number;
-  status: string;
-  created_at: string;
-}
+import { useLoanApplicationReview } from './hooks';
+import { LoanApplication, LoanOffer } from '@/app/shared/types';
 
 export default function LoanReviewPage() {
-  const params = useParams();
-  const router = useRouter();
-  const [application, setApplication] = useState<LoanApplication | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [actionLoading, setActionLoading] = useState(false);
-  const [counterOfferAmount, setCounterOfferAmount] = useState('');
-  const [counterOfferRate, setCounterOfferRate] = useState('');
-  const [counterOfferTerm, setCounterOfferTerm] = useState('');
-  const [showCounterOffer, setShowCounterOffer] = useState(false);
-
-  useEffect(() => {
-    fetchApplication();
-  }, [params.id]);
-
-  const fetchApplication = async () => {
-    try {
-      const response = await fetch(`/api/admin/applications/${params.id}`);
-      if (!response.ok) throw new Error('Failed to fetch application');
-      const data = await response.json();
-      setApplication(data);
-    } catch (error) {
-      console.error('Error fetching application:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAction = async (action: string, offerData?: any) => {
-    setActionLoading(true);
-    try {
-      const response = await fetch(`/api/admin/applications/${params.id}/action`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          action,
-          ...offerData,
-        }),
-      });
-
-      if (!response.ok) throw new Error('Action failed');
-
-      router.push('/admin/applications');
-    } catch (error) {
-      console.error('Error performing action:', error);
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'approved': return 'text-green-600 bg-green-100';
-      case 'rejected': return 'text-red-600 bg-red-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'under_review': return 'text-blue-600 bg-blue-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+  const { application, loading, actionLoading, counterOfferAmount, setCounterOfferAmount, counterOfferRate, setCounterOfferRate, counterOfferTerm, setCounterOfferTerm, showCounterOffer, setShowCounterOffer, fetchApplication, handleAction, getStatusColor } = useLoanApplicationReview();
 
   if (loading) {
     return (
@@ -256,24 +147,24 @@ export default function LoanReviewPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="text-sm font-medium text-gray-500">Employer</label>
-                        <p className="text-gray-900">{application.users.employment_details?.employer_name || 'N/A'}</p>
+                        <p className="text-gray-900">{application.users.employments?.employer_name || 'N/A'}</p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-gray-500">Job Title</label>
-                        <p className="text-gray-900">{application.users.employment_details?.job_title || 'N/A'}</p>
+                        <p className="text-gray-900">{application.users.employments?.job_title || 'N/A'}</p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-gray-500">Employment Type</label>
-                        <p className="text-gray-900">{application.users.employment_details?.employment_type}</p>
+                        <p className="text-gray-900">{application.users.employments?.employment_type}</p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-gray-500">Monthly Salary</label>
-                        <p className="text-gray-900">${application.users.employment_details?.monthly_income || 'N/A'}</p>
+                        <p className="text-gray-900">${application.users.employments?.monthly_income || 'N/A'}</p>
                       </div>
                       <div>
                         <label className="text-sm font-medium text-gray-500">Pay Day</label>
-                        <p className="text-gray-900">{application.users.employment_details?.payday_day ?
-                          new Date(application.users.employment_details.payday_day).toLocaleDateString() : 'N/A'}</p>
+                        <p className="text-gray-900">{application.users.employments?.payday_day ?
+                          new Date(application.users.employments.payday_day).toLocaleDateString() : 'N/A'}</p>
                       </div>
                     </div>
                   </div>

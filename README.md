@@ -25,6 +25,7 @@ npx prisma generate
 npx prisma db push                   # push schema (no migration files) - prototyping
 npx prisma db pull                   # introspect DB into schema.prisma
 npx prisma db seed                   # run seed script
+npx prisma format
 npx prisma studio                    # open visual DB explorer
 
 KEYCLOAK_CLIENT_ID=swift-loans-web

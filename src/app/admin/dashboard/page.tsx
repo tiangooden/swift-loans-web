@@ -35,7 +35,7 @@ export default function AdminDashboard() {
         console.error('Error fetching dashboard data:', error);
       }
     };
-    fetchDashboardData();
+    // fetchDashboardData();
   }, []);
 
   const getStatusColor = (status: string) => {

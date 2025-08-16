@@ -161,26 +161,26 @@ export default function LoanApplicationDetailsPage() {
                                     )}
                                 </div>
 
-                                {application.employment_details && (
+                                {application.employments && (
                                     <div className="bg-gray-50 rounded-lg p-4">
                                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Employment Details</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div>
                                                 <dt className="text-sm font-medium text-gray-500">Employer</dt>
-                                                <dd className="text-gray-900">{application.employment_details[0].employer_name}</dd>
+                                                <dd className="text-gray-900">{application.employments[0].employer_name}</dd>
 
                                             </div>
                                             <div>
                                                 <dt className="text-sm font-medium text-gray-500">Job Title</dt>
-                                                <dd className="text-gray-900">{application.employment_details[0].job_title}</dd>
+                                                <dd className="text-gray-900">{application.employments[0].job_title}</dd>
                                             </div>
                                             <div>
                                                 <dt className="text-sm font-medium text-gray-500">Monthly Income</dt>
-                                                <dd className="text-gray-900">{formatCurrency(application.employment_details[0].monthly_income)}</dd>
+                                                <dd className="text-gray-900">{formatCurrency(application.employments[0].monthly_income)}</dd>
                                             </div>
                                             <div>
                                                 <dt className="text-sm font-medium text-gray-500">Employment Length</dt>
-                                                <dd className="text-gray-900">{application.employment_details[0].employment_length}</dd>
+                                                <dd className="text-gray-900">{application.employments[0].employment_length}</dd>
                                             </div>
                                         </div>
                                     </div>

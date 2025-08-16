@@ -25,7 +25,7 @@ interface LoanApplication {
         file_url: string;
         uploaded_at: string;
     }[];
-    employment_details?: {
+    employments?: {
         employer_name: string;
         job_title: string;
         monthly_income: number;

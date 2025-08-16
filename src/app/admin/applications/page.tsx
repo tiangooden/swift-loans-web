@@ -1,61 +1,17 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Search, Eye, Clock, CheckCircle, AlertTriangle } from "lucide-react";
 import AdminNav from '../components/AdminNav';
+import { useAdminLoanApplications, getStatusColor, getStatusIcon } from './hooks';
 
 export default function AdminLoans() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [loanApplications, setLoanApplications] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { searchTerm, setSearchTerm, filterStatus, setFilterStatus, loanApplications, loading } = useAdminLoanApplications();
 
-  useEffect(() => {
-    const fetchLoanApplications = async () => {
-      try {
-        const response = await fetch('/api/admin/applications');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setLoanApplications(data);
-      } catch (error) {
-        console.error('Error fetching loan applications:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchLoanApplications();
-  }, []);
+  const filteredLoans = loanApplications;
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'text-green-600 bg-green-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'paid': return 'text-blue-600 bg-blue-100';
-      case 'overdue': return 'text-red-600 bg-red-100';
-      case 'suspended': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'active': return <CheckCircle className="h-4 w-4" />;
-      case 'pending': return <Clock className="h-4 w-4" />;
-      case 'paid': return <CheckCircle className="h-4 w-4" />;
-      case 'overdue': return <AlertTriangle className="h-4 w-4" />;
-      case 'suspended': return <AlertTriangle className="h-4 w-4" />;
-      default: return <Clock className="h-4 w-4" />;
-    }
-  };
-
-  const filteredLoans = loanApplications.filter((loan: any) => {
-    const matchesSearch = loan.user?.first_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      loan.user?.last_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      loan.id.toString().toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || loan.status === filterStatus;
-    return matchesSearch && matchesFilter;
-  });
+  if (loading) {
+    return <div className="flex justify-center items-center h-screen">Loading applications...</div>;
+  }
 
   return (
     <AdminNav>
@@ -68,46 +24,6 @@ export default function AdminLoans() {
               <p className="mt-1 text-sm text-gray-500">
                 A list of all loan applications including their status, amount, and borrower information.
               </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Filters */}
-        <div className="bg-white p-4 rounded-lg shadow mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
-                Search
-              </label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <input
-                  type="text"
-                  id="search"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search by name or ID..."
-                  className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
-                Status
-              </label>
-              <select
-                id="status"
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              >
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-                <option value="active">Active</option>
-                <option value="paid">Paid</option>
-              </select>
             </div>
           </div>
         </div>
@@ -141,36 +57,7 @@ export default function AdminLoans() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {loading ? (
-                [0].map((_, index) => (
-                  <tr key={index} className="animate-pulse">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="h-4 bg-gray-200 rounded w-16"></div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="space-y-2">
-                        <div className="h-4 bg-gray-200 rounded w-24"></div>
-                        <div className="h-3 bg-gray-200 rounded w-32"></div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="h-4 bg-gray-200 rounded w-20"></div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="h-4 bg-gray-200 rounded w-16"></div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="h-6 bg-gray-200 rounded-full w-20"></div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="h-4 bg-gray-200 rounded w-24"></div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="h-8 w-8 bg-gray-200 rounded"></div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
+              {
                 filteredLoans.map((loan: any) => (
                   <tr key={loan.id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -190,7 +77,7 @@ export default function AdminLoans() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(loan.status)}`}>
-                        {getStatusIcon(loan.status)}
+                        {getStatusIcon(loan.status, { className: "h-4 w-4" })}
                         <span className="ml-1">{loan.status}</span>
                       </span>
                     </td>
@@ -210,7 +97,7 @@ export default function AdminLoans() {
                     </td>
                   </tr>
                 ))
-              )}
+              }
             </tbody>
           </table>
         </div>

@@ -17,7 +17,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
             city: true,
             dob: true,
             trn: true,
-            employment_details: {
+            employments: {
               select: {
                 employer_name: true,
                 job_title: true,
@@ -27,13 +27,11 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
               }
             },
             bank_accounts: {
-              where: { is_primary: true },
               select: {
                 id: true,
                 bank_name: true,
                 account_type: true,
                 account_number: true,
-                is_primary: true
               },
               take: 1
             }
