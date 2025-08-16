@@ -7,9 +7,10 @@ export const LoanApplicationsRepository = {
     return prisma.applications.create({ data });
   },
 
-  findById: async (id: number): Promise<applications | null> => {
+  findById: async (id: number, include?: Prisma.applicationsInclude): Promise<applications | null> => {
     return prisma.applications.findUnique({
       where: { id },
+      include,
     });
   },
 

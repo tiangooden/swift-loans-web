@@ -200,7 +200,7 @@ export default function AdminLoans() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
                         <a
-                          href={`/admin/loans/${loan.id}/review`}
+                          href={`/admin/applications/${loan.id}/review`}
                           className="text-blue-600 hover:text-blue-900"
                           title="Review Application"
                         >

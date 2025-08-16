@@ -1,95 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, CheckCircle, XCircle, Clock } from 'lucide-react';
-
-interface LoanApplication {
-    id: number;
-    amount_requested: number;
-    term_in_days: number;
-    purpose: string;
-    status: string;
-    submitted_at: string;
-    decided_at?: string;
-    decision_reason?: string;
-    user: {
-        id: number;
-        first_name: string;
-        last_name: string;
-        email: string;
-        phone: string;
-    };
-    documents?: {
-        id: number;
-        document_type: string;
-        file_name: string;
-        file_url: string;
-        uploaded_at: string;
-    }[];
-    employment_details?: {
-        employer_name: string;
-        job_title: string;
-        monthly_income: number;
-        employment_length: string;
-    }[];
-    bank_account?: {
-        bank_name: string;
-        account_type: string;
-        last_four: string;
-    }[];
-}
-
-interface LoanOffer {
-    id: number;
-    principal: number;
-    interest_rate: number;
-    fee_amount: number;
-    repayment_date: string;
-    total_due: number;
-    offer_status: string;
-    created_at: string;
-}
+import { useLoanApplicationDetails, useUpdateLoanApplicationStatus } from '../hooks';
 
 export default function LoanApplicationDetailsPage() {
-    const { data: session, status } = useSession();
     const router = useRouter();
     const params = useParams();
-    const [application, setApplication] = useState<LoanApplication | null>(null);
-    const [loanOffers, setLoanOffers] = useState<LoanOffer[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        if (status === 'loading') return;
-        if (!session) {
-            router.push('/api/auth/signin');
-            return;
-        }
-        fetchApplicationDetails();
-    }, [session, status, params.id]);
-
-    const fetchApplicationDetails = async () => {
-        try {
-            const [applicationResponse, offersResponse] = await Promise.all([
-                fetch(`/api/applications/${params.id}`),
-                fetch(`/api/applications/${params.id}/offers`)
-            ]);
-            if (applicationResponse.ok) {
-                const appData = await applicationResponse.json();
-                setApplication(appData);
-            }
-
-            if (offersResponse.ok) {
-                const offersData = await offersResponse.json();
-                setLoanOffers(offersData);
-            }
-        } catch (error) {
-            console.error('Error fetching application details:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const { application, loanOffers, loading, error, fetchApplicationDetails } = useLoanApplicationDetails(params.id as string);
+    const { updateStatus } = useUpdateLoanApplicationStatus();
 
     const getStatusColor = (status: string) => {
         const colors = {
@@ -115,18 +34,9 @@ export default function LoanApplicationDetailsPage() {
     };
 
     const handleStatusUpdate = async (newStatus: string, reason?: string) => {
-        try {
-            const response = await fetch(`/api/applications/${params.id}/status`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: newStatus, decision_reason: reason }),
-            });
-
-            if (response.ok) {
-                await fetchApplicationDetails();
-            }
-        } catch (error) {
-            console.error('Error updating status:', error);
+        const success = await updateStatus(application!.id, newStatus, reason);
+        if (success) {
+            fetchApplicationDetails();
         }
     };
 
@@ -137,8 +47,24 @@ export default function LoanApplicationDetailsPage() {
         }).format(amount);
     };
 
-    if (status === 'loading' || loading) {
-        return <div className="flex justify-center items-center h-screen">Loading applications...</div>;
+    if (loading) {
+        return <div className="flex justify-center items-center h-screen">Loading application details...</div>;
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <h2 className="text-2xl font-bold text-red-600 mb-4">Error: {error}</h2>
+                    <button
+                        onClick={() => router.push('/applications')}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
+                    >
+                        Back to Applications
+                    </button>
+                </div>
+            </div>
+        );
     }
 
     if (!application) {

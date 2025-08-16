@@ -100,7 +100,7 @@ export default function LoanReviewPage() {
 
       if (!response.ok) throw new Error('Action failed');
 
-      router.push('/admin/loans');
+      router.push('/admin/applications');
     } catch (error) {
       console.error('Error performing action:', error);
     } finally {
@@ -144,7 +144,7 @@ export default function LoanReviewPage() {
               <h2 className="text-xl font-semibold text-gray-900 mb-2">Application Not Found</h2>
               <p className="text-gray-600 mb-4">The loan application you're looking for doesn't exist.</p>
               <button
-                onClick={() => router.push('/admin/loans')}
+                onClick={() => router.push('/admin/applications')}
                 className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
               >
                 Back to Loans
@@ -169,7 +169,7 @@ export default function LoanReviewPage() {
                   <p className="text-sm text-gray-500 mt-1">Application #{application.id}</p>
                 </div>
                 <button
-                  onClick={() => router.push('/admin/loans')}
+                  onClick={() => router.push('/admin/applications')}
                   className="text-gray-500 hover:text-gray-700"
                 >
                   <X className="h-6 w-6" />

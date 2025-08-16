@@ -1,32 +1,32 @@
-import { loan_offers, Prisma } from '../../generated/prisma';
+import { offers, Prisma } from '../../generated/prisma';
 import { prisma } from '../shared/prisma';
 
 export const LoanOffersRepository = {
 
-  create: async (data: Prisma.loan_offersCreateInput): Promise<loan_offers> => {
-    return prisma.loan_offers.create({ data });
+  create: async (data: Prisma.offersCreateInput): Promise<offers> => {
+    return prisma.offers.create({ data });
   },
 
   find: async (params: {
     skip?: number;
     take?: number;
-    cursor?: Prisma.loan_offersWhereUniqueInput;
-    where?: Prisma.loan_offersWhereInput;
-    orderBy?: Prisma.loan_offersOrderByWithRelationInput;
-  }): Promise<loan_offers[]> => {
+    cursor?: Prisma.offersWhereUniqueInput;
+    where?: Prisma.offersWhereInput;
+    orderBy?: Prisma.offersOrderByWithRelationInput;
+  }): Promise<offers[]> => {
     const { skip, take, cursor, where, orderBy } = params;
-    return prisma.loan_offers.findMany({ skip, take, cursor, where, orderBy });
+    return prisma.offers.findMany({ skip, take, cursor, where, orderBy });
   },
 
   update: async (params: {
-    where: Prisma.loan_offersWhereUniqueInput;
-    data: Prisma.loan_offersUpdateInput;
-  }): Promise<loan_offers> => {
+    where: Prisma.offersWhereUniqueInput;
+    data: Prisma.offersUpdateInput;
+  }): Promise<offers> => {
     const { where, data } = params;
-    return prisma.loan_offers.update({ where, data });
+    return prisma.offers.update({ where, data });
   },
 
-  delete: async (where: Prisma.loan_offersWhereUniqueInput): Promise<loan_offers> => {
-    return prisma.loan_offers.delete({ where });
+  delete: async (where: Prisma.offersWhereUniqueInput): Promise<offers> => {
+    return prisma.offers.delete({ where });
   }
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { LoanApplicationsRepository } from '../../../repository/loan_applications.repository';
+import { LoanOffersRepository } from '../../../repository/loan_offers.repository';
 import { UsersRepository } from '../../../user/users.repository';
 import getCurrentUser from '@/app/shared/get-user';
 
@@ -47,7 +48,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     const { id: loanId } = await params;
     // const user = await getCurrentUser();
-    const loanApplication = await LoanApplicationsRepository.findById(parseInt(loanId));
+    const loanApplication = await LoanApplicationsRepository.findById(parseInt(loanId), { offers: true });
     if (!loanApplication) {
         return NextResponse.json({ error: 'Loan application not found' }, { status: 404 });
     }
