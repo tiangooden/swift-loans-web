@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { notifications } from '@/app/shared/notifications';
-import { Toast } from "react-hot-toast";
+import { useProfileUpdate } from './hooks';
 
 interface UserProfile {
   id: number;
@@ -27,6 +26,7 @@ interface ProfileFormProps {
 const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
   const [formData, setFormData] = useState<UserProfile>(user);
   const [isEditing, setIsEditing] = useState(false);
+  const { updateProfile, loading, error } = useProfileUpdate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -38,22 +38,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const response = await fetch(`/api/user`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      notifications.success('Profile updated successfully!');
+    const success = await updateProfile(formData);
+    if (success) {
       setIsEditing(false);
-      // Optionally, refresh session or user data here if needed
-    } catch (e: any) {
-      notifications.error('An error occured');
     }
   };
 
@@ -198,8 +185,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
             <button
               type="submit"
               className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              disabled={loading}
             >
-              Save Changes
+              {loading ? 'Saving...' : 'Save'}
             </button>
           </>
         ) : (
@@ -212,6 +200,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
           </button>
         )}
       </div>
+      {error && <p className="text-red-500 text-sm mt-2">Error: {error}</p>}
     </form>
   );
 };

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { LoanOffersRepository } from '@/app/repository/loan_offers.repository';
-import { UsersRepository } from '@/app/repository/users.repository';
+import { UsersRepository } from '@/app/user/users.repository';
 
 export async function GET(
   request: NextRequest,

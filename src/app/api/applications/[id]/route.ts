@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { LoanApplicationsRepository } from '../../../repository/loan_applications.repository';
-import { UsersRepository } from '../../../repository/users.repository';
+import { UsersRepository } from '../../../user/users.repository';
 import getCurrentUser from '@/app/shared/get-user';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {

@@ -107,7 +107,7 @@ export function MobileMenu({ session }: MobileMenuProps) {
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                     <Link
-                      href="/profile"
+                      href="/user"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
                       onClick={() => {
                         setIsDropdownOpen(false);

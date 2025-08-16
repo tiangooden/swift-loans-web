@@ -1,5 +1,5 @@
 import { users } from '../../generated/prisma';
-import { UsersRepository } from '../repository/users.repository';
+import { UsersRepository } from '../user/users.repository';
 import { Prisma } from '../../generated/prisma';
 
 export interface CreateUserInput {

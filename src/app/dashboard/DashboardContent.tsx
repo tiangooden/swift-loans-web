@@ -55,7 +55,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ userData }) => {
     <div>
       {/* Navigation Tiles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <a href="/profile" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer group">
+        <a href="/user" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer group">
           <div className="flex items-center">
             <div className="bg-blue-100 p-3 rounded-full group-hover:bg-blue-200 transition-colors">
               <User className="h-6 w-6 text-blue-600" />
