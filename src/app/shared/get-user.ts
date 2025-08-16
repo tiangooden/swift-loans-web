@@ -19,7 +19,6 @@ export default async function getCurrentUser() {
             first_name: session?.user?.name ?
              session.user.name.charAt(0).toUpperCase() + session.user.name.slice(1) : '',
         });
-        throw new NotFoundError('User not found');
     }
     return user;
 }

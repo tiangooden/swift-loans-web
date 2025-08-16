@@ -12,7 +12,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             bank_name: data.bank_name,
             account_number: data.account_number,
             account_type: data.account_type,
-            is_primary: data.is_primary,
         },
     });
     return NextResponse.json(updatedAccount);

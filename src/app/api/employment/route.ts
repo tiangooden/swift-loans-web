@@ -41,11 +41,7 @@ export async function PUT(request: Request) {
         });
     } else {
         updatedEmployment = await EmploymentDetailsRepository.create({
-            users: {
-                connect: {
-                    id: user.id,
-                },
-            },
+            user_id: user.id,
             employer_name: body.employer_name,
             job_title: body.job_title,
             employment_type: body.employment_type,
