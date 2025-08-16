@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import EmploymentForm from './EmploymentForm';
+import { notifications } from '../shared/notifications';
 
 interface EmploymentDetails {
     employer_name: string;
@@ -29,8 +30,6 @@ export default function EmploymentPage() {
 
         const fetchEmployment = async () => {
             try {
-                // Assuming you have a user ID available in the session or can derive it
-                // For simplicity, let's assume we fetch by user's email for now
                 const res = await fetch(`/api/employment`);
                 if (!res.ok) {
                     if (res.status === 404) {
@@ -53,13 +52,11 @@ export default function EmploymentPage() {
                 setLoading(false);
             }
         };
-
         fetchEmployment();
     }, [session, status, router]);
 
     const handleSave = async (updatedEmployment: EmploymentDetails) => {
         if (!session?.user?.email) return;
-
         try {
             const res = await fetch(`/api/employment`, {
                 method: 'PUT',
@@ -68,16 +65,14 @@ export default function EmploymentPage() {
                 },
                 body: JSON.stringify(updatedEmployment),
             });
-
             if (!res.ok) {
                 throw new Error(`Failed to update employment details: ${res.statusText}`);
             }
-
             setEmployment(updatedEmployment);
-            alert('Employment details updated successfully!');
+            notifications.success('Employment details updated successfully!');
         } catch (err: any) {
             setError(err.message);
-            alert(`Error updating employment details: ${err.message}`);
+            notifications.error(`Error updating employment details`);
         }
     };
 

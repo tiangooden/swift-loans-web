@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { notifications } from '../shared/notifications';
 
 interface BankAccount {
   id?: number;
@@ -24,7 +25,6 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onS
     account_type: '',
     is_primary: false,
   });
-  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (account) {
@@ -50,11 +50,8 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onS
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage(null);
-
     const method = formData.id ? 'PUT' : 'POST';
     const url = formData.id ? `/api/bank-accounts/${formData.id}` : `/api/bank-accounts`;
-
     try {
       const response = await fetch(url, {
         method,
@@ -63,15 +60,13 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onS
         },
         body: JSON.stringify(formData),
       });
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      setMessage(`Bank account ${formData.id ? 'updated' : 'added'} successfully!`);
+      notifications.success(`Bank account ${formData.id ? 'updated' : 'added'} successfully!`);
       onSubmitSuccess();
     } catch (e: any) {
-      setMessage(`Failed to ${formData.id ? 'update' : 'add'} bank account: ${e.message}`);
+      notifications.error(`Failed to ${formData.id ? 'update' : 'add'} bank account: ` + e.message);
     }
   };
 
@@ -145,11 +140,6 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onS
               {account ? 'Update Account' : 'Add Account'}
             </button>
           </div>
-          {message && (
-            <div className={`mt-4 text-sm ${message.includes('Failed') ? 'text-red-600' : 'text-green-600'}`}>
-              {message}
-            </div>
-          )}
         </form>
       </div>
     </div>

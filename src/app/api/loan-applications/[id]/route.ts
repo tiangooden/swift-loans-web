@@ -3,20 +3,13 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { LoanApplicationsRepository } from '../../../repository/loan_applications.repository';
 import { UsersRepository } from '../../../repository/users.repository';
+import getCurrentUser from '@/app/shared/get-user';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
-    }
-    const { id, provider } = session.user as any;
-    const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
-    if (!user) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
+    const user = await getCurrentUser();
     const body = await request.json();
     const { amount_requested, term_in_days, purpose } = body;
-    if (!amount_requested || !term_in_days || !purpose) {
+    if (!amount_requested || !term_in_days /*|| !purpose*/) {
         return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
     const existingApplication = await LoanApplicationsRepository.findById(parseInt(params.id));

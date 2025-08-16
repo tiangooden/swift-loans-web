@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import BankAccountForm from './BankAccountForm';
+import { notifications } from '../shared/notifications';
 
 interface BankAccount {
   id: number;
@@ -61,13 +62,13 @@ const BankAccountsPage = () => {
         const response = await fetch(`/api/bank-accounts/${id}`, {
           method: 'DELETE',
         });
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         setBankAccounts(bankAccounts.filter((account) => account.id !== id));
+        notifications.success('Bank account deleted successfully!');
       } catch (e: any) {
-        alert(`Failed to delete account: ${e.message}`);
+        notifications.error(`Failed to delete account`);
       }
     }
   };

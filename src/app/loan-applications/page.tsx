@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import LoanApplicationForm from './LoanApplicationForm';
+import { notifications } from '../shared/notifications';
 
 interface LoanApplication {
   id: number;
@@ -41,7 +42,7 @@ export default function LoanApplicationsPage() {
         setApplications(data);
       }
     } catch (error) {
-      console.error('Error fetching applications:', error);
+      notifications.error('Failed to fetch loan applications');
     } finally {
       setLoading(false);
     }
@@ -56,9 +57,12 @@ export default function LoanApplicationsPage() {
       });
       if (response.ok) {
         setApplications(applications.filter(app => app.id !== id));
+        notifications.success('Loan application deleted successfully!');
+      } else {
+        notifications.error('Failed to delete loan application');
       }
     } catch (error) {
-      console.error('Error deleting application:', error);
+      notifications.error('Failed to delete loan application');
     }
   };
 
@@ -79,9 +83,10 @@ export default function LoanApplicationsPage() {
         await fetchApplications();
         setShowForm(false);
         setEditingApplication(null);
+        notifications.success(`${editingApplication ? 'Updated' : 'Submitted'} loan application successfully!`);
       }
     } catch (error) {
-      console.error('Error submitting application:', error);
+      notifications.error('Failed to submit loan application');
     }
   };
 

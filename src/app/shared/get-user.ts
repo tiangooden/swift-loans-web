@@ -17,8 +17,7 @@ export default async function getCurrentUser() {
             identity: `${provider}|${id}`,
             email: session?.user?.email,
             first_name: session?.user?.name ?
-                session.user.name.charAt(0).toUpperCase() + session.user.name.slice(1) :
-                '',
+             session.user.name.charAt(0).toUpperCase() + session.user.name.slice(1) : '',
         });
         throw new NotFoundError('User not found');
     }
