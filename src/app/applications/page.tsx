@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import ApplicationForm from './ApplicationForm';
-import { notifications } from '../shared/notifications';
+import { useFetchLoanApplications, useSaveLoanApplication, useDeleteLoanApplication } from './hooks';
 
 interface LoanApplication {
   id: number;
@@ -20,73 +20,34 @@ interface LoanApplication {
 export default function LoanApplicationsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [applications, setApplications] = useState<LoanApplication[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingApplication, setEditingApplication] = useState<LoanApplication | null>(null);
+  const { applications, loading, error, fetchApplications } = useFetchLoanApplications();
+  const { saveApplication, saving, saveError } = useSaveLoanApplication();
+  const { deleteApplication, deleting, deleteError } = useDeleteLoanApplication();
 
   useEffect(() => {
     if (status === 'loading') return;
     if (!session) {
       router.push('/api/auth/signin');
-      return;
     }
-    fetchApplications();
-  }, [session, status]);
-
-  const fetchApplications = async () => {
-    try {
-      const response = await fetch('/api/loan-applications');
-      if (response.ok) {
-        const data = await response.json();
-        setApplications(data);
-      }
-    } catch (error) {
-      notifications.error('Failed to fetch loan applications');
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [session, status, router]);
 
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this application?')) return;
 
-    try {
-      const response = await fetch(`/api/loan-applications/${id}`, {
-        method: 'DELETE',
-      });
-      if (response.ok) {
-        setApplications(applications.filter(app => app.id !== id));
-        notifications.success('Loan application deleted successfully!');
-      } else {
-        notifications.error('Failed to delete loan application');
-      }
-    } catch (error) {
-      notifications.error('Failed to delete loan application');
+    const success = await deleteApplication(id);
+    if (success) {
+      fetchApplications();
     }
   };
 
   const handleFormSubmit = async (data: any) => {
-    const url = editingApplication
-      ? `/api/loan-applications/${editingApplication.id}`
-      : '/api/loan-applications';
-    const method = editingApplication ? 'PUT' : 'POST';
-
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        await fetchApplications();
-        setShowForm(false);
-        setEditingApplication(null);
-        notifications.success(`${editingApplication ? 'Updated' : 'Submitted'} loan application successfully!`);
-      }
-    } catch (error) {
-      notifications.error('Failed to submit loan application');
+    const success = await saveApplication(data, editingApplication?.id);
+    if (success) {
+      fetchApplications();
+      setShowForm(false);
+      setEditingApplication(null);
     }
   };
 
@@ -100,8 +61,20 @@ export default function LoanApplicationsPage() {
     return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
 
-  if (status === 'loading' || loading) {
+  if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading applications...</div>;
+  }
+
+  if (saving) {
+    return <div className="flex justify-center items-center h-screen">Saving application...</div>;
+  }
+
+  if (deleting) {
+    return <div className="flex justify-center items-center h-screen">Deleting application...</div>;
+  }
+
+  if (error || saveError || deleteError) {
+    return <div className="flex justify-center items-center h-screen text-red-600">Error: {error || saveError || deleteError}</div>;
   }
 
   return (
@@ -169,7 +142,7 @@ export default function LoanApplicationsPage() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">
                             <button
-                              onClick={() => router.push(`/loan-applications/${application.id}`)}
+                              onClick={() => router.push(`/applications/${application.id}`)}
                               className="text-blue-600 hover:text-blue-900"
                             >
                               View
@@ -211,6 +184,16 @@ export default function LoanApplicationsPage() {
                   setEditingApplication(null);
                 }}
               />
+            </div>
+          </div>
+        )}
+
+        {(saving || loading || deleting) && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center z-50">
+            <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full relative text-center">
+              <p className="text-lg font-semibold">
+                {saving ? 'Saving application...' : deleting ? 'Deleting application...' : 'Loading applications...'}
+              </p>
             </div>
           </div>
         )}

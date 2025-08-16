@@ -1,17 +1,22 @@
 'use client';
 
-import ProfileForm from './UserForm';
-import { useFetchUserProfile } from './hooks';
+import { useFetchUserProfile, useProfileUpdate } from './hooks';
+import UserForm from './UserForm';
 
 const ProfilePage = () => {
     const { userProfile, loading, error } = useFetchUserProfile();
+    const { updateProfile, loading: saving, error: saveError } = useProfileUpdate();
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading profile...</div>;
     }
 
-    if (error) {
-        return <div className="flex justify-center items-center h-screen text-red-500">Error: {error}</div>;
+    if (saving) {
+        return <div className="flex justify-center items-center h-screen">Saving profile...</div>;
+    }
+
+    if (error || saveError) {
+        return <div className="flex justify-center items-center h-screen text-red-500">Error: {error || saveError}</div>;
     }
 
     if (!userProfile) {
@@ -27,7 +32,7 @@ const ProfilePage = () => {
                     </svg>
                     <h1 className="text-3xl font-bold text-gray-800">User Profile</h1>
                 </div>
-                <ProfileForm user={userProfile} />
+                <UserForm user={userProfile} onSave={updateProfile} />
             </div>
         </div>
     );

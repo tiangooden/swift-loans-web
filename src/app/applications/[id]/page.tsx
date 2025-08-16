@@ -33,12 +33,12 @@ interface LoanApplication {
         job_title: string;
         monthly_income: number;
         employment_length: string;
-    };
+    }[];
     bank_account?: {
         bank_name: string;
         account_type: string;
         last_four: string;
-    };
+    }[];
 }
 
 interface LoanOffer {
@@ -72,8 +72,8 @@ export default function LoanApplicationDetailsPage() {
     const fetchApplicationDetails = async () => {
         try {
             const [applicationResponse, offersResponse] = await Promise.all([
-                fetch(`/api/loan-applications/${params.id}`),
-                fetch(`/api/loan-applications/${params.id}/loan-offers`)
+                fetch(`/api/applications/${params.id}`),
+                fetch(`/api/applications/${params.id}/offers`)
             ]);
             if (applicationResponse.ok) {
                 const appData = await applicationResponse.json();
@@ -116,7 +116,7 @@ export default function LoanApplicationDetailsPage() {
 
     const handleStatusUpdate = async (newStatus: string, reason?: string) => {
         try {
-            const response = await fetch(`/api/loan-applications/${params.id}/status`, {
+            const response = await fetch(`/api/applications/${params.id}/status`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: newStatus, decision_reason: reason }),
@@ -147,7 +147,7 @@ export default function LoanApplicationDetailsPage() {
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">Application Not Found</h2>
                     <button
-                        onClick={() => router.push('/loan-applications')}
+                        onClick={() => router.push('/applications')}
                         className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
                     >
                         Back to Applications
@@ -159,11 +159,11 @@ export default function LoanApplicationDetailsPage() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 py-8">
                 {/* Header */}
                 <div className="mb-6">
                     <button
-                        onClick={() => router.push('/loan-applications')}
+                        onClick={() => router.push('/applications')}
                         className="flex items-center text-blue-600 hover:text-blue-800 mb-4"
                     >
                         <ArrowLeft className="h-4 w-4 mr-2" />
@@ -175,7 +175,7 @@ export default function LoanApplicationDetailsPage() {
                                 Loan Application #{application.id}
                             </h1>
                             <p className="text-gray-600 mt-1">
-                                {(new Date(application.submitted_at).toISOString())}
+                                {new Date(application.submitted_at).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
                             </p>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -187,183 +187,162 @@ export default function LoanApplicationDetailsPage() {
                     </div>
                 </div>
 
-                {/* Application Details */}
-                <div className="bg-white rounded-lg shadow mb-6">
-                    <div className="p-6">
-                        <h2 className="text-xl font-semibold text-gray-900 mb-4">Application Details</h2>
-                        <div className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Loan Request</h3>
-                                    <dl className="space-y-3">
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Amount Requested</dt>
-                                            <dd className="text-lg font-semibold text-gray-900">
-                                                {formatCurrency(application.amount_requested)}
-                                            </dd>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Application Details */}
+                    <div className="lg:col-span-1 bg-white shadow-lg rounded-xl">
+                        <div className="p-8">
+                            <h2 className="text-xl font-semibold text-gray-900 mb-4">Application Details</h2>
+                            <div className="space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+                                    <div className="bg-gray-50 rounded-lg p-4 shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">Loan Request</h3>
+                                        <div className="grid grid-cols-3 gap-4">
+                                            <div>
+                                                <dt className="text-sm font-medium text-gray-500">Amount Requested</dt>
+                                                <dd className="text-gray-900">{formatCurrency(application.amount_requested)}</dd>
+                                            </div>
+                                            <div>
+                                                <dt className="text-sm font-medium text-gray-500">Term</dt>
+                                                <dd className="text-gray-900">{application.term_in_days} days</dd>
+                                            </div>
+                                            <div>
+                                                <dt className="text-sm font-medium text-gray-500">Purpose</dt>
+                                                <dd className="text-gray-900">{application.purpose || 'Not specified'}</dd>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Term</dt>
-                                            <dd className="text-gray-900">{application.term_in_days} days</dd>
+                                    </div>
+
+                                    {application.user && (
+                                        <div className="bg-gray-50 rounded-lg p-4">
+                                            <h3 className="text-lg font-semibold text-gray-900 mb-4">Applicant Information</h3>
+                                            <dl className="space-y-3">
+                                                <div>
+                                                    <dt className="text-sm font-medium text-gray-500">Name</dt>
+                                                    <dd className="text-gray-900">
+                                                        {application.user.first_name} {application.user.last_name}
+                                                    </dd>
+                                                </div>
+                                                <div>
+                                                    <dt className="text-sm font-medium text-gray-500">Email</dt>
+                                                    <dd className="text-gray-900">{application.user.email}</dd>
+                                                </div>
+                                                <div>
+                                                    <dt className="text-sm font-medium text-gray-500">Phone</dt>
+                                                    <dd className="text-gray-900">{application.user.phone}</dd>
+                                                </div>
+                                            </dl>
                                         </div>
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Purpose</dt>
-                                            <dd className="text-gray-900">{application.purpose || 'Not specified'}</dd>
-                                        </div>
-                                    </dl>
+                                    )}
                                 </div>
 
-                                {application.user && (
+                                {application.employment_details && (
                                     <div className="bg-gray-50 rounded-lg p-4">
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Applicant Information</h3>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Employment Details</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <dt className="text-sm font-medium text-gray-500">Employer</dt>
+                                                <dd className="text-gray-900">{application.employment_details[0].employer_name}</dd>
+
+                                            </div>
+                                            <div>
+                                                <dt className="text-sm font-medium text-gray-500">Job Title</dt>
+                                                <dd className="text-gray-900">{application.employment_details[0].job_title}</dd>
+                                            </div>
+                                            <div>
+                                                <dt className="text-sm font-medium text-gray-500">Monthly Income</dt>
+                                                <dd className="text-gray-900">{formatCurrency(application.employment_details[0].monthly_income)}</dd>
+                                            </div>
+                                            <div>
+                                                <dt className="text-sm font-medium text-gray-500">Employment Length</dt>
+                                                <dd className="text-gray-900">{application.employment_details[0].employment_length}</dd>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {application.bank_account && (
+                                    <div className="bg-gray-50 rounded-lg p-4">
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Bank Account</h3>
                                         <dl className="space-y-3">
                                             <div>
-                                                <dt className="text-sm font-medium text-gray-500">Name</dt>
+                                                <dt className="text-sm font-medium text-gray-500">Bank Name</dt>
+                                                <dd className="text-gray-900">{application.bank_account[0].bank_name}</dd>
+                                            </div>
+                                            <div>
+                                                <dt className="text-sm font-medium text-gray-500">Account Type</dt>
+                                                <dd className="text-gray-900 capitalize">{application.bank_account[0].account_type}</dd>
+                                            </div>
+                                            <div>
+                                                <dt className="text-sm font-medium text-gray-500">Account Number</dt>
+                                                <dd className="text-gray-900">****{application.bank_account[0].last_four}</dd>
+                                            </div>
+                                        </dl>
+                                    </div>
+                                )}
+
+                                {application.decided_at && (
+                                    <div className="bg-gray-50 rounded-lg p-4">
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Decision Details</h3>
+                                        <dl className="space-y-3">
+                                            <div>
+                                                <dt className="text-sm font-medium text-gray-500">Decision Date</dt>
                                                 <dd className="text-gray-900">
-                                                    {application.user.first_name} {application.user.last_name}
+                                                    {new Date(application.decided_at!).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
                                                 </dd>
                                             </div>
-                                            <div>
-                                                <dt className="text-sm font-medium text-gray-500">Email</dt>
-                                                <dd className="text-gray-900">{application.user.email}</dd>
-                                            </div>
-                                            <div>
-                                                <dt className="text-sm font-medium text-gray-500">Phone</dt>
-                                                <dd className="text-gray-900">{application.user.phone}</dd>
-                                            </div>
+                                            {application.decision_reason && (
+                                                <div>
+                                                    <dt className="text-sm font-medium text-gray-500">Reason</dt>
+                                                    <dd className="text-gray-900">{application.decision_reason}</dd>
+                                                </div>
+                                            )}
                                         </dl>
                                     </div>
                                 )}
                             </div>
 
-                            {application.employment_details && (
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Employment Details</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Employer</dt>
-                                            <dd className="text-gray-900">{application.employment_details.employer_name}</dd>
-                                        </div>
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Job Title</dt>
-                                            <dd className="text-gray-900">{application.employment_details.job_title}</dd>
-                                        </div>
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Monthly Income</dt>
-                                            <dd className="text-gray-900">{formatCurrency(application.employment_details.monthly_income)}</dd>
-                                        </div>
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Employment Length</dt>
-                                            <dd className="text-gray-900">{application.employment_details.employment_length}</dd>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+                        </div>
+                    </div>
 
-                            {application.bank_account && (
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Bank Account</h3>
-                                    <dl className="space-y-3">
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Bank Name</dt>
-                                            <dd className="text-gray-900">{application.bank_account.bank_name}</dd>
-                                        </div>
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Account Type</dt>
-                                            <dd className="text-gray-900 capitalize">{application.bank_account.account_type}</dd>
-                                        </div>
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Account Number</dt>
-                                            <dd className="text-gray-900">****{application.bank_account.last_four}</dd>
-                                        </div>
-                                    </dl>
+                    {/* Loan Offers */}
+                    <div className="lg:col-span-1 bg-white rounded-lg shadow">
+                        <div className="p-6">
+                            <h2 className="text-xl font-semibold text-gray-900 mb-4">Loan Offers</h2>
+                            {loanOffers.length > 0 ? (
+                                <div className="overflow-x-auto">
+                                    <table className="min-w-full divide-y divide-gray-200">
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Principal</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interest Rate</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Due</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Repayment Date</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="bg-white divide-y divide-gray-200">
+                                            {loanOffers.map((offer) => (
+                                                <tr key={offer.id}>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{formatCurrency(offer.principal)}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{(offer.interest_rate * 100).toFixed(2)}%</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(offer.fee_amount)}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(offer.total_due)}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(offer.repayment_date).toLocaleDateString()}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(offer.offer_status)}`}>
+                                                            {offer.offer_status}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
-                            )}
-
-                            {application.decided_at && (
-                                <div className="bg-gray-50 rounded-lg p-4">
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Decision Details</h3>
-                                    <dl className="space-y-3">
-                                        <div>
-                                            <dt className="text-sm font-medium text-gray-500">Decision Date</dt>
-                                            <dd className="text-gray-900">
-                                                {(new Date(application.decided_at).toLocaleDateString())}
-                                            </dd>
-                                        </div>
-                                        {application.decision_reason && (
-                                            <div>
-                                                <dt className="text-sm font-medium text-gray-500">Reason</dt>
-                                                <dd className="text-gray-900">{application.decision_reason}</dd>
-                                            </div>
-                                        )}
-                                    </dl>
-                                </div>
+                            ) : (
+                                <p className="text-gray-500">No loan offers available for this application yet.</p>
                             )}
                         </div>
-
-                    </div>
-                </div>
-
-                {/* Historical Loan Offers */}
-                <div className="bg-white rounded-lg shadow">
-                    <div className="p-6">
-                        <h2 className="text-xl font-semibold text-gray-900 mb-4">Loan Offers</h2>
-                        {loanOffers.length > 0 ? (
-                            <div className="space-y-4">
-                                {loanOffers.map((offer) => (
-                                    <div key={offer.id} className="border rounded-lg p-4">
-                                        <div className="flex justify-between items-start">
-                                            <div>
-                                                <h4 className="font-semibold text-gray-900">
-                                                    {formatCurrency(offer.principal)} loan
-                                                </h4>
-                                                <p className="text-sm text-gray-600">
-                                                    Due {(new Date(offer.repayment_date)).toLocaleDateString()}
-                                                </p>
-                                            </div>
-                                            <span className={`inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full ${offer.offer_status === 'accepted' ? 'bg-green-100 text-green-800' :
-                                                offer.offer_status === 'rejected' ? 'bg-red-100 text-red-800' :
-                                                    'bg-blue-100 text-blue-800'
-                                                }`}>
-                                                {offer.offer_status}
-                                            </span>
-                                        </div>
-                                        <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                                            <div>
-                                                <span className="text-gray-500">Principal:</span>
-                                                <span className="ml-1 font-medium">{formatCurrency(offer.principal)}</span>
-                                            </div>
-                                            <div>
-                                                <span className="text-gray-500">Fee:</span>
-                                                <span className="ml-1 font-medium">{formatCurrency(offer.fee_amount)}</span>
-                                            </div>
-                                            <div>
-                                                <span className="text-gray-500">Interest:</span>
-                                                <span className="ml-1 font-medium">{offer.interest_rate}%</span>
-                                            </div>
-                                            <div>
-                                                <span className="text-gray-500">Total Due:</span>
-                                                <span className="ml-1 font-medium">{formatCurrency(offer.total_due)}</span>
-                                            </div>
-                                        </div>
-                                        {offer.offer_status === 'offered' && (
-                                            <div className="mt-4 flex space-x-2">
-                                                <button className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
-                                                    Accept
-                                                </button>
-                                                <button className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">
-                                                    Reject
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="text-center py-8 text-gray-500">
-                                No loan offers available for this application.
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>

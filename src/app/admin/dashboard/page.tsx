@@ -19,7 +19,7 @@ export default function AdminDashboard() {
       try {
         const [statsResponse, loansResponse] = await Promise.all([
           fetch('/api/admin/dashboard-stats'),
-          fetch('/api/admin/loan-applications?limit=5')
+          fetch('/api/admin/applications?limit=5')
         ]);
         
         if (statsResponse.ok) {

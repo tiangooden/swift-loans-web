@@ -15,8 +15,8 @@ interface ApplicationFormProps {
 
 export default function ApplicationForm({ initialData, onSubmit, onCancel }: ApplicationFormProps) {
   const [formData, setFormData] = useState({
-    amount_requested: initialData?.amount_requested || '',
-    term_in_days: initialData?.term_in_days || '',
+    amount_requested: initialData?.amount_requested || '15000',
+    term_in_days: initialData?.term_in_days || '14',
     purpose: initialData?.purpose || '',
   });
 

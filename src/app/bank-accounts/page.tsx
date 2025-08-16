@@ -1,74 +1,22 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import BankAccountForm, { BankAccount } from './BankAccountForm';
-import { notifications } from '../shared/notifications';
-import { useRouter } from 'next/navigation';
+import BankAccountForm from './BankAccountForm';
+import { useFetchBankAccounts, useSaveBankAccount } from './hooks';
 
 const BankAccountsPage = () => {
-  const { data: session, status } = useSession();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [account, setAccount] = useState<BankAccount | null>(null);
-  const router = useRouter();
+  const { account, loading: fetchLoading, error: fetchError } = useFetchBankAccounts();
+  const { saveBankAccount, loading: saveLoading, error: saveError } = useSaveBankAccount();
 
-  useEffect(() => {
-    const fetchAccount = async () => {
-      if (status === 'authenticated' && session?.user?.email) {
-        try {
-          const response = await fetch(`/api/bank-accounts`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
-          if (data.length > 0) {
-            setAccount(data[0]);
-          }
-        } catch (e: any) {
-          setError(e.message);
-        } finally {
-          setLoading(false);
-        }
-      } else if (status === 'unauthenticated') {
-        setLoading(false);
-        setError('You must be logged in to view this page.');
-      }
-    };
-    fetchAccount();
-  }, [session, status]);
-
-  const handleSaveBankAccount = async (bankAccount: BankAccount) => {
-    const method = bankAccount.id ? 'PUT' : 'POST';
-    const url = bankAccount.id ? `/api/bank-accounts/${bankAccount.id}` : `/api/bank-accounts`;
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bankAccount),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      notifications.success(`Bank account ${bankAccount.id ? 'updated' : 'added'} successfully!`);
-      router.refresh(); // Refresh data after save
-    } catch (e: any) {
-      notifications.error(`Failed to ${bankAccount.id ? 'update' : 'add'} bank account: ` + e.message);
-    }
-  };
-
-  if (loading) {
+  if (fetchLoading) {
     return <div className="flex justify-center items-center h-screen">Loading bank accounts...</div>;
   }
 
-  if (error) {
-    return <div className="flex justify-center items-center h-screen text-red-500">Error: {error}</div>;
+  if (saveLoading) {
+    return <div className="flex justify-center items-center h-screen">Saving bank account...</div>;
   }
 
-  if (!session?.user?.email) {
-    return <div className="flex justify-center items-center h-screen">Please log in to manage bank accounts.</div>;
+  if (fetchError || saveError) {
+    return <div className="flex justify-center items-center h-screen text-red-500">Error: {fetchError || saveError}</div>;
   }
 
   return (
@@ -80,7 +28,7 @@ const BankAccountsPage = () => {
           </svg>
           <h1 className="text-3xl font-bold text-gray-800">Bank Accounts</h1>
         </div>
-        <BankAccountForm account={account} onSave={handleSaveBankAccount} />
+        <BankAccountForm account={account} onSave={saveBankAccount} />
       </div>
     </div>
   );

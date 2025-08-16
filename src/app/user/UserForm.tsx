@@ -1,9 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useProfileUpdate } from './hooks';
-
-interface UserProfile {
+interface User {
   id: number;
   identity: string;
   email?: string;
@@ -19,14 +17,16 @@ interface UserProfile {
   status?: string;
 }
 
-interface ProfileFormProps {
-  user: UserProfile;
+interface UserFormProps {
+  user: User;
+  onSave: (userData: User) => Promise<boolean>;
 }
 
-const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
-  const [formData, setFormData] = useState<UserProfile>(user);
+const UserForm: React.FC<UserFormProps> = ({ user, onSave }) => {
+  const [formData, setFormData] = useState<User>(user);
   const [isEditing, setIsEditing] = useState(false);
-  const { updateProfile, loading, error } = useProfileUpdate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -38,9 +38,17 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await updateProfile(formData);
-    if (success) {
-      setIsEditing(false);
+    setLoading(true);
+    setError(null);
+    try {
+      const success = await onSave(formData);
+      if (success) {
+        setIsEditing(false);
+      }
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -205,4 +213,4 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
   );
 };
 
-export default ProfileForm;
+export default UserForm;

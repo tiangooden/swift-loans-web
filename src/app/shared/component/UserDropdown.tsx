@@ -54,7 +54,7 @@ export function UserDropdown({ session }: UserDropdownProps) {
             onClick={() => setIsDropdownOpen(false)}
           >
             <FileText className="h-4 w-4" />
-            <span>Loan Applications</span>
+            <span>Applications</span>
           </Link>
           <button
             onClick={() => {

@@ -91,7 +91,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ userData }) => {
           </div>
         </a>
 
-        <a href="/loan-applications" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer group">
+        <a href="/applications" className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer group">
           <div className="flex items-center">
             <div className="bg-orange-100 p-3 rounded-full group-hover:bg-orange-200 transition-colors">
               <CheckCircle className="h-6 w-6 text-orange-600" />

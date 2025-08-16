@@ -73,7 +73,7 @@ export default function LoanReviewPage() {
 
   const fetchApplication = async () => {
     try {
-      const response = await fetch(`/api/admin/loan-applications/${params.id}`);
+      const response = await fetch(`/api/admin/applications/${params.id}`);
       if (!response.ok) throw new Error('Failed to fetch application');
       const data = await response.json();
       setApplication(data);
@@ -87,7 +87,7 @@ export default function LoanReviewPage() {
   const handleAction = async (action: string, offerData?: any) => {
     setActionLoading(true);
     try {
-      const response = await fetch(`/api/admin/loan-applications/${params.id}/action`, {
+      const response = await fetch(`/api/admin/applications/${params.id}/action`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

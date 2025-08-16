@@ -148,7 +148,7 @@ export function MobileMenu({ session }: MobileMenuProps) {
                       }}
                     >
                       <FileText className="h-4 w-4" />
-                      <span>Loan Applications</span>
+                      <span>Applications</span>
                     </Link>
                     <button
                       onClick={() => {
