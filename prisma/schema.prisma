@@ -20,7 +20,7 @@ model bank_accounts {
   deleted_at     DateTime? @db.Timestamp(6)
   created_at     DateTime? @default(now()) @db.Timestamp(6)
   updated_at     DateTime? @default(now()) @db.Timestamp(6)
-  users          users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users          users?    @relation(fields: [user_id], references: [id])
 
   @@index([user_id], map: "idx_bank_accounts_user_id")
   @@index([user_id, is_deleted], map: "idx_bank_accounts_user_id_is_deleted")
@@ -53,7 +53,7 @@ model documents {
   deleted_at    DateTime? @db.Timestamp(6)
   created_at    DateTime? @default(now()) @db.Timestamp(6)
   updated_at    DateTime? @default(now()) @db.Timestamp(6)
-  users         users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users         users?    @relation(fields: [user_id], references: [id])
 
   @@index([document_type], map: "idx_documents_document_type")
   @@index([user_id], map: "idx_documents_user_id")
@@ -73,8 +73,7 @@ model employments {
   deleted_at      DateTime? @db.Timestamp(6)
   created_at      DateTime? @default(now()) @db.Timestamp(6)
   updated_at      DateTime? @default(now()) @db.Timestamp(6)
-  users           users?    @relation(fields: [usersId], references: [id])
-  usersId         Int?
+  user            users?    @relation(fields: [user_id], references: [id])
 
   @@index([employment_type], map: "idx_employments_employment_type")
   @@index([is_deleted], map: "idx_employments_is_deleted")

@@ -1,28 +1,19 @@
 'use client';
 
-'use client'
 import { Check, X, DollarSign, Clock, User, Mail, Phone, MapPin, Briefcase, Building, CreditCard, Calendar, AlertCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import AdminNav from '@/app/admin/components/AdminNav';
 import { useLoanApplicationReview } from './hooks';
-import { LoanApplication, LoanOffer } from '@/app/shared/types';
 
 export default function LoanReviewPage() {
-  const { application, loading, actionLoading, counterOfferAmount, setCounterOfferAmount, counterOfferRate, setCounterOfferRate, counterOfferTerm, setCounterOfferTerm, showCounterOffer, setShowCounterOffer, fetchApplication, handleAction, getStatusColor } = useLoanApplicationReview();
+  const router = useRouter();
+  const { application, loading, actionLoading, counterOfferAmount,
+    setCounterOfferAmount, counterOfferRate, setCounterOfferRate,
+    counterOfferTerm, setCounterOfferTerm, showCounterOffer, setShowCounterOffer,
+    fetchApplication, handleAction, getStatusColor } = useLoanApplicationReview();
 
   if (loading) {
-    return (
-      <AdminNav>
-        <div className="min-h-screen bg-gray-50 py-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-lg shadow animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            </div>
-          </div>
-        </div>
-      </AdminNav>
-    );
+    return <div className="flex justify-center items-center h-screen">Loading application review...</div>;
   }
 
   if (!application) {
@@ -92,7 +83,7 @@ export default function LoanReviewPage() {
                       <DollarSign className="h-5 w-5 mr-2" />
                       Loan Request
                     </h3>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                       <div>
                         <label className="text-sm font-medium text-gray-500">Amount Requested</label>
                         <p className="text-lg font-semibold text-gray-900">${application.amount_requested.toLocaleString()}</p>
@@ -104,10 +95,6 @@ export default function LoanReviewPage() {
                       <div>
                         <label className="text-sm font-medium text-gray-500">Purpose</label>
                         <p className="text-gray-900">{application.purpose}</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Employment Status</label>
-                        <p className="text-gray-900 capitalize">{application.employment_status}</p>
                       </div>
                     </div>
                   </div>
@@ -137,41 +124,44 @@ export default function LoanReviewPage() {
                       </div>
                     </div>
                   </div>
-
-                  {/* Employment Details */}
-                  <div className="bg-gray-50 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                      <Briefcase className="h-5 w-5 mr-2" />
-                      Employment Details
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Employer</label>
-                        <p className="text-gray-900">{application.users.employments?.employer_name || 'N/A'}</p>
+                  {
+                    application.users.employments?.map(({ employer_name, job_title, start_date, monthly_income, employment_type, payday_day }, key) =>
+                      < div key={key} className="bg-gray-50 rounded-lg p-6" >
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                          <Briefcase className="h-5 w-5 mr-2" />
+                          Employment Details
+                        </h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Employer</label>
+                            <p className="text-gray-900">{employer_name || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Job Title</label>
+                            <p className="text-gray-900">{job_title || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Employment Type</label>
+                            <p className="text-gray-900">{employment_type}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Monthly Salary</label>
+                            <p className="text-gray-900">${monthly_income || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Pay Day</label>
+                            <p className="text-gray-900">{payday_day ?
+                              new Date(payday_day).toLocaleDateString() : 'N/A'}</p>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Job Title</label>
-                        <p className="text-gray-900">{application.users.employments?.job_title || 'N/A'}</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Employment Type</label>
-                        <p className="text-gray-900">{application.users.employments?.employment_type}</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Monthly Salary</label>
-                        <p className="text-gray-900">${application.users.employments?.monthly_income || 'N/A'}</p>
-                      </div>
-                      <div>
-                        <label className="text-sm font-medium text-gray-500">Pay Day</label>
-                        <p className="text-gray-900">{application.users.employments?.payday_day ?
-                          new Date(application.users.employments.payday_day).toLocaleDateString() : 'N/A'}</p>
-                      </div>
-                    </div>
-                  </div>
+                    )
+                  }
 
                   {/* Bank Account */}
                   {
-                    application.users.bank_accounts?.map(({ bank_name, account_number }, key) =>
+                    application.users.bank_accounts?.map(({ bank_name, branch_name, account_name, account_type, account_number }, key) =>
+
                       <div key={key} className="bg-gray-50 rounded-lg p-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                           <CreditCard className="h-5 w-5 mr-2" />
@@ -183,10 +173,20 @@ export default function LoanReviewPage() {
                             <p className="text-gray-900">{bank_name || 'N/A'}</p>
                           </div>
                           <div>
+                            <label className="text-sm font-medium text-gray-500">Branch Name</label>
+                            <p className="text-gray-900">{branch_name || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Account Name</label>
+                            <p className="text-gray-900">{account_name || 'N/A'}</p>
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-gray-500">Account Type</label>
+                            <p className="text-gray-900">{account_type || 'N/A'}</p>
+                          </div>
+                          <div>
                             <label className="text-sm font-medium text-gray-500">Account Number</label>
-                            <p className="text-gray-900">
-                              {account_number ? `****${account_number.slice(-4)}` : 'N/A'}
-                            </p>
+                            <p className="text-gray-900">{account_number || 'N/A'}</p>
                           </div>
                         </div>
                       </div>
@@ -299,6 +299,6 @@ export default function LoanReviewPage() {
           </div>
         </div>
       </div>
-    </AdminNav>
+    </AdminNav >
   );
 }
