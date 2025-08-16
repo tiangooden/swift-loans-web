@@ -124,74 +124,63 @@ export default function LoanReviewPage() {
                       </div>
                     </div>
                   </div>
-                  {
-                    application.users.employments?.map(({ employer_name, job_title, start_date, monthly_income, employment_type, payday_day }, key) =>
-                      < div key={key} className="bg-gray-50 rounded-lg p-6" >
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                          <Briefcase className="h-5 w-5 mr-2" />
-                          Employment Details
-                        </h3>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Employer</label>
-                            <p className="text-gray-900">{employer_name || 'N/A'}</p>
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Job Title</label>
-                            <p className="text-gray-900">{job_title || 'N/A'}</p>
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Employment Type</label>
-                            <p className="text-gray-900">{employment_type}</p>
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Monthly Salary</label>
-                            <p className="text-gray-900">${monthly_income || 'N/A'}</p>
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Pay Day</label>
-                            <p className="text-gray-900">{payday_day ?
-                              new Date(payday_day).toLocaleDateString() : 'N/A'}</p>
-                          </div>
-                        </div>
+                  < div className="bg-gray-50 rounded-lg p-6" >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                      <Briefcase className="h-5 w-5 mr-2" />
+                      Employment Details
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Employer</label>
+                        <p className="text-gray-900">{application.users.employment?.employer_name || 'N/A'}</p>
                       </div>
-                    )
-                  }
-
-                  {/* Bank Account */}
-                  {
-                    application.users.bank_accounts?.map(({ bank_name, branch_name, account_name, account_type, account_number }, key) =>
-
-                      <div key={key} className="bg-gray-50 rounded-lg p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                          <CreditCard className="h-5 w-5 mr-2" />
-                          Bank Account
-                        </h3>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Bank Name</label>
-                            <p className="text-gray-900">{bank_name || 'N/A'}</p>
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Branch Name</label>
-                            <p className="text-gray-900">{branch_name || 'N/A'}</p>
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Account Name</label>
-                            <p className="text-gray-900">{account_name || 'N/A'}</p>
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Account Type</label>
-                            <p className="text-gray-900">{account_type || 'N/A'}</p>
-                          </div>
-                          <div>
-                            <label className="text-sm font-medium text-gray-500">Account Number</label>
-                            <p className="text-gray-900">{account_number || 'N/A'}</p>
-                          </div>
-                        </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Job Title</label>
+                        <p className="text-gray-900">{application.users.employment?.job_title || 'N/A'}</p>
                       </div>
-                    )
-                  }
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Employment Type</label>
+                        <p className="text-gray-900">{application.users.employment?.employment_type}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Monthly Salary</label>
+                        <p className="text-gray-900">${application.users.employment?.monthly_income || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Pay Day</label>
+                        <p className="text-gray-900">{application.users.employment?.payday_day ?
+                          new Date(application.users.employment?.payday_day).toLocaleDateString() : 'N/A'}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                      <CreditCard className="h-5 w-5 mr-2" />
+                      Bank Account
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Bank Name</label>
+                        <p className="text-gray-900">{application.users.bank_account?.bank_name || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Branch Name</label>
+                        <p className="text-gray-900">{application.users.bank_account?.branch_name || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Account Name</label>
+                        <p className="text-gray-900">{application.users.bank_account?.account_name || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Account Type</label>
+                        <p className="text-gray-900">{application.users.bank_account?.account_type || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-500">Account Number</label>
+                        <p className="text-gray-900">{application.users.bank_account?.account_number || 'N/A'}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Right Column - Actions & Summary */}

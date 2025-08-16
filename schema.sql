@@ -1,246 +1,241 @@
--- USERS
+-- Users Table
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    identity VARCHAR(255) UNIQUE NOT NULL, -- e.g. 'google|123456'
+    identity VARCHAR(255) UNIQUE NOT NULL,
     first_name VARCHAR(100),
     middle_name VARCHAR(100),
     last_name VARCHAR(100),
     email VARCHAR(50),
     dob DATE,
     phone_number VARCHAR(20),
-    trn VARCHAR(50), -- e.g. SSN/NIN/TRN
+    trn VARCHAR(50),
     street_address TEXT,
     city VARCHAR(100),
     country VARCHAR(100),
-    status TEXT DEFAULT 'active', -- e.g. 'active', 'inactive', 'suspended'
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    status VARCHAR DEFAULT 'active',
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now()
 );
 
--- EMPLOYMENT DETAILS
-CREATE TABLE employments (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER UNIQUE,
-    employer_name VARCHAR(255),
-    job_title VARCHAR(100),
-    employment_type VARCHAR(50), -- e.g. full_time, part_time
-    monthly_income DECIMAL(12, 2),
-    payday_day INT, -- e.g. 25 (for 25th of each month)
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+CREATE INDEX idx_users_created_at ON users(created_at);
+CREATE INDEX idx_users_identity ON users(identity);
+CREATE INDEX idx_users_status ON users(status);
+CREATE INDEX idx_users_is_deleted ON users(is_deleted);
+CREATE INDEX idx_users_email ON users(email);
 
--- BANK ACCOUNTS
+-- Bank Accounts
 CREATE TABLE bank_accounts (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
+    user_id INT UNIQUE NOT NULL,
     bank_name VARCHAR(255),
     branch_name VARCHAR(255),
-    account_name VARCHAR(255),
+    account_name VARCHAR(50),
     account_number VARCHAR(50),
     account_type VARCHAR(50),
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now(),
+    CONSTRAINT fk_bank_accounts_user FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
--- LOAN APPLICATIONS
-CREATE TABLE applications (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    amount_requested DECIMAL(12, 2),
-    term_in_days INT,
-    purpose TEXT,
-    status TEXT DEFAULT 'pending', -- e.g. 'pending', 'approved', 'rejected', 'cancelled'
-    decision_reason TEXT,
-    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    decided_at TIMESTAMP,
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- LOAN OFFERS
-CREATE TABLE offers (
-    id SERIAL PRIMARY KEY,
-    application_id INTEGER REFERENCES applications(id),
-    principal DECIMAL(12, 2),
-    interest_rate DECIMAL(5, 2), -- e.g. 15.50
-    fee_amount DECIMAL(12, 2),
-    repayment_date DATE,
-    total_due DECIMAL(12, 2),
-    offer_status TEXT DEFAULT 'offered', -- e.g. 'offered', 'accepted', 'declined'
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- LOANS
-CREATE TABLE loans (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    loan_offer_id INTEGER REFERENCES offers(id),
-    status TEXT DEFAULT 'active', -- e.g. 'active', 'repaid', 'overdue', 'defaulted'
-    disbursed_at TIMESTAMP,
-    due_date DATE,
-    total_amount DECIMAL(12, 2),
-    balance_remaining DECIMAL(12, 2),
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- REPAYMENTS
-CREATE TABLE repayments (
-    id SERIAL PRIMARY KEY,
-    loan_id INTEGER REFERENCES loans(id),
-    amount_paid DECIMAL(12, 2),
-    payment_date TIMESTAMP,
-    payment_method VARCHAR(50),
-    transaction_reference VARCHAR(100),
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- INTEREST AND FEES
-CREATE TABLE interests (
-    id SERIAL PRIMARY KEY,
-    loan_id INTEGER REFERENCES loans(id),
-    type VARCHAR(50), -- e.g. 'interest', 'origination_fee', 'late_fee'
-    amount DECIMAL(12, 2),
-    description TEXT,
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- DOCUMENTS
-CREATE TABLE documents (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    document_type VARCHAR(100), -- e.g. 'ID', 'Payslip', 'BankStatement'
-    file_url TEXT,
-    verified BOOLEAN DEFAULT FALSE,
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- NOTIFICATIONS
-CREATE TABLE notifications (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    title VARCHAR(255),
-    message TEXT,
-    read BOOLEAN DEFAULT FALSE,
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- SYSTEM SETTINGS
-CREATE TABLE settings (
-    id SERIAL PRIMARY KEY,
-    key VARCHAR(100) UNIQUE NOT NULL,
-    value TEXT,
-    description TEXT,
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- CAPITAL
-CREATE TABLE capital (
-    id SERIAL PRIMARY KEY,
-    capital_type VARCHAR(100) NOT NULL, -- e.g. 'cash', 'bank_account', 'investment'
-    amount DECIMAL(14, 2) NOT NULL,
-    currency VARCHAR(10) DEFAULT 'USD',
-    description TEXT,
-    is_deleted BOOLEAN DEFAULT FALSE,
-    deleted_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- ===================== INDEXES =====================
-
--- USERS
-CREATE INDEX idx_users_identity ON users(identity);
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_status ON users(status);
-CREATE INDEX idx_users_created_at ON users(created_at);
-CREATE INDEX idx_users_is_deleted ON users(is_deleted);
-
--- EMPLOYMENT DETAILS
-CREATE INDEX idx_employments_user_id ON employments(user_id);
-CREATE INDEX idx_employments_employment_type ON employments(employment_type);
-CREATE INDEX idx_employments_is_deleted ON employments(is_deleted);
-
--- BANK ACCOUNTS
 CREATE INDEX idx_bank_accounts_user_id ON bank_accounts(user_id);
-CREATE INDEX idx_bank_accounts_is_primary ON bank_accounts(is_primary);
-CREATE INDEX idx_bank_accounts_user_id_is_primary ON bank_accounts(user_id, is_primary);
+CREATE INDEX idx_bank_accounts_user_id_is_deleted ON bank_accounts(user_id, is_deleted);
 CREATE INDEX idx_bank_accounts_is_deleted ON bank_accounts(is_deleted);
 
--- LOAN APPLICATIONS
-CREATE INDEX idx_applications_user_id ON applications(user_id);
+-- Employments
+CREATE TABLE employments (
+    id SERIAL PRIMARY KEY,
+    user_id INT UNIQUE NOT NULL,
+    employer_name VARCHAR(255),
+    job_title VARCHAR(100),
+    employment_type VARCHAR(50),
+    monthly_income DECIMAL(12,2),
+    payday_day INT,
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now(),
+    CONSTRAINT fk_employments_user FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+CREATE INDEX idx_employments_employment_type ON employments(employment_type);
+CREATE INDEX idx_employments_is_deleted ON employments(is_deleted);
+CREATE INDEX idx_employments_user_id ON employments(user_id);
+
+-- Documents
+CREATE TABLE documents (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    document_type VARCHAR(100),
+    file_url TEXT,
+    verified BOOLEAN DEFAULT false,
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now(),
+    CONSTRAINT fk_documents_user FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+CREATE INDEX idx_documents_document_type ON documents(document_type);
+CREATE INDEX idx_documents_user_id ON documents(user_id);
+CREATE INDEX idx_documents_verified ON documents(verified);
+CREATE INDEX idx_documents_is_deleted ON documents(is_deleted);
+
+-- Applications
+CREATE TABLE applications (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    amount_requested DECIMAL(12,2),
+    term_in_days INT,
+    purpose TEXT,
+    status VARCHAR DEFAULT 'pending',
+    decision_reason TEXT,
+    submitted_at TIMESTAMP(6) DEFAULT now(),
+    decided_at TIMESTAMP(6),
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now(),
+    CONSTRAINT fk_applications_user FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
 CREATE INDEX idx_applications_status ON applications(status);
 CREATE INDEX idx_applications_submitted_at ON applications(submitted_at);
+CREATE INDEX idx_applications_user_id ON applications(user_id);
 CREATE INDEX idx_applications_is_deleted ON applications(is_deleted);
 
--- LOAN OFFERS
+-- Offers
+CREATE TABLE offers (
+    id SERIAL PRIMARY KEY,
+    application_id INT,
+    principal DECIMAL(12,2),
+    interest_rate DECIMAL(5,2),
+    fee_amount DECIMAL(12,2),
+    repayment_date DATE,
+    total_due DECIMAL(12,2),
+    offer_status VARCHAR DEFAULT 'offered',
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now(),
+    CONSTRAINT fk_offers_application FOREIGN KEY(application_id) REFERENCES applications(id)
+);
+
 CREATE INDEX idx_offers_application_id ON offers(application_id);
 CREATE INDEX idx_offers_offer_status ON offers(offer_status);
 CREATE INDEX idx_offers_is_deleted ON offers(is_deleted);
 
--- LOANS
-CREATE INDEX idx_loans_user_id ON loans(user_id);
+-- Loans
+CREATE TABLE loans (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    loan_offer_id INT,
+    status VARCHAR DEFAULT 'active',
+    disbursed_at TIMESTAMP(6),
+    due_date DATE,
+    total_amount DECIMAL(12,2),
+    balance_remaining DECIMAL(12,2),
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now(),
+    CONSTRAINT fk_loans_offer FOREIGN KEY(loan_offer_id) REFERENCES offers(id),
+    CONSTRAINT fk_loans_user FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+CREATE INDEX idx_loans_due_date ON loans(due_date);
 CREATE INDEX idx_loans_loan_offer_id ON loans(loan_offer_id);
 CREATE INDEX idx_loans_status ON loans(status);
-CREATE INDEX idx_loans_due_date ON loans(due_date);
+CREATE INDEX idx_loans_user_id ON loans(user_id);
 CREATE INDEX idx_loans_is_deleted ON loans(is_deleted);
 
--- REPAYMENTS
+-- Interest
+CREATE TABLE interest (
+    id SERIAL PRIMARY KEY,
+    loan_id INT,
+    type VARCHAR(50),
+    amount DECIMAL(12,2),
+    description TEXT,
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now(),
+    CONSTRAINT fk_interest_loan FOREIGN KEY(loan_id) REFERENCES loans(id)
+);
+
+CREATE INDEX idx_interest_loan_id ON interest(loan_id);
+CREATE INDEX idx_interest_type ON interest(type);
+CREATE INDEX idx_interest_is_deleted ON interest(is_deleted);
+
+-- Repayments
+CREATE TABLE repayments (
+    id SERIAL PRIMARY KEY,
+    loan_id INT,
+    amount_paid DECIMAL(12,2),
+    payment_date TIMESTAMP(6),
+    payment_method VARCHAR(50),
+    transaction_reference VARCHAR(100),
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now(),
+    CONSTRAINT fk_repayments_loan FOREIGN KEY(loan_id) REFERENCES loans(id)
+);
+
 CREATE INDEX idx_repayments_loan_id ON repayments(loan_id);
 CREATE INDEX idx_repayments_payment_date ON repayments(payment_date);
 CREATE INDEX idx_repayments_transaction_reference ON repayments(transaction_reference);
 CREATE INDEX idx_repayments_is_deleted ON repayments(is_deleted);
 
--- INTEREST AND FEES
-CREATE INDEX idx_interests_loan_id ON interests(loan_id);
-CREATE INDEX idx_interests_type ON interests(type);
-CREATE INDEX idx_interests_is_deleted ON interests(is_deleted);
+-- Notifications
+CREATE TABLE notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    title VARCHAR(255),
+    message TEXT,
+    read BOOLEAN DEFAULT false,
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now(),
+    CONSTRAINT fk_notifications_user FOREIGN KEY(user_id) REFERENCES users(id)
+);
 
--- DOCUMENTS
-CREATE INDEX idx_documents_user_id ON documents(user_id);
-CREATE INDEX idx_documents_document_type ON documents(document_type);
-CREATE INDEX idx_documents_verified ON documents(verified);
-CREATE INDEX idx_documents_is_deleted ON documents(is_deleted);
-
--- NOTIFICATIONS
-CREATE INDEX idx_notifications_user_id ON notifications(user_id);
-CREATE INDEX idx_notifications_read ON notifications(read);
 CREATE INDEX idx_notifications_created_at ON notifications(created_at);
+CREATE INDEX idx_notifications_read ON notifications(read);
+CREATE INDEX idx_notifications_user_id ON notifications(user_id);
 CREATE INDEX idx_notifications_is_deleted ON notifications(is_deleted);
 
--- SYSTEM SETTINGS
-CREATE INDEX idx_settings_is_deleted ON settings(is_deleted);
+-- Capital
+CREATE TABLE capital (
+    id SERIAL PRIMARY KEY,
+    capital_type VARCHAR(100),
+    amount DECIMAL(14,2),
+    currency VARCHAR(10) DEFAULT 'USD',
+    description TEXT,
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now()
+);
 
--- CAPITAL
 CREATE INDEX idx_capital_capital_type ON capital(capital_type);
 CREATE INDEX idx_capital_currency ON capital(currency);
 CREATE INDEX idx_capital_is_deleted ON capital(is_deleted);
+
+-- Settings
+CREATE TABLE settings (
+    id SERIAL PRIMARY KEY,
+    key VARCHAR(100) UNIQUE NOT NULL,
+    value TEXT,
+    description TEXT,
+    is_deleted BOOLEAN DEFAULT false,
+    deleted_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) DEFAULT now(),
+    updated_at TIMESTAMP(6) DEFAULT now()
+);
+
+CREATE INDEX idx_settings_is_deleted ON settings(is_deleted);

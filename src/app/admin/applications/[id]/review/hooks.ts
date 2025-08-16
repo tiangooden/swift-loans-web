@@ -22,21 +22,21 @@ interface LoanApplication {
     zip_code: string;
     date_of_birth: string;
     ssn: string;
-    bank_accounts: [{
+    bank_account: {
       bank_name: string;
       branch_name: string;
       account_name: string;
       account_type: string;
       account_number: string;
-    }] | null;
-    employments: [{
+    } | null;
+    employment: {
       employer_name: string;
       job_title: string;
       start_date: string;
       monthly_income: number;
       employment_type: string;
       payday_day: string;
-    }] | null;
+    } | null;
   };
 }
 

@@ -15,7 +15,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
           city: true,
           dob: true,
           trn: true,
-          employments: {
+          employment: {
             select: {
               employer_name: true,
               job_title: true,
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
               payday_day: true,
             }
           },
-          bank_accounts: {
+          bank_account: {
             select: {
               id: true,
               bank_name: true,
@@ -32,8 +32,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
               account_name: true,
               account_number: true,
               account_type: true,
-            },
-            take: 1
+            }
           }
         }
       }
