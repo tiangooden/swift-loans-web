@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-interface LoanApplicationFormProps {
+interface ApplicationFormProps {
   initialData?: {
     id: number;
     amount_requested: number;
@@ -13,7 +13,7 @@ interface LoanApplicationFormProps {
   onCancel: () => void;
 }
 
-export default function LoanApplicationForm({ initialData, onSubmit, onCancel }: LoanApplicationFormProps) {
+export default function ApplicationForm({ initialData, onSubmit, onCancel }: ApplicationFormProps) {
   const [formData, setFormData] = useState({
     amount_requested: initialData?.amount_requested || '',
     term_in_days: initialData?.term_in_days || '',

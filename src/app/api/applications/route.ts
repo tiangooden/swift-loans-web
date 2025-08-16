@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { UsersRepository } from '@/app/repository/users.repository';
 import { LoanApplicationsRepository } from '@/app/repository/loan_applications.repository';
 import getCurrentUser from '@/app/shared/get-user';
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import LoanApplicationForm from './LoanApplicationForm';
+import ApplicationForm from './ApplicationForm';
 import { notifications } from '../shared/notifications';
 
 interface LoanApplication {
@@ -203,7 +203,7 @@ export default function LoanApplicationsPage() {
         {showForm && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
-              <LoanApplicationForm
+              <ApplicationForm
                 initialData={editingApplication}
                 onSubmit={handleFormSubmit}
                 onCancel={() => {

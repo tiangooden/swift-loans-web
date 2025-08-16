@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { LoanApplicationsRepository } from '../../../repository/loan_applications.repository';
 import { UsersRepository } from '../../../repository/users.repository';
 import getCurrentUser from '@/app/shared/get-user';
@@ -48,15 +46,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     const { id: loanId } = await params;
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
-    }
-    const { id: userId, provider } = session.user as any;
-    const user = await UsersRepository.findByProviderId(`${provider}|${userId}`);
-    if (!user) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
+    // const user = await getCurrentUser();
     const loanApplication = await LoanApplicationsRepository.findById(parseInt(loanId));
     if (!loanApplication) {
         return NextResponse.json({ error: 'Loan application not found' }, { status: 404 });

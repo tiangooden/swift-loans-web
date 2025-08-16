@@ -49,7 +49,7 @@ export function UserDropdown({ session }: UserDropdownProps) {
             <span>Employment</span>
           </Link>
           <Link
-            href="/loan-applications"
+            href="/applications"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
             onClick={() => setIsDropdownOpen(false)}
           >
