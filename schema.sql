@@ -20,7 +20,7 @@ CREATE TABLE users (
 );
 
 -- EMPLOYMENT DETAILS
-CREATE TABLE employment_details (
+CREATE TABLE employments (
     id SERIAL PRIMARY KEY,
     user_id INTEGER UNIQUE,
     employer_name VARCHAR(255),
@@ -49,7 +49,7 @@ CREATE TABLE bank_accounts (
 );
 
 -- LOAN APPLICATIONS
-CREATE TABLE loan_applications (
+CREATE TABLE applications (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
     amount_requested DECIMAL(12, 2),
@@ -66,9 +66,9 @@ CREATE TABLE loan_applications (
 );
 
 -- LOAN OFFERS
-CREATE TABLE loan_offers (
+CREATE TABLE offers (
     id SERIAL PRIMARY KEY,
-    application_id INTEGER REFERENCES loan_applications(id),
+    application_id INTEGER REFERENCES applications(id),
     principal DECIMAL(12, 2),
     interest_rate DECIMAL(5, 2), -- e.g. 15.50
     fee_amount DECIMAL(12, 2),
@@ -85,7 +85,7 @@ CREATE TABLE loan_offers (
 CREATE TABLE loans (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
-    loan_offer_id INTEGER REFERENCES loan_offers(id),
+    loan_offer_id INTEGER REFERENCES offers(id),
     status TEXT DEFAULT 'active', -- e.g. 'active', 'repaid', 'overdue', 'defaulted'
     disbursed_at TIMESTAMP,
     due_date DATE,
@@ -112,7 +112,7 @@ CREATE TABLE repayments (
 );
 
 -- INTEREST AND FEES
-CREATE TABLE interest_and_fees (
+CREATE TABLE interests (
     id SERIAL PRIMARY KEY,
     loan_id INTEGER REFERENCES loans(id),
     type VARCHAR(50), -- e.g. 'interest', 'origination_fee', 'late_fee'
@@ -151,7 +151,7 @@ CREATE TABLE notifications (
 );
 
 -- SYSTEM SETTINGS
-CREATE TABLE system_settings (
+CREATE TABLE settings (
     id SERIAL PRIMARY KEY,
     key VARCHAR(100) UNIQUE NOT NULL,
     value TEXT,
@@ -185,9 +185,9 @@ CREATE INDEX idx_users_created_at ON users(created_at);
 CREATE INDEX idx_users_is_deleted ON users(is_deleted);
 
 -- EMPLOYMENT DETAILS
-CREATE INDEX idx_employment_details_user_id ON employment_details(user_id);
-CREATE INDEX idx_employment_details_employment_type ON employment_details(employment_type);
-CREATE INDEX idx_employment_details_is_deleted ON employment_details(is_deleted);
+CREATE INDEX idx_employments_user_id ON employments(user_id);
+CREATE INDEX idx_employments_employment_type ON employments(employment_type);
+CREATE INDEX idx_employments_is_deleted ON employments(is_deleted);
 
 -- BANK ACCOUNTS
 CREATE INDEX idx_bank_accounts_user_id ON bank_accounts(user_id);
@@ -196,15 +196,15 @@ CREATE INDEX idx_bank_accounts_user_id_is_primary ON bank_accounts(user_id, is_p
 CREATE INDEX idx_bank_accounts_is_deleted ON bank_accounts(is_deleted);
 
 -- LOAN APPLICATIONS
-CREATE INDEX idx_loan_applications_user_id ON loan_applications(user_id);
-CREATE INDEX idx_loan_applications_status ON loan_applications(status);
-CREATE INDEX idx_loan_applications_submitted_at ON loan_applications(submitted_at);
-CREATE INDEX idx_loan_applications_is_deleted ON loan_applications(is_deleted);
+CREATE INDEX idx_applications_user_id ON applications(user_id);
+CREATE INDEX idx_applications_status ON applications(status);
+CREATE INDEX idx_applications_submitted_at ON applications(submitted_at);
+CREATE INDEX idx_applications_is_deleted ON applications(is_deleted);
 
 -- LOAN OFFERS
-CREATE INDEX idx_loan_offers_application_id ON loan_offers(application_id);
-CREATE INDEX idx_loan_offers_offer_status ON loan_offers(offer_status);
-CREATE INDEX idx_loan_offers_is_deleted ON loan_offers(is_deleted);
+CREATE INDEX idx_offers_application_id ON offers(application_id);
+CREATE INDEX idx_offers_offer_status ON offers(offer_status);
+CREATE INDEX idx_offers_is_deleted ON offers(is_deleted);
 
 -- LOANS
 CREATE INDEX idx_loans_user_id ON loans(user_id);
@@ -220,9 +220,9 @@ CREATE INDEX idx_repayments_transaction_reference ON repayments(transaction_refe
 CREATE INDEX idx_repayments_is_deleted ON repayments(is_deleted);
 
 -- INTEREST AND FEES
-CREATE INDEX idx_interest_and_fees_loan_id ON interest_and_fees(loan_id);
-CREATE INDEX idx_interest_and_fees_type ON interest_and_fees(type);
-CREATE INDEX idx_interest_and_fees_is_deleted ON interest_and_fees(is_deleted);
+CREATE INDEX idx_interests_loan_id ON interests(loan_id);
+CREATE INDEX idx_interests_type ON interests(type);
+CREATE INDEX idx_interests_is_deleted ON interests(is_deleted);
 
 -- DOCUMENTS
 CREATE INDEX idx_documents_user_id ON documents(user_id);
@@ -237,7 +237,7 @@ CREATE INDEX idx_notifications_created_at ON notifications(created_at);
 CREATE INDEX idx_notifications_is_deleted ON notifications(is_deleted);
 
 -- SYSTEM SETTINGS
-CREATE INDEX idx_system_settings_is_deleted ON system_settings(is_deleted);
+CREATE INDEX idx_settings_is_deleted ON settings(is_deleted);
 
 -- CAPITAL
 CREATE INDEX idx_capital_capital_type ON capital(capital_type);
