@@ -1,14 +1,14 @@
-import { loan_applications, Prisma } from '../../generated/prisma';
+import { applications, Prisma } from '../../generated/prisma';
 import { prisma } from '../shared/prisma';
 
 export const LoanApplicationsRepository = {
 
-  create: async (data: Prisma.loan_applicationsCreateInput): Promise<loan_applications> => {
-    return prisma.loan_applications.create({ data });
+  create: async (data: Prisma.applicationsCreateInput): Promise<applications> => {
+    return prisma.applications.create({ data });
   },
 
-  findById: async (id: number): Promise<loan_applications | null> => {
-    return prisma.loan_applications.findUnique({
+  findById: async (id: number): Promise<applications | null> => {
+    return prisma.applications.findUnique({
       where: { id },
     });
   },
@@ -16,29 +16,29 @@ export const LoanApplicationsRepository = {
   findMany: async (params: {
     skip?: number;
     take?: number;
-    cursor?: Prisma.loan_applicationsWhereUniqueInput;
-    where?: Prisma.loan_applicationsWhereInput;
-    orderBy?: Prisma.loan_applicationsOrderByWithRelationInput;
-    include?: Prisma.loan_applicationsInclude;
-  }): Promise<loan_applications[]> => {
+    cursor?: Prisma.applicationsWhereUniqueInput;
+    where?: Prisma.applicationsWhereInput;
+    orderBy?: Prisma.applicationsOrderByWithRelationInput;
+    include?: Prisma.applicationsInclude;
+  }): Promise<applications[]> => {
     const { skip, take, cursor, where, orderBy, include } = params;
-    return prisma.loan_applications.findMany({ skip, take, cursor, where, orderBy, include });
+    return prisma.applications.findMany({ skip, take, cursor, where, orderBy, include });
   },
 
   update: async (params: {
-    where: Prisma.loan_applicationsWhereUniqueInput;
-    data: Prisma.loan_applicationsUpdateInput;
-  }): Promise<loan_applications> => {
+    where: Prisma.applicationsWhereUniqueInput;
+    data: Prisma.applicationsUpdateInput;
+  }): Promise<applications> => {
     const { where, data } = params;
-    return prisma.loan_applications.update({ where, data });
+    return prisma.applications.update({ where, data });
   },
 
-  delete: async (where: Prisma.loan_applicationsWhereUniqueInput): Promise<loan_applications> => {
-    return prisma.loan_applications.delete({ where });
+  delete: async (where: Prisma.applicationsWhereUniqueInput): Promise<applications> => {
+    return prisma.applications.delete({ where });
   },
 
-  softDelete: async (id: number): Promise<loan_applications> => {
-    return prisma.loan_applications.update({
+  softDelete: async (id: number): Promise<applications> => {
+    return prisma.applications.update({
       where: { id },
       data: {
         is_deleted: true,
@@ -47,8 +47,8 @@ export const LoanApplicationsRepository = {
     });
   },
 
-  restore: async (id: number): Promise<loan_applications> => {
-    return prisma.loan_applications.update({
+  restore: async (id: number): Promise<applications> => {
+    return prisma.applications.update({
       where: { id },
       data: {
         is_deleted: false,

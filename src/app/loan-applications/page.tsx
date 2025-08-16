@@ -132,12 +132,6 @@ export default function LoanApplicationsPage() {
             {applications.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-gray-500 text-lg mb-4">No loan applications found</div>
-                <button
-                  onClick={() => setShowForm(true)}
-                  className="text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  Create your first application
-                </button>
               </div>
             ) : (
               <div className="overflow-x-auto">

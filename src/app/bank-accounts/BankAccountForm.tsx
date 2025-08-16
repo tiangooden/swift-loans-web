@@ -1,29 +1,29 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { notifications } from '../shared/notifications';
 
-interface BankAccount {
+export interface BankAccount {
   id?: number;
   user_id?: number | null;
   bank_name: string | null;
+  branch_name: string | null;
+  account_name: string | null;
   account_number: string | null;
   account_type: string | null;
-  is_primary: boolean | null;
 }
 
 interface BankAccountFormProps {
   account: BankAccount | null;
-  onClose: () => void;
-  onSubmitSuccess: () => void;
+  onSave: (bankAccount: BankAccount) => Promise<void>;
 }
 
-const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onSubmitSuccess }) => {
+const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onSave }) => {
   const [formData, setFormData] = useState<BankAccount>(account || {
     bank_name: '',
+    branch_name: '',
+    account_name: '',
     account_number: '',
     account_type: '',
-    is_primary: false,
   });
 
   useEffect(() => {
@@ -32,9 +32,10 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onS
     } else {
       setFormData({
         bank_name: '',
+        branch_name: '',
+        account_name: '',
         account_number: '',
         account_type: '',
-        is_primary: false,
       });
     }
   }, [account]);
@@ -50,99 +51,85 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onClose, onS
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const method = formData.id ? 'PUT' : 'POST';
-    const url = formData.id ? `/api/bank-accounts/${formData.id}` : `/api/bank-accounts`;
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      notifications.success(`Bank account ${formData.id ? 'updated' : 'added'} successfully!`);
-      onSubmitSuccess();
-    } catch (e: any) {
-      notifications.error(`Failed to ${formData.id ? 'update' : 'add'} bank account: ` + e.message);
-    }
+    onSave(formData);
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center">
-      <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-4">{account ? 'Edit Bank Account' : 'Add New Bank Account'}</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="bank_name" className="block text-sm font-medium text-gray-700">Bank Name</label>
-            <input
-              type="text"
-              name="bank_name"
-              id="bank_name"
-              value={formData.bank_name || ''}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="account_number" className="block text-sm font-medium text-gray-700">Account Number</label>
-            <input
-              type="text"
-              name="account_number"
-              id="account_number"
-              value={formData.account_number || ''}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="account_type" className="block text-sm font-medium text-gray-700">Account Type</label>
-            <select
-              name="account_type"
-              id="account_type"
-              value={formData.account_type || ''}
-              onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2"
-              required
-            >
-              <option value="">Select Account Type</option>
-              <option value="Savings">Savings</option>
-              <option value="Checking">Checking</option>
-            </select>
-          </div>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              name="is_primary"
-              id="is_primary"
-              checked={formData.is_primary || false}
-              onChange={handleChange}
-              className="h-4 w-4 text-blue-600 border-gray-300 rounded"
-            />
-            <label htmlFor="is_primary" className="ml-2 block text-sm text-gray-900">Set as Primary Account</label>
-          </div>
-          <div className="flex justify-end space-x-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-            >
-              {account ? 'Update Account' : 'Add Account'}
-            </button>
-          </div>
-        </form>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="bank_name" className="block text-sm font-medium text-gray-700">Bank Name</label>
+          <input
+            type="text"
+            name="bank_name"
+            id="bank_name"
+            value={formData.bank_name || ''}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="branch_name" className="block text-sm font-medium text-gray-700">Branch Name</label>
+          <input
+            type="text"
+            name="branch_name"
+            id="branch_name"
+            value={formData.branch_name || ''}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="account_name" className="block text-sm font-medium text-gray-700">Account Name</label>
+          <input
+            type="text"
+            name="account_name"
+            id="account_name"
+            value={formData.account_name || ''}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="account_number" className="block text-sm font-medium text-gray-700">Account Number</label>
+          <input
+            type="text"
+            name="account_number"
+            id="account_number"
+            value={formData.account_number || ''}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="account_type" className="block text-sm font-medium text-gray-700">Account Type</label>
+          <select
+            name="account_type"
+            id="account_type"
+            value={formData.account_type || ''}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            required
+          >
+            <option value="">Select Account Type</option>
+            <option value="Savings">Savings</option>
+            <option value="Checking">Checking</option>
+          </select>
+        </div>
       </div>
-    </div>
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Save Bank Account Details
+        </button>
+      </div>
+    </form>
   );
 };
 

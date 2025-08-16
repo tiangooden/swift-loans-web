@@ -29,21 +29,15 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
-    }
-    const { id, provider } = session.user as any;
-    const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
-    if (!user) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-    const existingApplication = await LoanApplicationsRepository.findById(parseInt(params.id));
+    const user = await getCurrentUser();
+    const { id: loanId } = await params;
+    const loanIdInt = parseInt(loanId);
+    const existingApplication = await LoanApplicationsRepository.findById(loanIdInt);
     if (!existingApplication || existingApplication.user_id !== user.id) {
         return NextResponse.json({ error: 'Application not found' }, { status: 404 });
     }
     await LoanApplicationsRepository.update({
-        where: { id: parseInt(params.id) },
+        where: { id: loanIdInt },
         data: {
             is_deleted: true,
             deleted_at: new Date(),
