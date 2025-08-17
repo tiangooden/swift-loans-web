@@ -19,7 +19,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
             select: {
               employer_name: true,
               job_title: true,
-              employment_type: true,
               monthly_income: true,
               payday_day: true,
             }

@@ -139,10 +139,6 @@ export default function LoanReviewPage() {
                         <p className="text-gray-900">{application.users.employment?.job_title || 'N/A'}</p>
                       </div>
                       <div>
-                        <label className="text-sm font-medium text-gray-500">Employment Type</label>
-                        <p className="text-gray-900">{application.users.employment?.employment_type}</p>
-                      </div>
-                      <div>
                         <label className="text-sm font-medium text-gray-500">Monthly Salary</label>
                         <p className="text-gray-900">${application.users.employment?.monthly_income || 'N/A'}</p>
                       </div>

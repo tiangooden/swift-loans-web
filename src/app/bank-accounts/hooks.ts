@@ -1,7 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { notifications } from '@/app/shared/notifications';
-import { BankAccount } from './BankAccountForm';
+
+export interface BankAccount {
+  id?: number;
+  user_id?: number | null;
+  bank_name: string | null;
+  branch_name: string | null;
+  account_name: string | null;
+  account_number: string | null;
+  account_type: string | null;
+}
 
 export const useFetchBankAccounts = () => {
   const { data: session, status } = useSession();
@@ -11,24 +20,19 @@ export const useFetchBankAccounts = () => {
 
   useEffect(() => {
     const fetchAccount = async () => {
-      if (status === 'authenticated' && session?.user?.email) {
-        try {
-          const response = await fetch(`/api/bank-accounts`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
-          if (data.length > 0) {
-            setAccount(data[0]);
-          }
-        } catch (e: any) {
-          setError(e.message);
-        } finally {
-          setLoading(false);
+      try {
+        const response = await fetch(`/api/bank-accounts`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      } else if (status === 'unauthenticated') {
+        const data = await response.json();
+        if (data.length > 0) {
+          setAccount(data[0]);
+        }
+      } catch (e: any) {
+        setError(e.message);
+      } finally {
         setLoading(false);
-        setError('You must be logged in to view this page.');
       }
     };
     fetchAccount();

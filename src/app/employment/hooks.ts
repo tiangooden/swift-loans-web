@@ -3,10 +3,9 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { notifications } from '../shared/notifications';
 
-interface EmploymentDetails {
+export interface EmploymentDetails {
     employer_name: string;
     job_title: string;
-    employment_type: string;
     monthly_income: number;
     payday_day: number;
 }
@@ -24,38 +23,36 @@ export function useEmploymentDetails() {
             router.push('/api/auth/signin');
             return;
         }
-
-        const fetchEmployment = async () => {
-            try {
-                const res = await fetch(`/api/employment`);
-                if (!res.ok) {
-                    if (res.status === 404) {
-                        setEmployment({ employer_name: '', job_title: '', employment_type: '', monthly_income: 0, payday_day: 1 });
-                    } else {
-                        throw new Error(`Failed to fetch employment details: ${res.statusText}`);
-                    }
-                }
-                const data = await res.json();
-                setEmployment({
-                    employer_name: data.employer_name || '',
-                    job_title: data.job_title || '',
-                    employment_type: data.employment_type || '',
-                    monthly_income: data.monthly_income ? parseFloat(data.monthly_income) : 0,
-                    payday_day: data.payday_day || 1,
-                });
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchEmployment();
     }, [session, status, router]);
 
-    return { employment, loading, error };
+    const fetchEmployment = async () => {
+        try {
+            const res = await fetch(`/api/employment`);
+            if (!res.ok) {
+                if (res.status === 404) {
+                    setEmployment({ employer_name: '', job_title: '', monthly_income: 0, payday_day: 1 });
+                } else {
+                    throw new Error(`Failed to fetch employment details: ${res.statusText}`);
+                }
+            }
+            const data = await res.json();
+            setEmployment({
+                employer_name: data.employer_name || '',
+                job_title: data.job_title || '',
+                monthly_income: data.monthly_income ? parseFloat(data.monthly_income) : 0,
+                payday_day: data.payday_day || 1,
+            });
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+    return { employment, loading, error, fetchEmployment };
 }
 
-export function useSaveEmploymentDetails() {
+export function useSaveEmploymentDetails(onSuccess?: () => void) {
     const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -79,6 +76,9 @@ export function useSaveEmploymentDetails() {
                 throw new Error(`Failed to update employment details: ${res.statusText}`);
             }
             notifications.success('Employment details updated successfully!');
+            if (onSuccess) {
+                onSuccess();
+            }
             return true;
         } catch (err: any) {
             setError(err.message);

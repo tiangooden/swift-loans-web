@@ -34,7 +34,6 @@ interface LoanApplication {
       job_title: string;
       start_date: string;
       monthly_income: number;
-      employment_type: string;
       payday_day: string;
     } | null;
   };

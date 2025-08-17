@@ -1,16 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-
-export interface BankAccount {
-  id?: number;
-  user_id?: number | null;
-  bank_name: string | null;
-  branch_name: string | null;
-  account_name: string | null;
-  account_number: string | null;
-  account_type: string | null;
-}
+import { BankAccount } from './hooks';
 
 interface BankAccountFormProps {
   account: BankAccount | null;
@@ -49,13 +40,12 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onSave }) =>
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     onSave(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="bank_name" className="block text-sm font-medium text-gray-700">Bank Name</label>
@@ -123,7 +113,8 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onSave }) =>
       </div>
       <div className="flex justify-end">
         <button
-          type="submit"
+          type="button"
+          onClick={handleSubmit}
           className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           Save Bank Account Details

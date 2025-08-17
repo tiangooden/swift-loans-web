@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { EmploymentDetailsRepository } from '@/app/repository/employment_details.repository';
+import { EmploymentDetailsRepository as EmploymentRepository } from '@/app/employment/employments.repository';
 import getCurrentUser from '@/app/shared/get-user';
 
 export async function GET(request: Request) {
     const user = await getCurrentUser();
-    const employmentDetails = await EmploymentDetailsRepository.find({
+    const employmentDetails = await EmploymentRepository.find({
         where: {
             user_id: user.id,
         },
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
     const user = await getCurrentUser();
-    const existingEmployment = await EmploymentDetailsRepository.find({
+    const existingEmployment = await EmploymentRepository.find({
         where: {
             user_id: user.id,
         },
@@ -26,25 +26,27 @@ export async function PUT(request: Request) {
     let updatedEmployment;
     const body = await request.json();
     if (existingEmployment && existingEmployment.length) {
-        updatedEmployment = await EmploymentDetailsRepository.update({
+        updatedEmployment = await EmploymentRepository.update({
             where: {
                 user_id: user.id,
             },
             data: {
                 employer_name: body.employer_name,
                 job_title: body.job_title,
-                employment_type: body.employment_type,
                 monthly_income: body.monthly_income,
                 payday_day: body.payday_day,
                 updated_at: new Date(),
             },
         });
     } else {
-        updatedEmployment = await EmploymentDetailsRepository.create({
-            user_id: user.id,
+        updatedEmployment = await EmploymentRepository.create({
+            user: {
+                connect: {
+                    id: user.id,
+                }
+            },
             employer_name: body.employer_name,
             job_title: body.job_title,
-            employment_type: body.employment_type,
             monthly_income: body.monthly_income,
             payday_day: body.payday_day,
         });

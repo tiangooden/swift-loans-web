@@ -51,7 +51,6 @@ CREATE TABLE employments (
     user_id INT UNIQUE NOT NULL,
     employer_name VARCHAR(255),
     job_title VARCHAR(100),
-    employment_type VARCHAR(50),
     monthly_income DECIMAL(12,2),
     payday_day INT,
     is_deleted BOOLEAN DEFAULT false,
@@ -61,7 +60,6 @@ CREATE TABLE employments (
     CONSTRAINT fk_employments_user FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
-CREATE INDEX idx_employments_employment_type ON employments(employment_type);
 CREATE INDEX idx_employments_is_deleted ON employments(is_deleted);
 CREATE INDEX idx_employments_user_id ON employments(user_id);
 

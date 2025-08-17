@@ -6,14 +6,12 @@ interface EmploymentFormProps {
   initialData: {
     employer_name: string;
     job_title: string;
-    employment_type: string;
     monthly_income: number;
     payday_day: number;
   };
   onSave: (employment: {
     employer_name: string;
     job_title: string;
-    employment_type: string;
     monthly_income: number;
     payday_day: number;
   }) => void;
@@ -22,14 +20,12 @@ interface EmploymentFormProps {
 export default function EmploymentForm({ initialData, onSave }: EmploymentFormProps) {
   const [employer_name, setEmployerName] = useState(initialData.employer_name);
   const [job_title, setJobTitle] = useState(initialData.job_title);
-  const [employment_type, setEmploymentType] = useState(initialData.employment_type);
   const [monthly_income, setMonthlyIncome] = useState(initialData.monthly_income);
   const [payday_day, setPaydayDay] = useState(initialData.payday_day);
 
   useEffect(() => {
     setEmployerName(initialData.employer_name);
     setJobTitle(initialData.job_title);
-    setEmploymentType(initialData.employment_type);
     setMonthlyIncome(initialData.monthly_income);
     setPaydayDay(initialData.payday_day);
   }, [initialData]);
@@ -39,7 +35,6 @@ export default function EmploymentForm({ initialData, onSave }: EmploymentFormPr
     onSave({
       employer_name,
       job_title,
-      employment_type,
       monthly_income: parseFloat(monthly_income.toString()),
       payday_day: parseInt(payday_day.toString()),
     });
@@ -66,17 +61,6 @@ export default function EmploymentForm({ initialData, onSave }: EmploymentFormPr
             id="job_title"
             value={job_title}
             onChange={(e) => setJobTitle(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="employment_type" className="block text-sm font-medium text-gray-700">Employment Type</label>
-          <input
-            type="text"
-            id="employment_type"
-            value={employment_type}
-            onChange={(e) => setEmploymentType(e.target.value)}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
           />
