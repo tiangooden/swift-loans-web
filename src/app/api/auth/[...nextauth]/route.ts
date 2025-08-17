@@ -16,6 +16,10 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         async jwt({ token, user, account }) {
+            if (account && account.access_token && account.provider === "keycloak") {
+                const decoded = JSON.parse(Buffer.from(account.access_token.split(".")[1], "base64").toString());
+                token.roles = decoded.realm_access?.roles || [];
+            }
             if (user) {
                 token.id = user.id;
             }

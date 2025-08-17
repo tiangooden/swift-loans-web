@@ -45,7 +45,7 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
             type="text"
             id="employer_name"
             name="employer_name"
-            value={formData.employer_name}
+            value={formData.employer_name || ''}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
@@ -57,7 +57,7 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
             type="text"
             id="job_title"
             name="job_title"
-            value={formData.job_title}
+            value={formData.job_title || ''}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
@@ -69,7 +69,7 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
             type="number"
             id="monthly_income"
             name="monthly_income"
-            value={formData.monthly_income}
+            value={formData.monthly_income || ''}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
@@ -81,7 +81,7 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
             type="number"
             id="payday_day"
             name="payday_day"
-            value={formData.payday_day}
+            value={formData.payday_day || ''}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             min="1"

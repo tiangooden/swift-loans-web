@@ -69,7 +69,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             type="text"
             name="first_name"
             id="first_name"
-            value={formData.first_name}
+            value={formData.first_name || ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
@@ -81,7 +81,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             type="text"
             name="middle_name"
             id="middle_name"
-            value={formData.middle_name}
+            value={formData.middle_name || ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
@@ -93,7 +93,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             type="text"
             name="last_name"
             id="last_name"
-            value={formData.last_name}
+            value={formData.last_name || ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
@@ -105,7 +105,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             type="email"
             name="email"
             id="email"
-            value={formData.email}
+            value={formData.email || ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
@@ -129,7 +129,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             type="text"
             name="phone_number"
             id="phone_number"
-            value={formData.phone_number}
+            value={formData.phone_number || ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
@@ -141,7 +141,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             type="text"
             name="trn"
             id="trn"
-            value={formData.trn}
+            value={formData.trn || ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
@@ -153,7 +153,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             type="text"
             name="street_address"
             id="street_address"
-            value={formData.street_address}
+            value={formData.street_address || ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
@@ -165,7 +165,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             type="text"
             name="city"
             id="city"
-            value={formData.city}
+            value={formData.city || ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
@@ -177,7 +177,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             type="text"
             name="country"
             id="country"
-            value={formData.country}
+            value={formData.country || ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"

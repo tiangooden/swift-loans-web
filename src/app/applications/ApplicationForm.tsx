@@ -47,7 +47,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel }: Applicatio
           type="number"
           id="amount_requested"
           name="amount_requested"
-          value={formData.amount_requested}
+          value={formData.amount_requested || ''}
           onChange={handleChange}
           min="0"
           step="5000"
@@ -64,7 +64,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel }: Applicatio
         <select
           id="term_in_days"
           name="term_in_days"
-          value={formData.term_in_days}
+          value={formData.term_in_days || ''}
           onChange={handleChange}
           required
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -82,7 +82,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel }: Applicatio
         <textarea
           id="purpose"
           name="purpose"
-          value={formData.purpose}
+          value={formData.purpose || ''}
           onChange={handleChange}
           rows={3}
           // required
