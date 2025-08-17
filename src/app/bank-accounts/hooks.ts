@@ -13,35 +13,35 @@ export interface BankAccount {
 }
 
 export const useFetchBankAccounts = () => {
-  const { data: session, status } = useSession();
   const [account, setAccount] = useState<BankAccount | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchAccount = async () => {
-      try {
-        const response = await fetch(`/api/bank-accounts`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        if (data.length > 0) {
-          setAccount(data[0]);
-        }
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
+  const fetchAccount = async () => {
+    try {
+      const response = await fetch(`/api/bank-accounts`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
-    fetchAccount();
-  }, [session, status]);
+      const data = await response.json();
+      if (data.length > 0) {
+        setAccount(data[0]);
+      }
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  return { account, loading, error };
+  useEffect(() => {
+    fetchAccount();
+  }, []);
+
+  return { account, loading, error, fetchAccount };
 };
 
-export const useSaveBankAccount = () => {
+export const useSaveBankAccount = (onSuccess?: () => void) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,6 +62,9 @@ export const useSaveBankAccount = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       notifications.success(`Bank account ${bankAccount.id ? 'updated' : 'added'} successfully!`);
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (e: any) {
       notifications.error(`Failed to ${bankAccount.id ? 'update' : 'add'} bank account: ` + e.message);
       setError(e.message);

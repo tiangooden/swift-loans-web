@@ -1,43 +1,41 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { EmploymentDetails } from './hooks';
 
 interface EmploymentFormProps {
-  initialData: {
-    employer_name: string;
-    job_title: string;
-    monthly_income: number;
-    payday_day: number;
-  };
-  onSave: (employment: {
-    employer_name: string;
-    job_title: string;
-    monthly_income: number;
-    payday_day: number;
-  }) => void;
+  employment: EmploymentDetails | null;
+  onSave: (employment: EmploymentDetails) => void;
+
 }
 
-export default function EmploymentForm({ initialData, onSave }: EmploymentFormProps) {
-  const [employer_name, setEmployerName] = useState(initialData.employer_name);
-  const [job_title, setJobTitle] = useState(initialData.job_title);
-  const [monthly_income, setMonthlyIncome] = useState(initialData.monthly_income);
-  const [payday_day, setPaydayDay] = useState(initialData.payday_day);
+export default function EmploymentForm({ employment: initialData, onSave }: EmploymentFormProps) {
+  const [formData, setFormData] = useState<EmploymentDetails>(initialData || {
+    employer_name: '',
+    job_title: '',
+    monthly_income: 0,
+    payday_day: 0,
+  });
+  const { employer_name, job_title, monthly_income, payday_day } = formData;
 
   useEffect(() => {
-    setEmployerName(initialData.employer_name);
-    setJobTitle(initialData.job_title);
-    setMonthlyIncome(initialData.monthly_income);
-    setPaydayDay(initialData.payday_day);
+    if (initialData) {
+      setFormData(initialData);
+    }
   }, [initialData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({
-      employer_name,
-      job_title,
-      monthly_income: parseFloat(monthly_income.toString()),
-      payday_day: parseInt(payday_day.toString()),
-    });
+    onSave(formData);
   };
 
   return (
@@ -48,8 +46,9 @@ export default function EmploymentForm({ initialData, onSave }: EmploymentFormPr
           <input
             type="text"
             id="employer_name"
-            value={employer_name}
-            onChange={(e) => setEmployerName(e.target.value)}
+            name="employer_name"
+            value={formData.employer_name}
+            onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
           />
@@ -59,8 +58,9 @@ export default function EmploymentForm({ initialData, onSave }: EmploymentFormPr
           <input
             type="text"
             id="job_title"
-            value={job_title}
-            onChange={(e) => setJobTitle(e.target.value)}
+            name="job_title"
+            value={formData.job_title}
+            onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
           />
@@ -70,8 +70,9 @@ export default function EmploymentForm({ initialData, onSave }: EmploymentFormPr
           <input
             type="number"
             id="monthly_income"
-            value={monthly_income}
-            onChange={(e) => setMonthlyIncome(parseFloat(e.target.value))}
+            name="monthly_income"
+            value={formData.monthly_income}
+            onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
           />
@@ -81,8 +82,9 @@ export default function EmploymentForm({ initialData, onSave }: EmploymentFormPr
           <input
             type="number"
             id="payday_day"
-            value={payday_day}
-            onChange={(e) => setPaydayDay(parseInt(e.target.value))}
+            name="payday_day"
+            value={formData.payday_day}
+            onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             min="1"
             max="31"

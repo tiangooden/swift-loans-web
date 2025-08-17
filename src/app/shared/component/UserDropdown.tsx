@@ -38,7 +38,7 @@ export function UserDropdown({ session }: UserDropdownProps) {
             onClick={() => setIsDropdownOpen(false)}
           >
             <CreditCard className="h-4 w-4" />
-            <span>Bank Accounts</span>
+            <span>Bank Account</span>
           </Link>
           <Link
             href="/employment"

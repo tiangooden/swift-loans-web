@@ -1,8 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { notifications } from '@/app/shared/notifications';
-import { useSession } from 'next-auth/react';
 
-interface UserProfile {
+export interface User {
   id: number;
   identity: string;
   email?: string;
@@ -18,11 +17,38 @@ interface UserProfile {
   status?: string;
 }
 
-export const useProfileUpdate = () => {
+export const useFetchUserProfile = () => {
+  const [userProfile, setUserProfile] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await fetch(`/api/user`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setUserProfile(data);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { userProfile, loading, error, fetchUserProfile };
+};
+
+export function useProfileUpdate(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const updateProfile = useCallback(async (formData: UserProfile) => {
+  const updateProfile = async (formData: User) => {
     setLoading(true);
     setError(null);
     try {
@@ -34,9 +60,12 @@ export const useProfileUpdate = () => {
         body: JSON.stringify(formData),
       });
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Failed to update profile: ${response.statusText}`);
       }
       notifications.success('Profile updated successfully!');
+      if (onSuccess) {
+        onSuccess();
+      }
       return true;
     } catch (e: any) {
       notifications.error('An error occurred while updating profile.');
@@ -45,40 +74,6 @@ export const useProfileUpdate = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
-
+  };
   return { updateProfile, loading, error };
-};
-
-export const useFetchUserProfile = () => {
-  const { data: session, status } = useSession();
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      if (status === 'authenticated' && session?.user?.email) {
-        try {
-          const response = await fetch(`/api/user`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
-          setUserProfile(data);
-        } catch (e: any) {
-          setError(e.message);
-        } finally {
-          setLoading(false);
-        }
-      } else if (status === 'unauthenticated') {
-        setLoading(false);
-        setError('You must be logged in to view this page.');
-      }
-    };
-
-    fetchUserProfile();
-  }, [session, status]);
-
-  return { userProfile, loading, error };
 };

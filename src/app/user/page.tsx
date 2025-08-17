@@ -1,11 +1,11 @@
 'use client';
 
-import { useFetchUserProfile, useProfileUpdate } from './hooks';
 import UserForm from './UserForm';
+import { useFetchUserProfile, useProfileUpdate } from './hooks';
 
-const ProfilePage = () => {
-    const { userProfile, loading, error } = useFetchUserProfile();
-    const { updateProfile, loading: saving, error: saveError } = useProfileUpdate();
+export default function UserProfilePage() {
+    const { userProfile, loading, error, fetchUserProfile } = useFetchUserProfile();
+    const { updateProfile, loading: saving, error: saveError } = useProfileUpdate(fetchUserProfile);
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading profile...</div>;
@@ -17,10 +17,6 @@ const ProfilePage = () => {
 
     if (error || saveError) {
         return <div className="flex justify-center items-center h-screen text-red-500">Error: {error || saveError}</div>;
-    }
-
-    if (!userProfile) {
-        return <div className="flex justify-center items-center h-screen">No profile data found.</div>;
     }
 
     return (
@@ -37,5 +33,3 @@ const ProfilePage = () => {
         </div>
     );
 };
-
-export default ProfilePage;

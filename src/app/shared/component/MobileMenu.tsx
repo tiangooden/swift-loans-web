@@ -126,7 +126,7 @@ export function MobileMenu({ session }: MobileMenuProps) {
                       }}
                     >
                       <CreditCard className="h-5 w-5" />
-                      <span>Bank Accounts</span>
+                      <span>Bank Account</span>
                     </Link>
                     <Link
                       href="/employment"

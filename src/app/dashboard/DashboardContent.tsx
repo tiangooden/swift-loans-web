@@ -73,8 +73,8 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ userData }) => {
               <DollarSign className="h-6 w-6 text-green-600" />
             </div>
             <div className="ml-4">
-              <h3 className="text-lg font-semibold text-gray-900">Bank Accounts</h3>
-              <p className="text-sm text-gray-600">Link and manage your bank accounts</p>
+              <h3 className="text-lg font-semibold text-gray-900">Bank Account</h3>
+              <p className="text-sm text-gray-600">Manage your bank account details</p>
             </div>
           </div>
         </a>

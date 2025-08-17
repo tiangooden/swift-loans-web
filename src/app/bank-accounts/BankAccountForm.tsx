@@ -20,14 +20,6 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onSave }) =>
   useEffect(() => {
     if (account) {
       setFormData(account);
-    } else {
-      setFormData({
-        bank_name: '',
-        branch_name: '',
-        account_name: '',
-        account_number: '',
-        account_type: '',
-      });
     }
   }, [account]);
 

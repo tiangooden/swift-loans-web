@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { notifications } from '../shared/notifications';
 
 export interface EmploymentDetails {
@@ -11,57 +9,38 @@ export interface EmploymentDetails {
 }
 
 export function useEmploymentDetails() {
-    const { data: session, status } = useSession();
-    const router = useRouter();
     const [employment, setEmployment] = useState<EmploymentDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (status === 'loading') return;
-        if (!session) {
-            router.push('/api/auth/signin');
-            return;
-        }
         fetchEmployment();
-    }, [session, status, router]);
+    }, []);
 
     const fetchEmployment = async () => {
         try {
             const res = await fetch(`/api/employment`);
             if (!res.ok) {
-                if (res.status === 404) {
-                    setEmployment({ employer_name: '', job_title: '', monthly_income: 0, payday_day: 1 });
-                } else {
-                    throw new Error(`Failed to fetch employment details: ${res.statusText}`);
-                }
+                throw new Error(`Failed to fetch employment details: ${res.statusText}`);
             }
             const data = await res.json();
-            setEmployment({
-                employer_name: data.employer_name || '',
-                job_title: data.job_title || '',
-                monthly_income: data.monthly_income ? parseFloat(data.monthly_income) : 0,
-                payday_day: data.payday_day || 1,
-            });
+            setEmployment(data);
         } catch (err: any) {
             setError(err.message);
+            return false;
         } finally {
             setLoading(false);
         }
     };
+
     return { employment, loading, error, fetchEmployment };
 }
 
 export function useSaveEmploymentDetails(onSuccess?: () => void) {
-    const { data: session } = useSession();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const saveEmployment = async (updatedEmployment: EmploymentDetails) => {
-        if (!session?.user?.email) {
-            setError('User session not found.');
-            return false;
-        }
         setLoading(true);
         setError(null);
         try {
@@ -75,19 +54,18 @@ export function useSaveEmploymentDetails(onSuccess?: () => void) {
             if (!res.ok) {
                 throw new Error(`Failed to update employment details: ${res.statusText}`);
             }
-            notifications.success('Employment details updated successfully!');
+            notifications.success('Employment updated successfully!');
             if (onSuccess) {
                 onSuccess();
             }
             return true;
         } catch (err: any) {
-            setError(err.message);
             notifications.error(`Error updating employment details`);
+            setError(err.message);
             return false;
         } finally {
             setLoading(false);
         }
     };
-
     return { saveEmployment, loading, error };
 }
