@@ -177,7 +177,7 @@ export default function LoanApplicationsPage() {
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
             <div className="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
               <ApplicationForm
-                initialData={editingApplication}
+                data={editingApplication}
                 onSubmit={handleFormSubmit}
                 onCancel={() => {
                   setShowForm(false);

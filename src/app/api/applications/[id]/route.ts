@@ -4,6 +4,9 @@ import getCurrentUser from '@/app/shared/get-user';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     const user = await getCurrentUser();
+    // if (!user || !user.roles.includes('admin')) {
+    //     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    // }
     const body = await request.json();
     const { amount_requested, term_in_days, purpose } = body;
     if (!amount_requested || !term_in_days /*|| !purpose*/) {
@@ -19,6 +22,34 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             amount_requested: parseFloat(amount_requested),
             term_in_days: parseInt(term_in_days),
             purpose,
+            updated_at: new Date(),
+        },
+    });
+    return NextResponse.json(updatedApplication);
+}
+
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+    const user = await getCurrentUser();
+    // if (!user || !user.roles.includes('admin')) {
+    //     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    // }
+    const { id } = await params;
+    const body = await request.json();
+    const { status } = body;
+
+    if (!status) {
+        return NextResponse.json({ error: 'Missing status field' }, { status: 400 });
+    }
+
+    const existingApplication = await LoanApplicationsRepository.findById(id);
+    if (!existingApplication || existingApplication.user_id !== user.id) {
+        return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+    }
+
+    const updatedApplication = await LoanApplicationsRepository.update({
+        where: { id: id },
+        data: {
+            status: status,
             updated_at: new Date(),
         },
     });

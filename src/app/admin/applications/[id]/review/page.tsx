@@ -144,8 +144,7 @@ export default function LoanReviewPage() {
                       </div>
                       <div>
                         <label className="text-sm font-medium text-gray-500">Pay Day</label>
-                        <p className="text-gray-900">{application.users.employment?.payday_day ?
-                          new Date(application.users.employment?.payday_day).toLocaleDateString() : 'N/A'}</p>
+                        <p className="text-gray-900">{application.users.employment?.payday_day}</p>
                       </div>
                     </div>
                   </div>
@@ -181,25 +180,6 @@ export default function LoanReviewPage() {
 
                 {/* Right Column - Actions & Summary */}
                 <div className="space-y-6">
-                  {/* Financial Summary */}
-                  <div className="bg-blue-50 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Financial Summary</h3>
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Monthly Income</span>
-                        {/* <span className="font-medium">${application.monthly_income.toLocaleString()}</span> */}
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Credit Score</span>
-                        <span className="font-medium">{application.credit_score}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600">Debt-to-Income</span>
-                        <span className="font-medium text-green-600">Low</span>
-                      </div>
-                    </div>
-                  </div>
-
                   {/* Actions */}
                   <div className="bg-white border border-gray-200 rounded-lg p-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Actions</h3>

@@ -34,7 +34,7 @@ interface LoanApplication {
       job_title: string;
       start_date: string;
       monthly_income: number;
-      payday_day: string;
+      payday_day: number;
     } | null;
   };
 }
@@ -86,22 +86,28 @@ export function useLoanApplicationReview() {
   const handleAction = async (action: string, offerData?: any) => {
     setActionLoading(true);
     try {
-      const response = await fetch(`/api/admin/applications/${applicationId}/action`, {
+      const response = await fetch(`/api/applications/${applicationId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          action,
+          status: action,
           ...offerData,
         }),
       });
 
-      if (!response.ok) throw new Error('Action failed');
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Action failed: ${errorData.error || 'Unknown error'}`);
+        throw new Error('Action failed');
+      }
 
+      alert('Action performed successfully!');
       router.push('/admin/applications');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error performing action:', error);
+      alert(`Error: ${error.message || 'An unexpected error occurred'}`);
     } finally {
       setActionLoading(false);
     }

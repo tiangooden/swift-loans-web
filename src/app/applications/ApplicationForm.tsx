@@ -35,7 +35,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel }: Applicatio
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          {data ? 'Edit Loan Application' : 'New Loan Application'}
+          {data ? 'Update Loan Application' : 'New Loan Application'}
         </h2>
       </div>
 

@@ -8,11 +8,7 @@ export const UsersRepository = {
   },
 
   findByProviderId: async (identity: string): Promise<users | null> => {
-    return prisma.users.findUnique({ where: { identity } });
-  },
-
-  findByEmail: async (email: string): Promise<users | null> => {
-    return prisma.users.findUnique({ where: { email } });
+    return prisma.users.findUnique({ where: { identity }, include: { roles: true } });
   },
 
   findMany: async (params: {
