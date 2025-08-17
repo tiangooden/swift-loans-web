@@ -28,7 +28,7 @@ export default function EmploymentPage() {
                     </svg>
                     <h1 className="text-3xl font-bold text-gray-800">Employment Details</h1>
                 </div>
-                <EmploymentForm employment={employment} onSave={saveEmployment} />
+                <EmploymentForm data={employment} onSave={saveEmployment} />
             </div>
         </div>
     );

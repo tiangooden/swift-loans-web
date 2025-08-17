@@ -4,12 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { User } from './hooks';
 
 interface UserFormProps {
-  user: User | null;
+  data: User | null;
   onSave: (user: User) => Promise<boolean>;
 }
 
-export default function UserForm({ user, onSave }: UserFormProps) {
-  const [formData, setFormData] = useState<User>(user || {
+export default function UserForm({ data, onSave }: UserFormProps) {
+  const [formData, setFormData] = useState<User>({
     id: 0,
     identity: '',
     email: '',
@@ -26,10 +26,10 @@ export default function UserForm({ user, onSave }: UserFormProps) {
   });
 
   useEffect(() => {
-    if (user) {
-      setFormData(user);
+    if (data) {
+      setFormData(data);
     }
-  }, [user]);
+  }, [data]);
 
   const [isEditing, setIsEditing] = useState(true);
   const [loading, setLoading] = useState(false);

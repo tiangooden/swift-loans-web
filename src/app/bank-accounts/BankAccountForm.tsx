@@ -8,8 +8,8 @@ interface BankAccountFormProps {
   onSave: (bankAccount: BankAccount) => Promise<void>;
 }
 
-const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onSave }) => {
-  const [formData, setFormData] = useState<BankAccount>(account || {
+const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave }) => {
+  const [formData, setFormData] = useState<BankAccount>({
     bank_name: '',
     branch_name: '',
     account_name: '',
@@ -18,10 +18,10 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account, onSave }) =>
   });
 
   useEffect(() => {
-    if (account) {
-      setFormData(account);
+    if (data) {
+      setFormData(data);
     }
-  }, [account]);
+  }, [data]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;

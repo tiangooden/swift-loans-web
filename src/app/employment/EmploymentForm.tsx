@@ -4,25 +4,23 @@ import { useState, useEffect } from 'react';
 import { EmploymentDetails } from './hooks';
 
 interface EmploymentFormProps {
-  employment: EmploymentDetails | null;
+  data: EmploymentDetails | null;
   onSave: (employment: EmploymentDetails) => void;
-
 }
 
-export default function EmploymentForm({ employment: initialData, onSave }: EmploymentFormProps) {
-  const [formData, setFormData] = useState<EmploymentDetails>(initialData || {
+export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
+  const [formData, setFormData] = useState<EmploymentDetails>({
     employer_name: '',
     job_title: '',
     monthly_income: 0,
     payday_day: 0,
   });
-  const { employer_name, job_title, monthly_income, payday_day } = formData;
 
   useEffect(() => {
-    if (initialData) {
-      setFormData(initialData);
+    if (data) {
+      setFormData(data);
     }
-  }, [initialData]);
+  }, [data]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;

@@ -28,7 +28,7 @@ export default function UserProfilePage() {
                     </svg>
                     <h1 className="text-3xl font-bold text-gray-800">User Profile</h1>
                 </div>
-                <UserForm user={userProfile} onSave={updateProfile} />
+                <UserForm data={userProfile} onSave={updateProfile} />
             </div>
         </div>
     );

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 interface ApplicationFormProps {
-  initialData?: {
+  data: {
     id: number;
     amount_requested: number;
     term_in_days: number;
@@ -13,20 +13,17 @@ interface ApplicationFormProps {
   onCancel: () => void;
 }
 
-export default function ApplicationForm({ initialData, onSubmit, onCancel }: ApplicationFormProps) {
+export default function ApplicationForm({ data, onSubmit, onCancel }: ApplicationFormProps) {
   const [formData, setFormData] = useState({
-    amount_requested: initialData?.amount_requested || '15000',
-    term_in_days: initialData?.term_in_days || '14',
-    purpose: initialData?.purpose || '',
+    id: 0,
+    amount_requested: 15000,
+    term_in_days: 14,
+    purpose: '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({
-      amount_requested: parseFloat(formData.amount_requested as string),
-      term_in_days: parseInt(formData.term_in_days as string),
-      purpose: formData.purpose,
-    });
+    onSubmit(formData);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -38,7 +35,7 @@ export default function ApplicationForm({ initialData, onSubmit, onCancel }: App
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          {initialData ? 'Edit Loan Application' : 'New Loan Application'}
+          {data ? 'Edit Loan Application' : 'New Loan Application'}
         </h2>
       </div>
 
@@ -78,7 +75,7 @@ export default function ApplicationForm({ initialData, onSubmit, onCancel }: App
         </select>
       </div>
 
-      {/* <div>
+      <div>
         <label htmlFor="purpose" className="block text-sm font-medium text-gray-700 mb-2">
           Purpose
         </label>
@@ -88,18 +85,18 @@ export default function ApplicationForm({ initialData, onSubmit, onCancel }: App
           value={formData.purpose}
           onChange={handleChange}
           rows={3}
-          required
+          // required
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           placeholder="Describe the purpose of this loan..."
         />
-      </div> */}
+      </div>
 
       <div className="flex space-x-3 pt-4">
         <button
           type="submit"
           className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200"
         >
-          {initialData ? 'Update Application' : 'Submit Application'}
+          {data ? 'Update Application' : 'Submit Application'}
         </button>
         <button
           type="button"
