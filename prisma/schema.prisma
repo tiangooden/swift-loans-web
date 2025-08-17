@@ -9,18 +9,18 @@ datasource db {
 }
 
 model bank_accounts {
-  id             Int       @id @default(autoincrement())
-  user_id        Int       @unique
-  bank_name      String?   @db.VarChar(255)
-  branch_name    String?   @db.VarChar(255)
-  account_name   String?   @db.VarChar(50)
-  account_number String?   @db.VarChar(50)
-  account_type   String?   @db.VarChar(50)
-  is_deleted     Boolean?  @default(false)
-  deleted_at     DateTime? @db.Timestamp(6)
-  created_at     DateTime? @default(now()) @db.Timestamp(6)
-  updated_at     DateTime? @default(now()) @db.Timestamp(6)
-  user           users     @relation(fields: [user_id], references: [id])
+  id             String     @id @default(cuid())
+  user_id        String     @unique
+  bank_name      String?    @db.VarChar(255)
+  branch_name    String?    @db.VarChar(255)
+  account_name   String?    @db.VarChar(50)
+  account_number String?    @db.VarChar(50)
+  account_type   String?    @db.VarChar(50)
+  is_deleted     Boolean?   @default(false)
+  deleted_at     DateTime?  @db.Timestamp(6)
+  created_at     DateTime?  @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?  @default(now()) @db.Timestamp(6)
+  user           users      @relation(fields: [user_id], references: [id])
 
   @@index([user_id], map: "idx_bank_accounts_user_id")
   @@index([user_id, is_deleted], map: "idx_bank_accounts_user_id_is_deleted")
@@ -28,7 +28,7 @@ model bank_accounts {
 }
 
 model capital {
-  id           Int       @id @default(autoincrement())
+  id           String    @id @default(cuid())
   capital_type String    @db.VarChar(100)
   amount       Decimal   @db.Decimal(14, 2)
   currency     String?   @default("USD") @db.VarChar(10)
@@ -44,16 +44,16 @@ model capital {
 }
 
 model documents {
-  id            Int       @id @default(autoincrement())
-  user_id       Int?
-  document_type String?   @db.VarChar(100)
+  id            String     @id @default(cuid())
+  user_id       String?
+  document_type String?    @db.VarChar(100)
   file_url      String?
-  verified      Boolean?  @default(false)
-  is_deleted    Boolean?  @default(false)
-  deleted_at    DateTime? @db.Timestamp(6)
-  created_at    DateTime? @default(now()) @db.Timestamp(6)
-  updated_at    DateTime? @default(now()) @db.Timestamp(6)
-  users         users?    @relation(fields: [user_id], references: [id])
+  verified      Boolean?   @default(false)
+  is_deleted    Boolean?   @default(false)
+  deleted_at    DateTime?  @db.Timestamp(6)
+  created_at    DateTime?  @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?  @default(now()) @db.Timestamp(6)
+  users         users?     @relation(fields: [user_id], references: [id])
 
   @@index([document_type], map: "idx_documents_document_type")
   @@index([user_id], map: "idx_documents_user_id")
@@ -62,8 +62,8 @@ model documents {
 }
 
 model employments {
-  id              Int       @id @default(autoincrement())
-  user_id         Int       @unique
+  id              String    @id @default(cuid())
+  user_id         String    @unique
   employer_name   String?   @db.VarChar(255)
   job_title       String?   @db.VarChar(100)
   monthly_income  Decimal?  @db.Decimal(12, 2)
@@ -79,8 +79,8 @@ model employments {
 }
 
 model interest {
-  id          Int       @id @default(autoincrement())
-  loan_id     Int?
+  id          String    @id @default(cuid())
+  loan_id     String?
   type        String?   @db.VarChar(50)
   amount      Decimal?  @db.Decimal(12, 2)
   description String?
@@ -96,20 +96,20 @@ model interest {
 }
 
 model applications {
-  id               Int       @id @default(autoincrement())
-  user_id          Int?
-  amount_requested Decimal?  @db.Decimal(12, 2)
+  id               String       @id @default(cuid())
+  user_id          String?
+  amount_requested Decimal?     @db.Decimal(12, 2)
   term_in_days     Int?
   purpose          String?
-  status           String?   @default("pending")
+  status           String?      @default("pending")
   decision_reason  String?
-  submitted_at     DateTime? @default(now()) @db.Timestamp(6)
-  decided_at       DateTime? @db.Timestamp(6)
-  is_deleted       Boolean?  @default(false)
-  deleted_at       DateTime? @db.Timestamp(6)
-  created_at       DateTime? @default(now()) @db.Timestamp(6)
-  updated_at       DateTime? @default(now()) @db.Timestamp(6)
-  users            users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  submitted_at     DateTime?    @default(now()) @db.Timestamp(6)
+  decided_at       DateTime?    @db.Timestamp(6)
+  is_deleted       Boolean?     @default(false)
+  deleted_at       DateTime?    @db.Timestamp(6)
+  created_at       DateTime?    @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?    @default(now()) @db.Timestamp(6)
+  users            users?       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   offers           offers[]
 
   @@index([status], map: "idx_applications_status")
@@ -119,8 +119,8 @@ model applications {
 }
 
 model offers {
-  id             Int           @id @default(autoincrement())
-  application_id Int?
+  id             String        @id @default(cuid())
+  application_id String?
   principal      Decimal?      @db.Decimal(12, 2)
   interest_rate  Decimal?      @db.Decimal(5, 2)
   fee_amount     Decimal?      @db.Decimal(12, 2)
@@ -140,9 +140,9 @@ model offers {
 }
 
 model loans {
-  id                Int          @id @default(autoincrement())
-  user_id           Int?
-  loan_offer_id     Int?
+  id                String       @id @default(cuid())
+  user_id           String?
+  loan_offer_id     String?
   status            String?      @default("active")
   disbursed_at      DateTime?    @db.Timestamp(6)
   due_date          DateTime?    @db.Date
@@ -165,8 +165,8 @@ model loans {
 }
 
 model notifications {
-  id         Int       @id @default(autoincrement())
-  user_id    Int?
+  id         String    @id @default(cuid())
+  user_id    String?
   title      String?   @db.VarChar(255)
   message    String?
   read       Boolean?  @default(false)
@@ -183,8 +183,8 @@ model notifications {
 }
 
 model repayments {
-  id                    Int       @id @default(autoincrement())
-  loan_id               Int?
+  id                    String    @id @default(cuid())
+  loan_id               String?
   amount_paid           Decimal?  @db.Decimal(12, 2)
   payment_date          DateTime? @db.Timestamp(6)
   payment_method        String?   @db.VarChar(50)
@@ -202,7 +202,7 @@ model repayments {
 }
 
 model settings {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(cuid())
   key         String    @unique @db.VarChar(100)
   value       String?
   description String?
@@ -215,7 +215,7 @@ model settings {
 }
 
 model users {
-  id             Int             @id @default(autoincrement())
+  id             String          @id @default(cuid())
   identity       String          @unique @db.VarChar(255)
   first_name     String?         @db.VarChar(100)
   middle_name    String?         @db.VarChar(100)

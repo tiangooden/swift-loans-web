@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
-    const application = await LoanApplicationsRepository.findById(parseInt(id), {
+    const application = await LoanApplicationsRepository.findById(id, {
       users: {
         select: {
           first_name: true,
