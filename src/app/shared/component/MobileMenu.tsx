@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Home, FileText, Info, HelpCircle, Mail, LayoutDashboard, CreditCard, LogIn, LogOut, User, Briefcase, ChevronDown } from 'lucide-react';
+import { Menu, X, Home, FileText, Info, HelpCircle, Mail, LayoutDashboard, CreditCard, LogIn, LogOut, User, Briefcase, ChevronDown, Shield } from 'lucide-react';
 import { signOut } from 'next-auth/react';
+import Image from 'next/image';
 
 interface MobileMenuProps {
   session: any;
@@ -91,7 +92,8 @@ export function MobileMenu({ session }: MobileMenuProps) {
                 }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Admin
+              <Shield className="h-4 w-4" />
+              <span>Admin</span>
             </Link>
 
             {session ? (
@@ -100,7 +102,17 @@ export function MobileMenu({ session }: MobileMenuProps) {
                   className="flex items-center text-gray-600 hover:text-blue-600 focus:outline-none cursor-pointer"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
-                  <User className="h-5 w-5 mr-1" />
+                  {session.user?.image ? (
+                    <Image
+                      src={session.user.image}
+                      alt="User Avatar"
+                      width={32}
+                      height={32}
+                      className="rounded-full mr-3"
+                    />
+                  ) : (
+                    <User className="h-5 w-5 mr-1" />
+                  )}
                   {session.user?.email}
                   <ChevronDown className="ml-1 h-5 w-5" />
                 </button>
@@ -126,7 +138,7 @@ export function MobileMenu({ session }: MobileMenuProps) {
                       }}
                     >
                       <CreditCard className="h-5 w-5" />
-                      <span>Bank Account</span>
+                      <span>Bank Accounts</span>
                     </Link>
                     <Link
                       href="/employment"

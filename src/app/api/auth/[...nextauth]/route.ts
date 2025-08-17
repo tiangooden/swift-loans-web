@@ -15,10 +15,13 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        async jwt({ token, user, account }) {
-            if (account && account.access_token && account.provider === "keycloak") {
-                const decoded = JSON.parse(Buffer.from(account.access_token.split(".")[1], "base64").toString());
-                token.roles = decoded.realm_access?.roles || [];
+        async jwt({ token, user, account, profile }) {
+            if (account) {
+                if (account.provider === "keycloak" && account.access_token) {
+                    const decoded = JSON.parse(Buffer.from(account.access_token.split(".")[1], "base64").toString());
+                    token.roles = decoded.realm_access?.roles || [];
+                }
+                token.picture = (profile as any)?.picture;
             }
             if (user) {
                 token.id = user.id;
@@ -32,6 +35,9 @@ export const authOptions: NextAuthOptions = {
             if (token?.id) {
                 session.user = { ...session.user, id: token.id } as any;
                 session.user = { ...session.user, provider: token.provider } as any;
+            }
+            if (token?.picture) {
+                session.user = { ...session.user, image: token.picture } as any;
             }
             return session;
         },

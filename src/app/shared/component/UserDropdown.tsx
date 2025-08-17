@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronDown, User, CreditCard, Briefcase, FileText, LogOut } from 'lucide-react';
+import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 
 interface UserDropdownProps {
@@ -18,7 +19,17 @@ export function UserDropdown({ session }: UserDropdownProps) {
         className="flex items-center text-gray-600 hover:text-blue-600 focus:outline-none cursor-pointer"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
-        <User className="h-4 w-4 mr-1" />
+        {session.user?.image ? (
+          <Image
+            src={session.user.image}
+            alt="User Avatar"
+            width={24}
+            height={24}
+            className="rounded-full mr-1"
+          />
+        ) : (
+          <User className="h-4 w-4 mr-1" />
+        )}
         {session.user?.email}
         <ChevronDown className="ml-1 h-4 w-4" />
       </button>

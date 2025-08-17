@@ -62,9 +62,9 @@ export default async function Navbar() {
               className="px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center space-x-1 text-gray-600 hover:text-blue-600"
             >
               <Shield className="h-4 w-4" />
-              Admin
+              <span>Admin</span>
             </Link>
-            
+
             {session ? (
               <UserDropdown session={session} />
             ) : (
