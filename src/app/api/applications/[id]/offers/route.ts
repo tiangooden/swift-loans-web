@@ -7,7 +7,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const loanOffers = await LoanOffersRepository.find({
       where: {
         applications: {
-          id: parseInt(id)
+          id: id
         },
       },
       orderBy: {
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     const loanOffer = await LoanOffersRepository.create({
       applications: {
         connect: {
-          id: parseInt(id),
+          id: id,
         },
       },
       principal: parseFloat(principal),
