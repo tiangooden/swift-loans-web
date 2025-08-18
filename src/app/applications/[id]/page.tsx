@@ -7,7 +7,7 @@ import { useLoanApplicationDetails, useUpdateLoanApplicationStatus } from '../ho
 export default function LoanApplicationDetailsPage() {
     const router = useRouter();
     const params = useParams();
-    const { application, loanOffers, loading, error, fetchApplicationDetails } = useLoanApplicationDetails(params.id as string);
+    const { application, loading, error, fetchApplicationDetails } = useLoanApplicationDetails(params.id as string);
     const { updateStatus } = useUpdateLoanApplicationStatus();
 
     const getStatusColor = (status: string) => {
@@ -98,7 +98,7 @@ export default function LoanApplicationDetailsPage() {
                     <div className="flex justify-between items-start">
                         <div>
                             <h1 className="text-3xl font-bold text-gray-900">
-                                Loan Application #{application.id}
+                                Loan Application: {application.id}
                             </h1>
                             <p className="text-gray-600 mt-1">
                                 {new Date(application.submitted_at).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
@@ -226,7 +226,6 @@ export default function LoanApplicationDetailsPage() {
                                     </div>
                                 )}
                             </div>
-
                         </div>
                     </div>
 
@@ -234,30 +233,26 @@ export default function LoanApplicationDetailsPage() {
                     <div className="lg:col-span-1 bg-white rounded-lg shadow">
                         <div className="p-6">
                             <h2 className="text-xl font-semibold text-gray-900 mb-4">Loan Offers</h2>
-                            {loanOffers.length > 0 ? (
+                            {application.offers.length > 0 ? (
                                 <div className="overflow-x-auto">
                                     <table className="min-w-full divide-y divide-gray-200">
                                         <thead className="bg-gray-50">
                                             <tr>
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Principal</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interest Rate</th>
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Due</th>
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Repayment Date</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Term in Days</th>
                                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
-                                            {loanOffers.map((offer) => (
+                                            {application.offers.map((offer: any) => (
                                                 <tr key={offer.id}>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{formatCurrency(offer.principal)}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{(offer.interest_rate * 100).toFixed(2)}%</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(offer.fee_amount)}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatCurrency(offer.total_due)}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(offer.repayment_date).toLocaleDateString()}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{offer.interest_rate}%</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{offer.term_in_days}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(offer.offer_status)}`}>
-                                                            {offer.offer_status}
+                                                            {offer.status}
                                                         </span>
                                                     </td>
                                                 </tr>

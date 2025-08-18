@@ -111,10 +111,8 @@ CREATE TABLE offers (
     application_id INT,
     principal DECIMAL(12,2),
     interest_rate DECIMAL(5,2),
-    fee_amount DECIMAL(12,2),
-    repayment_date DATE,
-    total_due DECIMAL(12,2),
-    offer_status VARCHAR DEFAULT 'offered',
+    term_in_days INT,
+    status VARCHAR DEFAULT 'offered',
     is_deleted BOOLEAN DEFAULT false,
     deleted_at TIMESTAMP(6),
     created_at TIMESTAMP(6) DEFAULT now(),
@@ -123,7 +121,7 @@ CREATE TABLE offers (
 );
 
 CREATE INDEX idx_offers_application_id ON offers(application_id);
-CREATE INDEX idx_offers_offer_status ON offers(offer_status);
+CREATE INDEX idx_offers_status ON offers(status);
 CREATE INDEX idx_offers_is_deleted ON offers(is_deleted);
 
 -- Loans

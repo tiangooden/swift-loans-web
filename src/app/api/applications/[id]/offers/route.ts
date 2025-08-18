@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import getCurrentUser from '@/app/shared/get-user';
+import { LoanApplicationsRepository } from '@/app/repository/loan_applications.repository';
 import { LoanOffersRepository } from '@/app/repository/loan_offers.repository';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   try {
-    const { id } = await params;
     const loanOffers = await LoanOffersRepository.find({
       where: {
         applications: {
@@ -20,27 +22,41 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 }
 
-export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+  const user = await getCurrentUser();
+  const { id } = await params;
+  const { amount, interest_rate, term } = await request.json();
+  if (!amount || !interest_rate || !term) {
+    return NextResponse.json({ error: 'Missing required offer fields' }, { status: 400 });
+  }
+  const existingApplication = await LoanApplicationsRepository.findById(id);
+  if (!existingApplication || existingApplication.user_id !== user.id) {
+    return NextResponse.json({ error: 'Application not found or unauthorized' }, { status: 404 });
+  }
   try {
-    const { id } = await params;
-    const { principal, fee, interest_rate, total_due, term_months } = await request.json();
-    if (!principal || !fee || !interest_rate || !total_due || !term_months) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-    const loanOffer = await LoanOffersRepository.create({
+    await LoanApplicationsRepository.update({
+      where: { id: id },
+      data: {
+        status: 'counter_offer',
+        updated_at: new Date(),
+      },
+    });
+    const newOffer = await LoanOffersRepository.create({
       applications: {
         connect: {
           id: id,
-        },
+        }
       },
-      principal: parseFloat(principal),
-      fee_amount: parseFloat(fee),
+      principal: parseFloat(amount),
       interest_rate: parseFloat(interest_rate),
-      total_due: parseFloat(total_due),
-      offer_status: 'offered',
+      term_in_days: parseInt(term),
+      status: 'offered', // Default status for a new offer
+      created_at: new Date(),
+      updated_at: new Date(),
     });
-    return NextResponse.json(loanOffer, { status: 201 });
+    return NextResponse.json(newOffer, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('Error processing counter offer:', error);
+    return NextResponse.json({ error: 'Failed to process counter offer' }, { status: 500 });
   }
 }

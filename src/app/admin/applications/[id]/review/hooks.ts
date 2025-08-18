@@ -86,7 +86,7 @@ export function useLoanApplicationReview() {
   const handleAction = async (action: string, offerData?: any) => {
     setActionLoading(true);
     try {
-      const response = await fetch(`/api/applications/${applicationId}`, {
+      const response = await fetch(`/api/applications/${applicationId}/offers`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
