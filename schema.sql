@@ -210,7 +210,7 @@ CREATE TABLE capital (
     id SERIAL PRIMARY KEY,
     capital_type VARCHAR(100),
     amount DECIMAL(14,2),
-    currency VARCHAR(10) DEFAULT 'USD',
+    currency VARCHAR(10) DEFAULT 'JMD',
     description TEXT,
     is_deleted BOOLEAN DEFAULT false,
     deleted_at TIMESTAMP(6),
