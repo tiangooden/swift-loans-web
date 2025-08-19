@@ -121,7 +121,7 @@ export default function LoanApplicationDetailsPage() {
                             <div className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                                     <div className="bg-gray-50 rounded-lg p-4 shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
-                                        <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">Loan Request</h3>
+                                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Loan Request</h3>
                                         <div className="grid grid-cols-3 gap-4">
                                             <div>
                                                 <dt className="text-sm font-medium text-gray-500">Amount Requested</dt>

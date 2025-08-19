@@ -14,27 +14,28 @@ export default function AdminDashboard() {
   });
   const [recentLoans, setRecentLoans] = useState([]);
 
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const [statsResponse, loansResponse] = await Promise.all([
-          fetch('/api/admin/dashboard-stats'),
-          fetch('/api/admin/applications?limit=5')
-        ]);
-        
-        if (statsResponse.ok) {
-          const statsData = await statsResponse.json();
-          setStats(statsData);
-        }
-        
-        if (loansResponse.ok) {
-          const loansData = await loansResponse.json();
-          setRecentLoans(loansData.slice(0, 5));
-        }
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+  const fetchDashboardData = async () => {
+    try {
+      const [statsResponse, loansResponse] = await Promise.all([
+        fetch('/api/admin/dashboard-stats'),
+        fetch('/api/applications/all?limit=5')
+      ]);
+
+      if (statsResponse.ok) {
+        const statsData = await statsResponse.json();
+        setStats(statsData);
       }
-    };
+
+      if (loansResponse.ok) {
+        const loansData = await loansResponse.json();
+        setRecentLoans(loansData.slice(0, 5));
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    }
+  };
+
+  useEffect(() => {
     // fetchDashboardData();
   }, []);
 

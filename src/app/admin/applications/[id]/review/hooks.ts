@@ -37,18 +37,6 @@ interface LoanApplication {
   };
 }
 
-interface LoanOffer {
-  id: string;
-  amount_offered: number;
-  interest_rate: number;
-  term_in_days: number;
-  monthly_payment: number;
-  total_interest: number;
-  total_amount: number;
-  status: string;
-  created_at: string;
-}
-
 export function useLoanApplicationReview() {
   const params = useParams();
   const router = useRouter();
@@ -60,17 +48,17 @@ export function useLoanApplicationReview() {
   const [counterOfferTerm, setCounterOfferTerm] = useState('');
   const [showCounterOffer, setShowCounterOffer] = useState(false);
 
-  const applicationId = params.id as string;
+  const id = params.id as string;
 
   useEffect(() => {
-    if (applicationId) {
+    if (id) {
       fetchApplication();
     }
-  }, [applicationId]);
+  }, [id]);
 
   const fetchApplication = async () => {
     try {
-      const response = await fetch(`/api/admin/applications/${applicationId}`);
+      const response = await fetch(`/api/applications/${id}/review`);
       if (!response.ok) throw new Error('Failed to fetch application');
       const data = await response.json();
       setApplication(data);
@@ -89,15 +77,15 @@ export function useLoanApplicationReview() {
       let body = {};
 
       if (action === 'reject') {
-        url = `/api/admin/applications/${applicationId}`;
+        url = `/api/applications/${id}`;
         method = 'PATCH';
         body = { status: 'rejected', decision_reason: data?.decision_reason };
       } else if (action === 'approve') {
-        url = `/api/applications/${applicationId}/offers`;
+        url = `/api/applications/${id}/offers`;
         method = 'POST';
         body = { status: 'approved', ...data };
       } else if (action === 'counter_offer') {
-        url = `/api/applications/${applicationId}/offers`;
+        url = `/api/applications/${id}/offers`;
         method = 'POST';
         body = { status: action, ...data };
       } else {

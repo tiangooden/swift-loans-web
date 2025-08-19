@@ -10,7 +10,7 @@ export function useAdminLoanApplications() {
   useEffect(() => {
     const fetchLoanApplications = async () => {
       try {
-        const response = await fetch('/api/admin/applications');
+        const response = await fetch('/api/applications/all');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
