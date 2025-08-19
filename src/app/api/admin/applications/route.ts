@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { LoanApplicationsRepository } from '@/app/repository/loan_applications.repository';
-// import getCurrentUser from '@/app/shared/get-user';
 
 export async function GET(request: NextRequest) {
     const loanApplications = await LoanApplicationsRepository.findMany({

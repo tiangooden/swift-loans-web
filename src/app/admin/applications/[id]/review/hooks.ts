@@ -8,9 +8,7 @@ interface LoanApplication {
   status: string;
   created_at: string;
   purpose: string;
-  employment_status: string;
   monthly_income: number;
-  credit_score: number;
   users: {
     first_name: string;
     last_name: string;
@@ -83,18 +81,35 @@ export function useLoanApplicationReview() {
     }
   };
 
-  const handleAction = async (action: string, offerData?: any) => {
+  const handleAction = async (action: string, data?: any) => {
     setActionLoading(true);
     try {
-      const response = await fetch(`/api/applications/${applicationId}/offers`, {
-        method: 'POST',
+      let url = '';
+      let method = '';
+      let body = {};
+
+      if (action === 'reject') {
+        url = `/api/admin/applications/${applicationId}`;
+        method = 'PATCH';
+        body = { status: 'rejected', decision_reason: data?.decision_reason };
+      } else if (action === 'approve') {
+        url = `/api/applications/${applicationId}/offers`;
+        method = 'POST';
+        body = { status: 'approved', ...data };
+      } else if (action === 'counter_offer') {
+        url = `/api/applications/${applicationId}/offers`;
+        method = 'POST';
+        body = { status: action, ...data };
+      } else {
+        throw new Error('Invalid action');
+      }
+
+      const response = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          status: action,
-          ...offerData,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {

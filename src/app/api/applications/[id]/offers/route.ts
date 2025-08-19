@@ -25,7 +25,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   const user = await getCurrentUser();
   const { id } = await params;
-  const { amount, interest_rate, term } = await request.json();
+  const { amount, interest_rate, term, status } = await request.json();
   if (!amount || !interest_rate || !term) {
     return NextResponse.json({ error: 'Missing required offer fields' }, { status: 400 });
   }
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     await LoanApplicationsRepository.update({
       where: { id: id },
       data: {
-        status: 'counter_offer',
+        status: status,
         updated_at: new Date(),
       },
     });
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       principal: parseFloat(amount),
       interest_rate: parseFloat(interest_rate),
       term_in_days: parseInt(term),
-      status: 'offered', // Default status for a new offer
+      status: status,
       created_at: new Date(),
       updated_at: new Date(),
     });
