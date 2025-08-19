@@ -1,19 +1,19 @@
-enum APPLICATION_STATUS {
-    SUBMITTED,
-    OFFERED,
-    APPROVED,
-    COUNTERED,
-    REJECTED
+export const APPLICATION_STATUS = {
+    SUBMITTED: 'submitted',
+    OFFERED: 'offered',
+    APPROVED: 'approved',
+    COUNTERED: 'countered',
+    REJECTED: 'rejected'
 }
 
-enum OFFER_STATUS {
-    SUBMITTED,
-    ACCEPTED,
-    REJECTED
+export const OFFER_STATUS = {
+    SUBMITTED: 'submitted',
+    ACCEPTED: 'accepted',
+    REJECTED: 'rejected'
 }
 
-enum LOAN_STATUS {
-    ACTIVE,
-    REPAID,
-    OVERDUE
+export const LOAN_STATUS = {
+    ACTIVE: 'active',
+    REPAID: 'repaid',
+    OVERDUE: 'overdue'
 }

@@ -83,62 +83,72 @@ export function useLoanApplicationDetails(id: string) {
   return { application, loading, error, fetchApplicationDetails };
 }
 
-export function useUpdateLoanApplicationStatus() {
-  const [updating, setUpdating] = useState(false);
-  const [updateError, setUpdateError] = useState<string | null>(null);
+export function useAcceptLoanOffer() {
+  const [accepting, setAccepting] = useState(false);
+  const [acceptError, setAcceptError] = useState<string | null>(null);
 
-  const updateStatus = useCallback(async (id: string, status: string, decision_reason?: string) => {
-    setUpdating(true);
-    setUpdateError(null);
+  const acceptOffer = useCallback(async (offerId: string) => {
+    setAccepting(true);
+    setAcceptError(null);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/status`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status, decision_reason }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update application status');
-      }
-      notifications.success('Application status updated successfully!');
-      return true;
-    } catch (err: any) {
-      notifications.error(`Error updating application status: ${err.message}`);
-      setUpdateError(err.message);
-      return false;
-    } finally {
-      setUpdating(false);
-    }
-  }, []);
-
-  const updateOfferStatus = useCallback(async (offerId: string, status: string) => {
-    setUpdating(true);
-    setUpdateError(null);
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/status`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/accept`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ status: 'accepted' }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update offer status');
+        throw new Error('Failed to accept offer');
       }
 
-      notifications.success('Offer status updated successfully!');
+      notifications.success('Offer accepted successfully!');
       return true;
     } catch (err: any) {
-      notifications.error(`Error updating offer status: ${err.message}`);
-      setUpdateError(err.message);
+      notifications.error(`Error accepting offer: ${err.message}`);
+      setAcceptError(err.message);
       return false;
     } finally {
-      setUpdating(false);
+      setAccepting(false);
     }
   }, []);
 
-  return { updateStatus, updateOfferStatus, updating, updateError };
+  return { acceptOffer, accepting, acceptError };
+}
+
+export function useRejectLoanOffer() {
+  const [rejecting, setRejecting] = useState(false);
+  const [rejectError, setRejectError] = useState<string | null>(null);
+
+  const rejectOffer = useCallback(async (offerId: string) => {
+    setRejecting(true);
+    setRejectError(null);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/reject`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'rejected' }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to reject offer');
+      }
+
+      notifications.success('Offer rejected successfully!');
+      return true;
+    } catch (err: any) {
+      notifications.error(`Error rejecting offer: ${err.message}`);
+      setRejectError(err.message);
+      return false;
+    } finally {
+      setRejecting(false);
+    }
+  }, []);
+
+  return { rejectOffer, rejecting, rejectError };
 }
 
 export function useFetchLoanApplications() {

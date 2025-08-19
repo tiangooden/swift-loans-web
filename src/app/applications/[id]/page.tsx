@@ -2,7 +2,7 @@
 
 import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, Check, X } from 'lucide-react';
-import { useLoanApplicationDetails, useUpdateLoanApplicationStatus } from '../hooks';
+import { useAcceptLoanOffer, useLoanApplicationDetails, useRejectLoanOffer } from '../hooks';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 
@@ -10,17 +10,18 @@ export default function LoanApplicationDetailsPage() {
     const router = useRouter();
     const params = useParams();
     const { application, loading, error, fetchApplicationDetails } = useLoanApplicationDetails(params.id as string);
-    const { updateStatus, updateOfferStatus } = useUpdateLoanApplicationStatus();
+    const { acceptOffer, accepting, acceptError } = useAcceptLoanOffer();
+    const { rejectOffer, rejecting, rejectError } = useRejectLoanOffer();
 
-    const handleStatusUpdate = async (newStatus: string, reason?: string) => {
-        const success = await updateStatus(application!.id, newStatus, reason);
+    const handleAcceptOffer = async (offerId: string) => {
+        const success = await acceptOffer(offerId);
         if (success) {
             fetchApplicationDetails();
         }
     };
 
-    const handleOfferAction = async (offerId: string, newStatus: string) => {
-        const success = await updateOfferStatus(offerId, newStatus);
+    const handleRejectOffer = async (offerId: string) => {
+        const success = await rejectOffer(offerId);
         if (success) {
             fetchApplicationDetails();
         }
@@ -240,7 +241,7 @@ export default function LoanApplicationDetailsPage() {
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{offer.term_in_days}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(offer.status)}`}>
-                                                            {getStatusIcon(offer.status)} {offer.status}
+                                                            {getStatusIcon(offer.status)}&nbsp;{offer.status}
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDateString(offer.created_at)}</td>
@@ -248,14 +249,14 @@ export default function LoanApplicationDetailsPage() {
                                                         {offer.status === 'offered' && (
                                                             <div className="flex items-center space-x-2">
                                                                 <button
-                                                                    onClick={() => handleOfferAction(offer.id, 'accepted')}
+                                                                    onClick={() => handleAcceptOffer(offer.id)}
                                                                     className="text-green-600 hover:text-green-900"
                                                                     title="Accept Offer"
                                                                 >
                                                                     <Check className="h-5 w-5" />
                                                                 </button>
                                                                 <button
-                                                                    onClick={() => handleOfferAction(offer.id, 'rejected')}
+                                                                    onClick={() => handleRejectOffer(offer.id)}
                                                                     className="text-red-600 hover:text-red-900"
                                                                     title="Reject Offer"
                                                                 >
