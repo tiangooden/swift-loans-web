@@ -59,7 +59,7 @@ export function useLoanApplicationReview() {
 
   const fetchApplication = async () => {
     try {
-      const response = await fetch(`/api/applications/${id}/review`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/review`);
       if (!response.ok) throw new Error('Failed to fetch application');
       const data = await response.json();
       setApplication(data);
@@ -73,7 +73,7 @@ export function useLoanApplicationReview() {
   const handleAction = async (action: string, data?: any) => {
     setActionLoading(true);
     try {
-      let url = `/api/applications/${id}/`;
+      let url = `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/`;
       let method = 'POST';
       if (action === 'approve') {
         url = url + `approve`;

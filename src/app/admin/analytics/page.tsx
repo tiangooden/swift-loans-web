@@ -19,7 +19,7 @@ export default function AdminAnalytics() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const response = await fetch('/api/admin/analytics');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/analytics`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

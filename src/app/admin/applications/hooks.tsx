@@ -10,7 +10,7 @@ export function useAdminLoanApplications() {
   useEffect(() => {
     const fetchLoanApplications = async () => {
       try {
-        const response = await fetch('/api/applications/all');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/all`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

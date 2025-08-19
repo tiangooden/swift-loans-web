@@ -19,7 +19,7 @@ export function useEmploymentDetails() {
 
     const fetchEmployment = async () => {
         try {
-            const res = await fetch(`/api/employment`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment`);
             if (!res.ok) {
                 throw new Error(`Failed to fetch employment details: ${res.statusText}`);
             }
@@ -44,7 +44,7 @@ export function useSaveEmploymentDetails(onSuccess?: () => void) {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch(`/api/employment`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

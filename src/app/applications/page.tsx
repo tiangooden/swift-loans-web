@@ -29,7 +29,7 @@ export default function LoanApplicationsPage() {
   useEffect(() => {
     if (status === 'loading') return;
     if (!session) {
-      router.push('/api/auth/signin');
+      router.push(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/auth/signin`);
     }
   }, [session, status, router]);
 

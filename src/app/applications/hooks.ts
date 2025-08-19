@@ -61,7 +61,7 @@ export function useLoanApplicationDetails(id: string) {
     setLoading(true);
     setError(null);
     try {
-      const applicationResponse = await fetch(`/api/applications/${id}`);
+      const applicationResponse = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}`);
 
       if (!applicationResponse.ok) {
         throw new Error('Failed to fetch loan application details');
@@ -91,7 +91,7 @@ export function useUpdateLoanApplicationStatus() {
     setUpdating(true);
     setUpdateError(null);
     try {
-      const response = await fetch(`/api/applications/${id}/status`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, decision_reason: reason }),
@@ -125,7 +125,7 @@ export function useFetchLoanApplications() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/applications');
+      const response = await fetch(process.env.NEXT_PUBLIC_SWIFT_LOANS_API + '/api/applications');
       if (!response.ok) {
         throw new Error('Failed to fetch loan applications');
       }
@@ -153,7 +153,7 @@ export function useSaveLoanApplication() {
   const saveApplication = useCallback(async (data: any, id?: number) => {
     setSaving(true);
     setSaveError(null);
-    const url = id ? `/api/applications/${id}` : '/api/applications';
+    const url = id ? `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}` : process.env.NEXT_PUBLIC_SWIFT_LOANS_API + '/api/applications';
     const method = id ? 'PUT' : 'POST';
 
     try {
@@ -188,7 +188,7 @@ export function useDeleteLoanApplication() {
     setDeleting(true);
     setDeleteError(null);
     try {
-      const response = await fetch(`/api/applications/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {

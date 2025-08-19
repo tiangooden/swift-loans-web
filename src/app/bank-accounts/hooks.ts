@@ -19,7 +19,7 @@ export const useFetchBankAccounts = () => {
 
   const fetchAccount = async () => {
     try {
-      const response = await fetch(`/api/bank-accounts`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -49,7 +49,7 @@ export const useSaveBankAccount = (onSuccess?: () => void) => {
     setLoading(true);
     setError(null);
     const method = bankAccount.id ? 'PUT' : 'POST';
-    const url = bankAccount.id ? `/api/bank-accounts/${bankAccount.id}` : `/api/bank-accounts`;
+    const url = bankAccount.id ? `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts/${bankAccount.id}` : `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts`;
     try {
       const response = await fetch(url, {
         method,

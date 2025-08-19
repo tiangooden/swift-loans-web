@@ -17,8 +17,8 @@ export default function AdminDashboard() {
   const fetchDashboardData = async () => {
     try {
       const [statsResponse, loansResponse] = await Promise.all([
-        fetch('/api/admin/dashboard-stats'),
-        fetch('/api/applications/all?limit=5')
+        fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/dashboard-stats`),
+        fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/all?limit=5`)
       ]);
 
       if (statsResponse.ok) {

@@ -28,7 +28,7 @@ export const useFetchUserProfile = () => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await fetch(`/api/user`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -52,7 +52,7 @@ export function useProfileUpdate(onSuccess?: () => void) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/user`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
