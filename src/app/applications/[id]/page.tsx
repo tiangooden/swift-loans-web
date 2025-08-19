@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Check, X } from 'lucide-react';
 import { useLoanApplicationDetails, useUpdateLoanApplicationStatus } from '../hooks';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
@@ -10,10 +10,17 @@ export default function LoanApplicationDetailsPage() {
     const router = useRouter();
     const params = useParams();
     const { application, loading, error, fetchApplicationDetails } = useLoanApplicationDetails(params.id as string);
-    const { updateStatus } = useUpdateLoanApplicationStatus();
+    const { updateStatus, updateOfferStatus } = useUpdateLoanApplicationStatus();
 
     const handleStatusUpdate = async (newStatus: string, reason?: string) => {
         const success = await updateStatus(application!.id, newStatus, reason);
+        if (success) {
+            fetchApplicationDetails();
+        }
+    };
+
+    const handleOfferAction = async (offerId: string, newStatus: string) => {
+        const success = await updateOfferStatus(offerId, newStatus);
         if (success) {
             fetchApplicationDetails();
         }
@@ -92,7 +99,7 @@ export default function LoanApplicationDetailsPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     {/* Application Details */}
                     <div className="lg:col-span-1 bg-white shadow-lg rounded-xl">
                         <div className="p-8">
@@ -101,7 +108,7 @@ export default function LoanApplicationDetailsPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                                     <div className="bg-gray-50 rounded-lg p-4 shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300">
                                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Loan Request</h3>
-                                        <div className="grid grid-cols-3 gap-4">
+                                        <div className="grid grid-cols-1 gap-4">
                                             <div>
                                                 <dt className="text-sm font-medium text-gray-500">Amount Requested</dt>
                                                 <dd className="text-gray-900">{formatCurrency(application.amount_requested)}</dd>
@@ -209,7 +216,7 @@ export default function LoanApplicationDetailsPage() {
                     </div>
 
                     {/* Loan Offers */}
-                    <div className="lg:col-span-2 bg-white rounded-lg shadow">
+                    <div className="lg:col-span-3 bg-white rounded-lg shadow">
                         <div className="p-6">
                             <h2 className="text-xl font-semibold text-gray-900 mb-4">Loan Offers</h2>
                             {application.offers.length > 0 ? (
@@ -222,6 +229,7 @@ export default function LoanApplicationDetailsPage() {
                                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Term in Days</th>
                                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Offered</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
@@ -236,6 +244,26 @@ export default function LoanApplicationDetailsPage() {
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDateString(offer.created_at)}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                        {offer.status === 'offered' && (
+                                                            <div className="flex items-center space-x-2">
+                                                                <button
+                                                                    onClick={() => handleOfferAction(offer.id, 'accepted')}
+                                                                    className="text-green-600 hover:text-green-900"
+                                                                    title="Accept Offer"
+                                                                >
+                                                                    <Check className="h-5 w-5" />
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleOfferAction(offer.id, 'rejected')}
+                                                                    className="text-red-600 hover:text-red-900"
+                                                                    title="Reject Offer"
+                                                                >
+                                                                    <X className="h-5 w-5" />
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>

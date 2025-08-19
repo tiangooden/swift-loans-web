@@ -4,7 +4,7 @@ import { notifications } from '../shared/notifications';
 
 interface LoanApplication {
   offers: any;
-  id: number;
+  id: string;
   amount_requested: number;
   term_in_days: number;
   purpose: string;
@@ -87,14 +87,14 @@ export function useUpdateLoanApplicationStatus() {
   const [updating, setUpdating] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
 
-  const updateStatus = useCallback(async (id: number, newStatus: string, reason?: string) => {
+  const updateStatus = useCallback(async (id: string, status: string, decision_reason?: string) => {
     setUpdating(true);
     setUpdateError(null);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/status`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus, decision_reason: reason }),
+        body: JSON.stringify({ status, decision_reason }),
       });
 
       if (!response.ok) {
@@ -103,7 +103,7 @@ export function useUpdateLoanApplicationStatus() {
       notifications.success('Application status updated successfully!');
       return true;
     } catch (err: any) {
-      notifications.error(err.message);
+      notifications.error(`Error updating application status: ${err.message}`);
       setUpdateError(err.message);
       return false;
     } finally {
@@ -111,7 +111,34 @@ export function useUpdateLoanApplicationStatus() {
     }
   }, []);
 
-  return { updateStatus, updating, updateError };
+  const updateOfferStatus = useCallback(async (offerId: string, status: string) => {
+    setUpdating(true);
+    setUpdateError(null);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update offer status');
+      }
+
+      notifications.success('Offer status updated successfully!');
+      return true;
+    } catch (err: any) {
+      notifications.error(`Error updating offer status: ${err.message}`);
+      setUpdateError(err.message);
+      return false;
+    } finally {
+      setUpdating(false);
+    }
+  }, []);
+
+  return { updateStatus, updateOfferStatus, updating, updateError };
 }
 
 export function useFetchLoanApplications() {
