@@ -2,23 +2,19 @@ import React from 'react';
 import { redirect } from 'next/navigation';
 import getCurrentUser from '@/app/shared/get-user';
 import DashboardContent from './DashboardContent';
+import formatDateString from '../shared/date';
 
 const Dashboard = async () => {
   let userData;
   try {
     const user = await getCurrentUser();
     userData = {
-      name: user.first_name  
-        ? `${user.first_name}` 
+      name: user.first_name
+        ? `${user.first_name}`
         : 'User',
       email: user.email || '',
       phone: user.phone_number || '',
-      memberSince: user.created_at 
-        ? new Date(user.created_at).toLocaleDateString('en-US', { 
-            month: 'long', 
-            year: 'numeric' 
-          })
-        : 'Member'
+      memberSince: formatDateString(user.created_at)
     };
   } catch (error) {
     console.error('Error fetching user data:', error);

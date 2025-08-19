@@ -6,6 +6,7 @@ import AdminNav from '@/app/admin/components/AdminNav';
 import { useLoanApplicationReview } from './hooks';
 import { useState } from 'react';
 import { notifications } from '@/app/shared/notifications';
+import formatDateString from '@/app/shared/date';
 
 export default function LoanReviewPage() {
   const router = useRouter();
@@ -87,7 +88,7 @@ export default function LoanReviewPage() {
                       {application.status.replace('_', ' ').toUpperCase()}
                     </span>
                     <span className="ml-4 text-sm text-gray-600">
-                      Submitted: {new Date(application.created_at).toLocaleDateString()}
+                      {formatDateString(application.created_at)}
                     </span>
                   </div>
                 </div>

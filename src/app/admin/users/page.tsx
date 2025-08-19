@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Users, Search, Eye, Edit, Trash2, Mail, Phone } from "lucide-react";
 import AdminNav from '../components/AdminNav';
+import formatDateString from '@/app/shared/date';
 
 export default function AdminUsers() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -164,7 +165,7 @@ export default function AdminUsers() {
                     {user.loan_count || 0} loans
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(user.created_at).toLocaleDateString()}
+                    {formatDateString(user.created_at)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex space-x-2">

@@ -7,7 +7,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const { id } = await params;
     const data = await request.json();
     const updatedAccount = await BankAccountsRepository.update({
-        where: { id: parseInt(id) },
+        where: { id: id },
         data: {
             bank_name: data.bank_name,
             account_number: data.account_number,
@@ -21,7 +21,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     const user = await getCurrentUser();
     const { id } = await params;
     await BankAccountsRepository.update({
-        where: { id: parseInt(id) },
+        where: { id: id },
         data: {
             is_deleted: true,
             deleted_at: new Date(),

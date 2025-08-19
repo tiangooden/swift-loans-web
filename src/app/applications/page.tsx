@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import ApplicationForm from './ApplicationForm';
 import { useFetchLoanApplications, useSaveLoanApplication, useDeleteLoanApplication } from './hooks';
+import formatDateString from '../shared/date';
 
 interface LoanApplication {
   id: number;
@@ -137,7 +138,7 @@ export default function LoanApplicationsPage() {
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {(new Date(application.submitted_at)).toLocaleDateString()}
+                          {formatDateString(application.submitted_at)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <div className="flex space-x-2">

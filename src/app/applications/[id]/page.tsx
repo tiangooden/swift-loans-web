@@ -192,7 +192,7 @@ export default function LoanApplicationDetailsPage() {
                                             <div>
                                                 <dt className="text-sm font-medium text-gray-500">Decision Date</dt>
                                                 <dd className="text-gray-900">
-                                                    {new Date(application.decided_at!).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
+                                                    {formatDateString(application.decided_at!)}
                                                 </dd>
                                             </div>
                                             {application.decision_reason && (

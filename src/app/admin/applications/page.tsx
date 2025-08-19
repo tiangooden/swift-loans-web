@@ -3,6 +3,7 @@ import React from 'react';
 import { Search, Eye, Clock, CheckCircle, AlertTriangle } from "lucide-react";
 import AdminNav from '../components/AdminNav';
 import { useAdminLoanApplications, getStatusColor, getStatusIcon } from './hooks';
+import formatDateString from '@/app/shared/date';
 
 export default function AdminLoans() {
   const { searchTerm, setSearchTerm, filterStatus, setFilterStatus, loanApplications, loading } = useAdminLoanApplications();
@@ -82,7 +83,7 @@ export default function AdminLoans() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(loan.submitted_at).toLocaleDateString()}
+                      {formatDateString(loan.submitted_at)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
