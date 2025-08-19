@@ -2,16 +2,19 @@ import { LoanApplicationsRepository } from '@/app/repository/loan_applications.r
 import { LoanOffersRepository } from '@/app/repository/loan_offers.repository';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = await params;
   try {
-    const { applicationId, loanDetails } = await request.json();
+    const { amount, term, interest_rate } = await request.json();
     await LoanApplicationsRepository.update({
-      where: { id: applicationId },
+      where: { id: id },
       data: { status: 'approved' },
     });
     await LoanOffersRepository.create({
-      ...loanDetails,
-      application_id: applicationId,
+      principal: amount,
+      term_in_days: term,
+      interest_rate: interest_rate,
+      applications: { connect: { id } },
       status: 'approved',
       created_at: new Date(),
       updated_at: new Date(),

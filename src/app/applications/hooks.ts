@@ -50,18 +50,18 @@ interface LoanOffer {
   created_at: string;
 }
 
-export function useLoanApplicationDetails(applicationId: string) {
+export function useLoanApplicationDetails(id: string) {
   const { data: session, status } = useSession();
   const [application, setApplication] = useState<LoanApplication | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchApplicationDetails = useCallback(async () => {
-    if (status === 'loading' || !session || !applicationId) return;
+    if (status === 'loading' || !session || !id) return;
     setLoading(true);
     setError(null);
     try {
-      const applicationResponse = await fetch(`/api/applications/${applicationId}`);
+      const applicationResponse = await fetch(`/api/applications/${id}`);
 
       if (!applicationResponse.ok) {
         throw new Error('Failed to fetch loan application details');
@@ -74,7 +74,7 @@ export function useLoanApplicationDetails(applicationId: string) {
     } finally {
       setLoading(false);
     }
-  }, [session, status, applicationId]);
+  }, [session, status, id]);
 
   useEffect(() => {
     fetchApplicationDetails();
@@ -87,11 +87,11 @@ export function useUpdateLoanApplicationStatus() {
   const [updating, setUpdating] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
 
-  const updateStatus = useCallback(async (applicationId: number, newStatus: string, reason?: string) => {
+  const updateStatus = useCallback(async (id: number, newStatus: string, reason?: string) => {
     setUpdating(true);
     setUpdateError(null);
     try {
-      const response = await fetch(`/api/applications/${applicationId}/status`, {
+      const response = await fetch(`/api/applications/${id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, decision_reason: reason }),

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Settings, Save, Bell, Shield, CreditCard, Mail, Globe, Lock } from "lucide-react";
 import AdminNav from '../components/AdminNav';
+import { notifications } from '@/app/shared/notifications';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState({
@@ -28,7 +29,7 @@ export default function AdminSettings() {
 
   const handleSave = () => {
     // Save settings logic here
-    alert('Settings saved successfully!');
+    notifications.success('Settings saved successfully!');
   };
 
   const handleChange = (key: string, value: any) => {

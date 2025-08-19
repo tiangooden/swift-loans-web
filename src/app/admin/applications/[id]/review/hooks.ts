@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { notifications } from '@/app/shared/notifications';
 
 interface LoanApplication {
   id: string;
@@ -72,22 +73,15 @@ export function useLoanApplicationReview() {
   const handleAction = async (action: string, data?: any) => {
     setActionLoading(true);
     try {
-      let url = '';
-      let method = '';
-      let body = {};
-
-      if (action === 'reject') {
-        url = `/api/applications/${id}`;
+      let url = `/api/applications/${id}/`;
+      let method = 'POST';
+      if (action === 'approve') {
+        url = url + `approve`;
+      } else if (action === 'reject') {
+        url = url + `reject`;
         method = 'PATCH';
-        body = { status: 'rejected', decision_reason: data?.decision_reason };
-      } else if (action === 'approve') {
-        url = `/api/applications/${id}/offers`;
-        method = 'POST';
-        body = { status: 'approved', ...data };
-      } else if (action === 'counter_offer') {
-        url = `/api/applications/${id}/offers`;
-        method = 'POST';
-        body = { status: action, ...data };
+      } else if (action === 'counter') {
+        url = url + `counter-offer`;
       } else {
         throw new Error('Invalid action');
       }
@@ -97,20 +91,17 @@ export function useLoanApplicationReview() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        alert(`Action failed: ${errorData.error || 'Unknown error'}`);
         throw new Error('Action failed');
       }
 
-      alert('Action performed successfully!');
+      notifications.success('Action performed successfully!')
       router.push('/admin/applications');
     } catch (error: any) {
-      console.error('Error performing action:', error);
-      alert(`Error: ${error.message || 'An unexpected error occurred'}`);
+      notifications.error(`Error performing action:, ${error}`)
     } finally {
       setActionLoading(false);
     }

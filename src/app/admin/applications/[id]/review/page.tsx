@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import AdminNav from '@/app/admin/components/AdminNav';
 import { useLoanApplicationReview } from './hooks';
 import { useState } from 'react';
+import { notifications } from '@/app/shared/notifications';
 
 export default function LoanReviewPage() {
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function LoanReviewPage() {
 
   const confirmReject = () => {
     if (decisionReason.trim() === '') {
-      alert('Please provide a reason for rejection.');
+      notifications.info('Please provide a reason for rejection.')
       return;
     }
     handleAction('reject', { decision_reason: decisionReason });
@@ -267,7 +268,7 @@ export default function LoanReviewPage() {
                               />
                             </div>
                             <button
-                              onClick={() => handleAction('counter_offer', {
+                              onClick={() => handleAction('counter', {
                                 amount: counterOfferAmount,
                                 interest_rate: counterOfferRate,
                                 term: counterOfferTerm
