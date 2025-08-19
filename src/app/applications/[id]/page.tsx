@@ -1,37 +1,16 @@
 'use client';
 
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useLoanApplicationDetails, useUpdateLoanApplicationStatus } from '../hooks';
+import { getStatusColor, getStatusIcon } from '@/app/shared/status';
+import formatDateString from '@/app/shared/date';
 
 export default function LoanApplicationDetailsPage() {
     const router = useRouter();
     const params = useParams();
     const { application, loading, error, fetchApplicationDetails } = useLoanApplicationDetails(params.id as string);
     const { updateStatus } = useUpdateLoanApplicationStatus();
-
-    const getStatusColor = (status: string) => {
-        const colors = {
-            pending: 'bg-yellow-100 text-yellow-800',
-            approved: 'bg-green-100 text-green-800',
-            rejected: 'bg-red-100 text-red-800',
-            cancelled: 'bg-gray-100 text-gray-800',
-        };
-        return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
-    };
-
-    const getStatusIcon = (status: string) => {
-        switch (status) {
-            case 'approved':
-                return <CheckCircle className="h-4 w-4" />;
-            case 'rejected':
-                return <XCircle className="h-4 w-4" />;
-            case 'pending':
-                return <Clock className="h-4 w-4" />;
-            default:
-                return <Clock className="h-4 w-4" />;
-        }
-    };
 
     const handleStatusUpdate = async (newStatus: string, reason?: string) => {
         const success = await updateStatus(application!.id, newStatus, reason);
@@ -101,7 +80,7 @@ export default function LoanApplicationDetailsPage() {
                                 Loan Application: {application.id}
                             </h1>
                             <p className="text-gray-600 mt-1">
-                                {new Date(application.submitted_at).toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
+                                {formatDateString(application.submitted_at)}
                             </p>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -113,7 +92,7 @@ export default function LoanApplicationDetailsPage() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Application Details */}
                     <div className="lg:col-span-1 bg-white shadow-lg rounded-xl">
                         <div className="p-8">
@@ -230,7 +209,7 @@ export default function LoanApplicationDetailsPage() {
                     </div>
 
                     {/* Loan Offers */}
-                    <div className="lg:col-span-1 bg-white rounded-lg shadow">
+                    <div className="lg:col-span-2 bg-white rounded-lg shadow">
                         <div className="p-6">
                             <h2 className="text-xl font-semibold text-gray-900 mb-4">Loan Offers</h2>
                             {application.offers.length > 0 ? (
@@ -242,6 +221,7 @@ export default function LoanApplicationDetailsPage() {
                                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interest Rate</th>
                                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Term in Days</th>
                                                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Offered</th>
                                             </tr>
                                         </thead>
                                         <tbody className="bg-white divide-y divide-gray-200">
@@ -251,10 +231,11 @@ export default function LoanApplicationDetailsPage() {
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{offer.interest_rate}%</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{offer.term_in_days}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(offer.offer_status)}`}>
-                                                            {offer.status}
+                                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(offer.status)}`}>
+                                                            {getStatusIcon(offer.status)} {offer.status}
                                                         </span>
                                                     </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDateString(offer.created_at)}</td>
                                                 </tr>
                                             ))}
                                         </tbody>

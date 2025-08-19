@@ -45,7 +45,7 @@ export default function AdminAnalytics() {
           ],
           statusDistribution: [
             { status: 'active', count: 1834 },
-            { status: 'pending', count: 127 },
+            { status: 'submitted', count: 127 },
             { status: 'paid', count: 892 },
             { status: 'overdue', count: 45 }
           ],

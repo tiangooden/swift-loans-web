@@ -1,0 +1,19 @@
+enum APPLICATION_STATUS {
+    SUBMITTED,
+    OFFERED,
+    APPROVED,
+    COUNTERED,
+    REJECTED
+}
+
+enum OFFER_STATUS {
+    SUBMITTED,
+    ACCEPTED,
+    REJECTED
+}
+
+enum LOAN_STATUS {
+    ACTIVE,
+    REPAID,
+    OVERDUE
+}

@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { UsersRepository } from "../user/users.repository";
-import { NotFoundError, UnauthorizedError } from "./http-errors";
+import { UnauthorizedError } from "./http-errors";
 
 export default async function getCurrentUser() {
     const session = await getServerSession(authOptions);
