@@ -4,7 +4,7 @@ import { Eye } from "lucide-react";
 import AdminNav from '../components/AdminNav';
 import formatDateString from '@/app/shared/date';
 import { useAdminLoanApplications } from './useFetchAdminLoanApplications';
-import { getStatusColor, getStatusIcon } from './utils';
+import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 
 export default function AdminLoans() {
   const { searchTerm, setSearchTerm, filterStatus, setFilterStatus, loanApplications, loading } = useAdminLoanApplications();
@@ -79,7 +79,7 @@ export default function AdminLoans() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(loan.status)}`}>
-                        {getStatusIcon(loan.status, { className: "h-4 w-4" })}
+                        {getStatusIcon(loan.status)}
                         <span className="ml-1">{loan.status}</span>
                       </span>
                     </td>
