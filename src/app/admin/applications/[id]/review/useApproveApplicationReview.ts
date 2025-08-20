@@ -13,14 +13,14 @@ export function useApproveApplicationReview() {
                 method: 'POST',
             });
             if (!response.ok) {
-                throw new Error('Failed to approve application review');
+                throw new Error('Failed to approve application');
             }
-            notifications.success('Application review approved successfully!');
+            notifications.success('Application approved successfully!');
             return true;
         } catch (error: any) {
             setError(error.message);
-            console.error('Error approving application review:', error);
-            notifications.error(`Error approving application review: ${error.message}`);
+            console.error('Error approving application:', error);
+            notifications.error(`Error approving application: ${error.message}`);
             return false;
         } finally {
             setLoading(false);

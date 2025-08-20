@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
-    const { loanDetails } = await request.json();
+    const data = await request.json();
     await ApplicationsRepository.update({
       where: { id: id },
       data: {
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       },
     });
     await OffersRepository.create({
-      ...loanDetails,
+      ...data,
       application_id: id,
       status: 'submitted',
       created_at: new Date(),

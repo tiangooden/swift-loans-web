@@ -14,14 +14,14 @@ export function useRejectApplicationReview() {
                 body: JSON.stringify(data)
             });
             if (!response.ok) {
-                throw new Error('Failed to reject application review');
+                throw new Error('Failed to reject application');
             }
-            notifications.success('Application review rejected successfully!');
+            notifications.success('Application rejected successfully!');
             return true;
         } catch (error: any) {
             setError(error.message);
-            console.error('Error rejecting application review:', error);
-            notifications.error(`Error rejecting application review: ${error.message}`);
+            console.error('Error rejecting application:', error);
+            notifications.error(`Error rejecting application: ${error.message}`);
             return false;
         } finally {
             setLoading(false);

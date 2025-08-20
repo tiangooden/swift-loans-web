@@ -4,10 +4,6 @@ import { LoanApplication } from './types';
 export function useFetchApplicationReview(id: string) {
   const [application, setApplication] = useState<LoanApplication | null>(null);
   const [loading, setLoading] = useState(true);
-  const [counterOfferAmount, setCounterOfferAmount] = useState('');
-  const [counterOfferRate, setCounterOfferRate] = useState('');
-  const [counterOfferTerm, setCounterOfferTerm] = useState('');
-  const [showCounterOffer, setShowCounterOffer] = useState(false);
 
   useEffect(() => {
     fetchApplication();
@@ -15,6 +11,7 @@ export function useFetchApplicationReview(id: string) {
 
   const fetchApplication = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/review`);
       if (!response.ok) throw new Error('Failed to fetch application');
       const data = await response.json();
@@ -29,14 +26,6 @@ export function useFetchApplicationReview(id: string) {
   return {
     application,
     loading,
-    counterOfferAmount,
-    setCounterOfferAmount,
-    counterOfferRate,
-    setCounterOfferRate,
-    counterOfferTerm,
-    setCounterOfferTerm,
-    showCounterOffer,
-    setShowCounterOffer,
     fetchApplication,
   };
 }

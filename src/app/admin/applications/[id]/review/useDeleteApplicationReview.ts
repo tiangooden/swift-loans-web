@@ -12,14 +12,14 @@ export function useDeleteApplicationReview() {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to delete application review');
+                throw new Error('Failed to delete application');
             }
 
-            notifications.success('Application review deleted successfully!');
+            notifications.success('Application deleted successfully!');
             return true;
         } catch (error: any) {
-            console.error('Error deleting application review:', error);
-            notifications.error(`Error deleting application review: ${error.message}`);
+            console.error('Error deleting application:', error);
+            notifications.error(`Error deleting application: ${error.message}`);
             return false;
         } finally {
             setLoading(false);

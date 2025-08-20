@@ -1,6 +1,6 @@
 'use client';
 
-import { DollarSign, User, Briefcase, AlertCircle, X, Check } from 'lucide-react';
+import { DollarSign, User, Briefcase, AlertCircle, X, Check, MessageSquareReply, MailCheck } from 'lucide-react';
 import AdminLoanOffers from './components/AdminLoanOffers';
 import { useParams, useRouter } from 'next/navigation';
 import AdminNav from '@/app/admin/components/AdminNav';
@@ -11,18 +11,24 @@ import { getStatusColor } from '@/app/shared/status';
 import { useFetchApplicationReview } from './useFetchApplicationReview';
 import { useApproveApplicationReview } from './useApproveApplicationReview';
 import { useRejectApplicationReview } from './useRejectApplicationReview';
+import { useCounterOfferApplicationReview } from './hooks/useCounterOfferApplicationReview';
+import { useDeleteApplicationReview } from './useDeleteApplicationReview';
 
 export default function LoanReviewPage() {
   const router = useRouter();
   const params = useParams();
   const { id } = params;
-  const { application, loading, counterOfferAmount,
-    setCounterOfferAmount, counterOfferRate, setCounterOfferRate,
-    counterOfferTerm, setCounterOfferTerm, showCounterOffer, setShowCounterOffer,
-    fetchApplication } = useFetchApplicationReview(id as string);
-  const { approveApplicationReview, loading: approving, error: approveError } = useApproveApplicationReview();
-  const { rejectApplicationReview, loading: rejecting, error: rejectError } = useRejectApplicationReview();
+  const { application, loading, fetchApplication } = useFetchApplicationReview(id as string);
 
+  const { approveApplicationReview, loading: approveLoading } = useApproveApplicationReview();
+  const { rejectApplicationReview, loading: rejectLoading } = useRejectApplicationReview();
+  const { deleteApplicationReview, loading: deleteLoading } = useDeleteApplicationReview();
+  const { counterOfferApplicationReview, loading: counterLoading } = useCounterOfferApplicationReview();
+
+  const [counterOfferAmount, setCounterOfferAmount] = useState('');
+  const [counterOfferRate, setCounterOfferRate] = useState('');
+  const [counterOfferTerm, setCounterOfferTerm] = useState('');
+  const [showCounterOffer, setShowCounterOffer] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [decisionReason, setDecisionReason] = useState('');
 
@@ -37,9 +43,9 @@ export default function LoanReviewPage() {
     }
     const success = await rejectApplicationReview(id as string, { decision_reason: decisionReason });
     if (success) {
-      setShowRejectModal(false);
-      setDecisionReason('');
       router.push('/admin/applications');
+      // setShowRejectModal(false);
+      // setDecisionReason('');
     }
   };
 
@@ -195,26 +201,27 @@ export default function LoanReviewPage() {
                               router.push('/admin/applications');
                             }
                           }}
-                          disabled={approving}
+                          disabled={approveLoading}
                           className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:opacity-50 flex items-center justify-center"
                         >
-                          <Check className="h-4 w-4 mr-2" />
-                          Approve
+                          <Check className="h-5 w-5 mr-2" />
+                          Approve Application
                         </button>
 
                         <button
                           onClick={handleRejectClick}
-                          disabled={rejecting}
+                          disabled={rejectLoading}
                           className="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 disabled:opacity-50 flex items-center justify-center"
                         >
-                          <X className="h-4 w-4 mr-2" />
-                          Reject
+                          <X className="h-5 w-5 mr-2" />
+                          Reject Application
                         </button>
 
                         <button
                           onClick={() => setShowCounterOffer(!showCounterOffer)}
-                          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
+                          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center"
                         >
+                          <MailCheck className="h-5 w-5 mr-2" />
                           Counter Offer
                         </button>
 
@@ -252,9 +259,26 @@ export default function LoanReviewPage() {
                               />
                             </div>
                             <button
-                              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
+                              onClick={async () => {
+                                if (!counterOfferAmount || !counterOfferRate || !counterOfferTerm) {
+                                  notifications.info('Please fill all counter offer fields.');
+                                  return;
+                                }
+                                const loanDetails = {
+                                  principal: parseFloat(counterOfferAmount),
+                                  interest_rate: parseFloat(counterOfferRate),
+                                  term_in_days: parseInt(counterOfferTerm),
+                                };
+                                const success = await counterOfferApplicationReview(id as string, loanDetails);
+                                if (success) {
+                                  fetchApplication();
+                                  setShowCounterOffer(false);
+                                }
+                              }}
+                              disabled={counterLoading}
+                              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center"
                             >
-                              Send Counter Offer
+                              Submit Counter Offer
                             </button>
                           </div>
                         )}
@@ -297,7 +321,7 @@ export default function LoanReviewPage() {
               </button>
               <button
                 onClick={confirmReject}
-                disabled={rejecting}
+                disabled={rejectLoading}
                 className="px-6 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
               >
                 Confirm Rejection
