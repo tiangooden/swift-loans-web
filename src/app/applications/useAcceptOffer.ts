@@ -14,7 +14,6 @@ export function useAcceptOffer() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: 'accepted' }),
       });
 
       if (!response.ok) {

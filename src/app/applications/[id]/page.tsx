@@ -18,7 +18,7 @@ export default function LoanApplicationDetailsPage() {
         if (application) {
             const success = await withdrawApplication(application.id);
             if (success) {
-                fetchApplications();
+                router.push('/applications');
             }
         }
     };

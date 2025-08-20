@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, X } from 'lucide-react';
+import { Check, Download, X } from 'lucide-react';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { useAcceptOffer } from '../../useAcceptOffer';
@@ -13,8 +13,8 @@ interface LoanOffersProps {
 }
 
 export default function LoanOffers({ offers, applicationId, fetchApplicationDetails }: LoanOffersProps) {
-    const { acceptOffer, accepting, acceptError } = useAcceptOffer();
-    const { rejectOffer, rejecting, rejectError } = useRejectOffer();
+    const { acceptOffer, loading: accepting, error: acceptError } = useAcceptOffer();
+    const { rejectOffer, loading: rejecting, error: rejectError } = useRejectOffer();
 
     const handleAcceptOffer = async (offerId: string) => {
         const success = await acceptOffer(offerId);
@@ -67,24 +67,29 @@ export default function LoanOffers({ offers, applicationId, fetchApplicationDeta
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDateString(offer.created_at)}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            {offer.status === 'offered' && (
-                                                <div className="flex items-center space-x-2">
-                                                    <button
-                                                        onClick={() => handleAcceptOffer(offer.id)}
-                                                        className="text-green-600 hover:text-green-900"
-                                                        title="Accept Offer"
-                                                    >
-                                                        <Check className="h-5 w-5" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleRejectOffer(offer.id)}
-                                                        className="text-red-600 hover:text-red-900"
-                                                        title="Reject Offer"
-                                                    >
-                                                        <X className="h-5 w-5" />
-                                                    </button>
-                                                </div>
-                                            )}
+                                            <div className="flex items-center space-x-2">
+                                                <button
+                                                    onClick={() => handleAcceptOffer(offer.id)}
+                                                    className="text-green-600 hover:text-green-900"
+                                                    title="Accept Offer"
+                                                >
+                                                    <Check className="h-5 w-5" />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleRejectOffer(offer.id)}
+                                                    className="text-red-600 hover:text-red-900"
+                                                    title="Reject Offer"
+                                                >
+                                                    <X className="h-5 w-5" />
+                                                </button>
+                                                <button
+                                                    onClick={() => console.log('generate approval doc')}
+                                                    className="text-blue-600 hover:text-blue-900"
+                                                    title="Reject Offer"
+                                                >
+                                                    <Download className="h-5 w-5" />
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

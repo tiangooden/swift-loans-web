@@ -14,7 +14,6 @@ export function useRejectOffer() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: 'rejected' }),
       });
       if (!response.ok) {
         throw new Error('Failed to reject offer');

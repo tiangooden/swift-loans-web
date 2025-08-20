@@ -5,6 +5,7 @@ export const getStatusColor = (status: string) => {
     const colors = {
         submitted: 'bg-gray-100 text-blue-800',
         approved: 'bg-green-100 text-green-800',
+        accepted: 'bg-green-100 text-green-800',
         offered: 'bg-orange-100 text-orange-800',
         rejected: 'bg-red-100 text-red-800',
         countered: 'bg-yellow-100 text-gray-800',
@@ -21,6 +22,7 @@ export const getStatusColor = (status: string) => {
 export const getStatusIcon = (status: string) => {
     switch (status) {
         case 'approved': return <CheckCircle className="h-4 w-4" />;
+        case 'accepted': return <CheckCircle className="h-4 w-4" />;
         case 'rejected': return <XCircle className="h-4 w-4" />;
         case 'offered': return <Clock className="h-4 w-4" />;
         case 'pending': return <Clock className="h-4 w-4" />;
