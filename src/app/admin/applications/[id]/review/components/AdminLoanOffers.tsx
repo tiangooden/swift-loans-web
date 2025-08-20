@@ -1,13 +1,25 @@
 'use client';
 
-import { Check, X } from 'lucide-react';
+import { Check, X, Trash2 } from 'lucide-react';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
-import { useFetchApplicationReview } from '../useFetchApplicationReview';
 import { AdminLoanOffersProps } from '../types';
+import { useDeleteOffer } from '../useDeleteOffer';
 
-export default function AdminLoanOffers({ offers, applicationId, fetchApplication }: AdminLoanOffersProps) {
-    const { } = useFetchApplicationReview(applicationId);
+export default function AdminLoanOffers({ offers, fetchApplication }: AdminLoanOffersProps) {
+    const { deleteOffer, loading: isDeleting, error: deleteError } = useDeleteOffer();
+
+    const handleDeleteOffer = async (id: string) => {
+        if (window.confirm('Are you sure you want to delete this offer?')) {
+            try {
+                const success = await deleteOffer(id);
+                if (success) {
+                    fetchApplication();
+                }
+            } catch (error: any) {
+            }
+        }
+    };
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
@@ -45,22 +57,16 @@ export default function AdminLoanOffers({ offers, applicationId, fetchApplicatio
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDateString(offer.created_at)}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        {offer.status === 'offered' && (
-                                            <div className="flex items-center space-x-2">
-                                                <button
-                                                    className="text-green-600 hover:text-green-900"
-                                                    title="Accept Offer"
-                                                >
-                                                    <Check className="h-5 w-5" />
-                                                </button>
-                                                <button
-                                                    className="text-red-600 hover:text-red-900"
-                                                    title="Reject Offer"
-                                                >
-                                                    <X className="h-5 w-5" />
-                                                </button>
-                                            </div>
-                                        )}
+                                        <div className="flex items-center space-x-2">
+                                            <button
+                                                onClick={() => handleDeleteOffer(offer.id)}
+                                                className="text-red-400 hover:text-red-900 disabled:opacity-50"
+                                                title="Delete Offer"
+                                                disabled={isDeleting}
+                                            >
+                                                <Trash2 className="h-5 w-5" />
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

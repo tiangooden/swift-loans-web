@@ -3,8 +3,8 @@ import getCurrentUser from '@/app/shared/get-user';
 import { ApplicationsRepository } from '@/app/repository/applications.repository';
 import { OffersRepository } from '@/app/repository/offers.repository';
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
   try {
     const loanOffers = await OffersRepository.find({
       where: {
@@ -19,6 +19,20 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json(loanOffers);
   } catch (error: any) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = await params;
+  if (!id) {
+    return NextResponse.json({ error: 'Offer ID is required' }, { status: 400 });
+  }
+  try {
+    await OffersRepository.delete({ id: id });
+    return NextResponse.json({ message: 'Offer deleted successfully' }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting offer:', error);
+    return NextResponse.json({ error: 'Failed to delete offer' }, { status: 500 });
   }
 }
 

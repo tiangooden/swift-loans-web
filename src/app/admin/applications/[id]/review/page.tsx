@@ -13,16 +13,14 @@ import { useApproveApplicationReview } from './useApproveApplicationReview';
 import { useRejectApplicationReview } from './useRejectApplicationReview';
 import { useCounterOfferApplicationReview } from './useCounterOfferApplicationReview';
 import { useDeleteApplicationReview } from './useDeleteApplicationReview';
+import { useDeleteOffer } from './useDeleteOffer';
 
 export default function LoanReviewPage() {
   const router = useRouter();
-  const params = useParams();
-  const { id } = params;
+  const { id } = useParams();
   const { application, loading, fetchApplication } = useFetchApplicationReview(id as string);
-
   const { approveApplicationReview, loading: approveLoading } = useApproveApplicationReview();
   const { rejectApplicationReview, loading: rejectLoading } = useRejectApplicationReview();
-  const { deleteApplicationReview, loading: deleteLoading } = useDeleteApplicationReview();
   const { counterOfferApplicationReview, loading: counterLoading } = useCounterOfferApplicationReview();
 
   const [counterOfferAmount, setCounterOfferAmount] = useState('');
@@ -44,8 +42,7 @@ export default function LoanReviewPage() {
     const success = await rejectApplicationReview(id as string, { decision_reason: decisionReason });
     if (success) {
       router.push('/admin/applications');
-      // setShowRejectModal(false);
-      // setDecisionReason('');
+      setDecisionReason('');
     }
   };
 
@@ -291,7 +288,6 @@ export default function LoanReviewPage() {
                 {/* Loan Offers */}
                 <AdminLoanOffers
                   offers={application.offers}
-                  applicationId={application.id}
                   fetchApplication={fetchApplication}
                 />
               </div>

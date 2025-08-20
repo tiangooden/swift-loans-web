@@ -37,6 +37,5 @@ export interface LoanApplication {
 
 export interface AdminLoanOffersProps {
   offers: any[];
-  applicationId: string;
   fetchApplication: () => void;
 }
