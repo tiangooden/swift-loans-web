@@ -1,12 +1,12 @@
 'use client';
 
-import { useFetchUserProfile } from './useFetchUserProfile';
-import { useProfileUpdate } from './useProfileUpdate';
+import { useFetchUser } from './useFetchUser';
+import { useUpdateUser } from './useUpdateUser';
 import UserForm from './UserForm';
 
 export default function UserProfilePage() {
-    const { userProfile, loading, error, fetchUserProfile } = useFetchUserProfile();
-    const { updateProfile, loading: saving, error: saveError } = useProfileUpdate(fetchUserProfile);
+    const { userProfile, loading, error, fetchUserProfile } = useFetchUser();
+    const { updateProfile, loading: saving, error: saveError } = useUpdateUser(fetchUserProfile);
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading profile...</div>;

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { notifications } from '@/app/shared/notifications';
 import { User } from './types';
 
-export function useProfileUpdate(onSuccess?: () => void) {
+export function useUpdateUser(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

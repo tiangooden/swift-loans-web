@@ -1,16 +1,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
-import { notifications } from '../shared/notifications';
-import { LoanApplication } from './types';
+import { notifications } from '../../shared/notifications';
+import { LoanApplication } from '../types';
 
-export function useLoanApplicationDetails(id: string) {
+export function useFetchApplication(id: string) {
     const { data: session, status } = useSession();
     const [application, setApplication] = useState<LoanApplication | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const fetchApplicationDetails = useCallback(async () => {
-        if (status === 'loading' || !session || !id) return;
         setLoading(true);
         setError(null);
         try {

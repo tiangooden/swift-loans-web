@@ -1,11 +1,12 @@
 'use client';
 
 import EmploymentForm from './EmploymentForm';
-import { useEmploymentDetails, useSaveEmploymentDetails } from './hooks';
+import { useFetchEmployment } from './useFetchEmployment';
+import { useSaveEmployment } from './useSaveEmployment';
 
 export default function EmploymentPage() {
-    const { employment, loading, error, fetchEmployment } = useEmploymentDetails();
-    const { saveEmployment, loading: saving, error: saveError } = useSaveEmploymentDetails(fetchEmployment);
+    const { employment, loading, error, fetchEmployment } = useFetchEmployment();
+    const { saveEmployment, loading: saving, error: saveError } = useSaveEmployment(fetchEmployment);
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading employment details...</div>;

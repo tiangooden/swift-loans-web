@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { notifications } from '../shared/notifications';
 
-export function useRejectLoanOffer() {
+export function useRejectOffer() {
   const [rejecting, setRejecting] = useState(false);
   const [rejectError, setRejectError] = useState<string | null>(null);
 

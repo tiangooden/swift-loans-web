@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { notifications } from '../shared/notifications';
 
-export function useSaveLoanApplication() {
+export function useSaveApplication() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 

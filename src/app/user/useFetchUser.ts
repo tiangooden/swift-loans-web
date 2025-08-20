@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { User } from './types';
 
-export const useFetchUserProfile = () => {
+export const useFetchUser = () => {
   const [userProfile, setUserProfile] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchUserProfile();
+    fetchUser();
   }, []);
 
-  const fetchUserProfile = async () => {
+  const fetchUser = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`);
       if (!response.ok) {
@@ -25,5 +25,5 @@ export const useFetchUserProfile = () => {
     }
   };
 
-  return { userProfile, loading, error, fetchUserProfile };
+  return { userProfile, loading, error, fetchUserProfile: fetchUser };
 };

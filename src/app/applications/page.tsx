@@ -5,9 +5,9 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import ApplicationForm from './ApplicationForm';
 import formatDateString from '../shared/date';
-import { useFetchLoanApplications } from './useFetchLoanApplications';
-import { useSaveLoanApplication } from './useSaveLoanApplication';
-import { useDeleteLoanApplication } from './useDeleteLoanApplication';
+import { useFetchApplications } from './useFetchApplications';
+import { useSaveApplication } from './useSaveApplication';
+import { useDeleteApplication } from './useDeleteApplication';
 
 interface LoanApplication {
   id: string;
@@ -25,9 +25,9 @@ export default function LoanApplicationsPage() {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [editingApplication, setEditingApplication] = useState<LoanApplication | null>(null);
-  const { applications, loading, error, fetchApplications } = useFetchLoanApplications();
-  const { saveApplication, saving, saveError } = useSaveLoanApplication();
-  const { deleteApplication, deleting, deleteError } = useDeleteLoanApplication();
+  const { applications, loading, error, fetchApplications } = useFetchApplications();
+  const { saveApplication, saving, saveError } = useSaveApplication();
+  const { deleteApplication, deleting, deleteError } = useDeleteApplication();
 
   useEffect(() => {
     if (status === 'loading') return;

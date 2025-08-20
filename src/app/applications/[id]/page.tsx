@@ -5,12 +5,12 @@ import { ArrowLeft } from 'lucide-react';
 import LoanOffers from './components/LoanOffers';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
-import { useLoanApplicationDetails } from '../useLoanApplicationDetails';
+import { useFetchApplication } from './useFetchApplication';
 
 export default function LoanApplicationDetailsPage() {
     const router = useRouter();
     const params = useParams();
-    const { application, loading, error, fetchApplicationDetails } = useLoanApplicationDetails(params.id as string);
+    const { application, loading, error, fetchApplicationDetails } = useFetchApplication(params.id as string);
 
 
     const formatCurrency = (amount: number) => {

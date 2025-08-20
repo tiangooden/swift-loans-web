@@ -3,14 +3,13 @@ import { useSession } from 'next-auth/react';
 import { notifications } from '../shared/notifications';
 import { LoanApplication } from './types';
 
-export function useFetchLoanApplications() {
+export function useFetchApplications() {
   const { data: session, status } = useSession();
   const [applications, setApplications] = useState<LoanApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchApplications = useCallback(async () => {
-    if (status === 'loading' || !session) return;
     setLoading(true);
     setError(null);
     try {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Employment } from './types';
 
-export function useEmploymentDetails() {
+export function useFetchEmployment() {
     const [employment, setEmployment] = useState<Employment | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);

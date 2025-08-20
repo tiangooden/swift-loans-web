@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { notifications } from '../shared/notifications';
 import { Employment } from './types';
 
-export function useSaveEmploymentDetails(onSuccess?: () => void) {
+export function useSaveEmployment(onSuccess?: () => void) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 

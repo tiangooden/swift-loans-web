@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { notifications } from "../shared/notifications";
 
-export function useDeleteLoanApplication() {
+export function useDeleteApplication() {
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 

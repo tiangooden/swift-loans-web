@@ -3,8 +3,8 @@
 import { Check, X } from 'lucide-react';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
-import { useAcceptLoanOffer } from '../../useAcceptLoanOffer';
-import { useRejectLoanOffer } from '../../useRejectLoanOffer';
+import { useAcceptOffer } from '../../useAcceptOffer';
+import { useRejectOffer } from '../../useRejectOffer';
 
 interface LoanOffersProps {
     offers: any[];
@@ -13,8 +13,8 @@ interface LoanOffersProps {
 }
 
 export default function LoanOffers({ offers, applicationId, fetchApplicationDetails }: LoanOffersProps) {
-    const { acceptOffer, accepting, acceptError } = useAcceptLoanOffer();
-    const { rejectOffer, rejecting, rejectError } = useRejectLoanOffer();
+    const { acceptOffer, accepting, acceptError } = useAcceptOffer();
+    const { rejectOffer, rejecting, rejectError } = useRejectOffer();
 
     const handleAcceptOffer = async (offerId: string) => {
         const success = await acceptOffer(offerId);
