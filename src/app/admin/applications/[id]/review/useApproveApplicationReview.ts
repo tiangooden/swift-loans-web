@@ -10,7 +10,7 @@ export function useApproveApplicationReview() {
         setError(null);
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}/approve`, {
-                method: 'POST',
+                method: 'PATCH',
             });
             if (!response.ok) {
                 throw new Error('Failed to approve application');
