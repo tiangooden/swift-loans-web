@@ -3,11 +3,11 @@ import React from 'react';
 import { Eye } from "lucide-react";
 import AdminNav from '../components/AdminNav';
 import formatDateString from '@/app/shared/date';
-import { useAdminLoanApplications } from './useFetchAdminLoanApplications';
+import { useFetchAdminApplications } from './useFetchAdminApplications';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 
 export default function AdminLoans() {
-  const { searchTerm, setSearchTerm, filterStatus, setFilterStatus, loanApplications, loading } = useAdminLoanApplications();
+  const { searchTerm, setSearchTerm, filterStatus, setFilterStatus, applications: loanApplications, loading } = useFetchAdminApplications();
 
   const filteredLoans = loanApplications;
 

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getCurrentUser from '@/app/shared/get-user';
 import { ApplicationsRepository } from '@/app/repository/applications.repository';
-import { LoanOffersRepository } from '@/app/repository/offers.repository';
+import { OffersRepository } from '@/app/repository/offers.repository';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   try {
-    const loanOffers = await LoanOffersRepository.find({
+    const loanOffers = await OffersRepository.find({
       where: {
         applications: {
           id: id
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         updated_at: new Date(),
       },
     });
-    const newOffer = await LoanOffersRepository.create({
+    const newOffer = await OffersRepository.create({
       applications: {
         connect: {
           id: id,

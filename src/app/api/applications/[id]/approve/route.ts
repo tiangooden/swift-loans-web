@@ -1,19 +1,19 @@
 import { ApplicationsRepository } from '@/app/repository/applications.repository';
-import { LoanOffersRepository } from '@/app/repository/offers.repository';
+import { OffersRepository } from '@/app/repository/offers.repository';
+import { INTEREST_RATE } from '@/app/shared/constants';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   const { id } = await params;
   try {
-    const { amount, term, interest_rate } = await request.json();
-    await ApplicationsRepository.update({
+    const application = await ApplicationsRepository.update({
       where: { id: id },
       data: { status: 'approved' },
     });
-    await LoanOffersRepository.create({
-      principal: amount,
-      term_in_days: term,
-      interest_rate: interest_rate,
+    await OffersRepository.create({
+      principal: application.amount_requested,
+      term_in_days: application.term_in_days,
+      interest_rate: INTEREST_RATE[application.term_in_days?.toString() ?? '14'],
       applications: { connect: { id } },
       status: 'approved',
       created_at: new Date(),

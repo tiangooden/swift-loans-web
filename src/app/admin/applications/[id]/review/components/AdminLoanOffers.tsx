@@ -3,16 +3,11 @@
 import { Check, X } from 'lucide-react';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
-import { useLoanApplicationReview } from '../useFetchLoanApplicationReview';
+import { useFetchApplicationReview } from '../useFetchApplicationReview';
+import { AdminLoanOffersProps } from '../types';
 
-interface AdminLoanOffersProps {
-    offers: any[];
-    applicationId: string;
-    fetchApplicationDetails: () => void;
-}
-
-export default function AdminLoanOffers({ offers, applicationId, fetchApplicationDetails }: AdminLoanOffersProps) {
-    const { handleAction, actionLoading } = useLoanApplicationReview(applicationId);
+export default function AdminLoanOffers({ offers, applicationId, fetchApplication }: AdminLoanOffersProps) {
+    const { } = useFetchApplicationReview(applicationId);
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
@@ -53,16 +48,12 @@ export default function AdminLoanOffers({ offers, applicationId, fetchApplicatio
                                         {offer.status === 'offered' && (
                                             <div className="flex items-center space-x-2">
                                                 <button
-                                                    onClick={() => handleAction('accept_offer', { offer_id: offer.id })} // Assuming 'accept_offer' action
-                                                    disabled={actionLoading}
                                                     className="text-green-600 hover:text-green-900"
                                                     title="Accept Offer"
                                                 >
                                                     <Check className="h-5 w-5" />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleAction('reject_offer', { offer_id: offer.id })} // Assuming 'reject_offer' action
-                                                    disabled={actionLoading}
                                                     className="text-red-600 hover:text-red-900"
                                                     title="Reject Offer"
                                                 >

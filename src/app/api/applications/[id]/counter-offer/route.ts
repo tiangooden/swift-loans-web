@@ -1,5 +1,5 @@
 import { ApplicationsRepository } from '@/app/repository/applications.repository';
-import { LoanOffersRepository } from '@/app/repository/offers.repository';
+import { OffersRepository } from '@/app/repository/offers.repository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         updated_at: new Date(),
       },
     });
-    await LoanOffersRepository.create({
+    await OffersRepository.create({
       ...loanDetails,
       application_id: id,
       status: 'submitted',

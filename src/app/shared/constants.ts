@@ -17,3 +17,8 @@ export const LOAN_STATUS = {
     REPAID: 'repaid',
     OVERDUE: 'overdue'
 }
+
+export const INTEREST_RATE: Record<string, number> = {
+  '14': 25,
+  '28': 30,
+};

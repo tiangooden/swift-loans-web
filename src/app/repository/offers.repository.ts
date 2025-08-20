@@ -1,7 +1,7 @@
 import { offers, Prisma } from '../../generated/prisma';
 import { prisma } from '../shared/prisma';
 
-export const LoanOffersRepository = {
+export const OffersRepository = {
 
   create: async (data: Prisma.offersCreateInput): Promise<offers> => {
     return prisma.offers.create({ data });

@@ -1,4 +1,4 @@
-import { LoanOffersRepository } from '@/app/repository/offers.repository';
+import { OffersRepository } from '@/app/repository/offers.repository';
 import { OFFER_STATUS } from '@/app/shared/constants';
 import { NextResponse } from 'next/server';
 
@@ -8,7 +8,7 @@ export async function PATCH(
 ) {
     try {
         const offerId = params.id;
-        const updatedOffer = await LoanOffersRepository.update({
+        const updatedOffer = await OffersRepository.update({
             where: { id: offerId },
             data: { status: OFFER_STATUS.REJECTED },
         });
