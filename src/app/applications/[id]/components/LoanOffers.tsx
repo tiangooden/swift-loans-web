@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Download, X } from 'lucide-react';
+import { Check, Download, Upload, X } from 'lucide-react';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { useAcceptOffer } from '../../useAcceptOffer';
@@ -85,9 +85,16 @@ export default function LoanOffers({ offers, applicationId, fetchApplicationDeta
                                                 <button
                                                     onClick={() => console.log('generate approval doc')}
                                                     className="text-blue-600 hover:text-blue-900"
-                                                    title="Reject Offer"
+                                                    title="Download Approval Letter"
                                                 >
                                                     <Download className="h-5 w-5" />
+                                                </button>
+                                                <button
+                                                    onClick={() => console.log('upload approval doc')}
+                                                    className="text-blue-600 hover:text-blue-900"
+                                                    title="Upload Approval Letter"
+                                                >
+                                                    <Upload className="h-5 w-5" />
                                                 </button>
                                             </div>
                                         </td>
