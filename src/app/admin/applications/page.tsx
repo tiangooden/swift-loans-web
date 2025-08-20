@@ -1,9 +1,10 @@
 'use client'
 import React from 'react';
-import { Search, Eye, Clock, CheckCircle, AlertTriangle } from "lucide-react";
+import { Eye } from "lucide-react";
 import AdminNav from '../components/AdminNav';
-import { useAdminLoanApplications, getStatusColor, getStatusIcon } from './hooks';
 import formatDateString from '@/app/shared/date';
+import { useAdminLoanApplications } from './useFetchAdminLoanApplications';
+import { getStatusColor, getStatusIcon } from './utils';
 
 export default function AdminLoans() {
   const { searchTerm, setSearchTerm, filterStatus, setFilterStatus, loanApplications, loading } = useAdminLoanApplications();

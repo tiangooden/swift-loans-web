@@ -1,7 +1,8 @@
 'use client';
 
 import BankAccountForm from './BankAccountForm';
-import { useFetchBankAccounts, useSaveBankAccount } from './hooks';
+import { useFetchBankAccounts } from './useFetchBankAccounts';
+import { useSaveBankAccount } from './useSaveBankAccount';
 
 const BankAccountsPage = () => {
   const { account, loading: fetchLoading, error: fetchError, fetchAccount } = useFetchBankAccounts();

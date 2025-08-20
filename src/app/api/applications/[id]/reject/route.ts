@@ -1,11 +1,11 @@
-import { LoanApplicationsRepository } from '@/app/repository/loan_applications.repository';
+import { ApplicationsRepository } from '@/app/repository/applications.repository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
     const { decision_reason } = await request.json();
-    await LoanApplicationsRepository.update({
+    await ApplicationsRepository.update({
       where: { id: id },
       data: { status: 'rejected', decision_reason: decision_reason, decided_at: new Date() },
     });

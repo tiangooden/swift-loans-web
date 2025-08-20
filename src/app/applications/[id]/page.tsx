@@ -1,11 +1,11 @@
 'use client';
 
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Check, X } from 'lucide-react';
-import { useLoanApplicationDetails } from '../hooks';
+import { ArrowLeft } from 'lucide-react';
 import LoanOffers from './components/LoanOffers';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
+import { useLoanApplicationDetails } from '../useLoanApplicationDetails';
 
 export default function LoanApplicationDetailsPage() {
     const router = useRouter();

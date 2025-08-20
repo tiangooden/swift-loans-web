@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { User } from './hooks';
+import { User } from './types';
 
 interface UserFormProps {
   data: User | null;

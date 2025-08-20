@@ -34,7 +34,6 @@ const Dashboard = async () => {
             Here's what's happening with your account today.
           </p>
         </div>
-
         <DashboardContent userData={userData} />
       </div>
     </div>

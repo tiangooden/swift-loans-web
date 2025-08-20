@@ -1,7 +1,7 @@
 import { applications, Prisma } from '../../generated/prisma';
 import { prisma } from '../shared/prisma';
 
-export const LoanApplicationsRepository = {
+export const ApplicationsRepository = {
 
   create: async (data: Prisma.applicationsCreateInput): Promise<applications> => {
     return prisma.applications.create({ data });

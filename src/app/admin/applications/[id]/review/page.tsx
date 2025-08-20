@@ -1,20 +1,22 @@
 'use client';
 
-import { DollarSign, Clock, User, Mail, Phone, MapPin, Briefcase, Building, CreditCard, Calendar, AlertCircle, X, Check } from 'lucide-react';
+import { DollarSign, User, Briefcase, AlertCircle, X, Check } from 'lucide-react';
 import AdminLoanOffers from './components/AdminLoanOffers';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import AdminNav from '@/app/admin/components/AdminNav';
-import { useLoanApplicationReview } from './hooks';
 import { useState } from 'react';
 import { notifications } from '@/app/shared/notifications';
 import formatDateString from '@/app/shared/date';
+import { useLoanApplicationReview } from './useFetchLoanApplicationReview';
 
 export default function LoanReviewPage() {
   const router = useRouter();
+  const params = useParams();
+  const { id } = params;
   const { application, loading, actionLoading, counterOfferAmount,
     setCounterOfferAmount, counterOfferRate, setCounterOfferRate,
     counterOfferTerm, setCounterOfferTerm, showCounterOffer, setShowCounterOffer,
-    handleAction, getStatusColor, fetchApplication } = useLoanApplicationReview();
+    handleAction, getStatusColor, fetchApplication } = useLoanApplicationReview(id as string);
 
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [decisionReason, setDecisionReason] = useState('');

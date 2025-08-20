@@ -1,45 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { notifications } from '@/app/shared/notifications';
+import { LoanApplication } from './types';
 
-interface LoanApplication {
-  id: string;
-  amount_requested: number;
-  term_in_days: number;
-  status: string;
-  created_at: string;
-  purpose: string;
-  monthly_income: number;
-  users: {
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone_number: string;
-    street_address: string;
-    city: string;
-    state: string;
-    zip_code: string;
-    date_of_birth: string;
-    ssn: string;
-    bank_account: {
-      bank_name: string;
-      branch_name: string;
-      account_name: string;
-      account_type: string;
-      account_number: string;
-    } | null;
-    employment: {
-      employer_name: string;
-      job_title: string;
-      start_date: string;
-      monthly_income: number;
-      payday_day: number;
-    } | null;
-  },
-  offers: [];
-}
-
-export function useLoanApplicationReview() {
+export function useLoanApplicationReview(id: string) {
   const params = useParams();
   const router = useRouter();
   const [application, setApplication] = useState<LoanApplication | null>(null);
@@ -50,13 +14,9 @@ export function useLoanApplicationReview() {
   const [counterOfferTerm, setCounterOfferTerm] = useState('');
   const [showCounterOffer, setShowCounterOffer] = useState(false);
 
-  const id = params.id as string;
-
   useEffect(() => {
-    if (id) {
-      fetchApplication();
-    }
-  }, [id]);
+    fetchApplication();
+  }, []);
 
   const fetchApplication = async () => {
     try {

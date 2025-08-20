@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 interface ApplicationFormProps {
   data: {
-    id: number;
+    id: string;
     amount_requested: number;
     term_in_days: number;
     purpose: string;
@@ -15,7 +15,7 @@ interface ApplicationFormProps {
 
 export default function ApplicationForm({ data, onSubmit, onCancel }: ApplicationFormProps) {
   const [formData, setFormData] = useState({
-    id: 0,
+    id: '',
     amount_requested: 15000,
     term_in_days: 14,
     purpose: '',

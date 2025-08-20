@@ -1,9 +1,9 @@
 'use client';
 
 import { Check, X } from 'lucide-react';
-import { useLoanApplicationReview } from '../hooks';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
+import { useLoanApplicationReview } from '../useFetchLoanApplicationReview';
 
 interface AdminLoanOffersProps {
     offers: any[];
@@ -12,7 +12,7 @@ interface AdminLoanOffersProps {
 }
 
 export default function AdminLoanOffers({ offers, applicationId, fetchApplicationDetails }: AdminLoanOffersProps) {
-    const { handleAction, actionLoading } = useLoanApplicationReview();
+    const { handleAction, actionLoading } = useLoanApplicationReview(applicationId);
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {

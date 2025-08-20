@@ -1,5 +1,5 @@
-import { capital, Prisma } from '../../generated/prisma';
-import { prisma } from '../shared/prisma';
+import prisma from '@/app/shared/prisma';
+import { capital, Prisma } from '@/generated/prisma';
 
 export const CapitalRepository = {
 

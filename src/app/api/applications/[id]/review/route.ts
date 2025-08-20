@@ -1,10 +1,10 @@
-import { LoanApplicationsRepository } from '@/app/repository/loan_applications.repository';
+import { ApplicationsRepository } from '@/app/repository/applications.repository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
-    const application = await LoanApplicationsRepository.findById(id, {
+    const application = await ApplicationsRepository.findById(id, {
       users: {
         select: {
           first_name: true,

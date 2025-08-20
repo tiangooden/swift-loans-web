@@ -1,5 +1,5 @@
 
-import { ArrowLeft, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { CheckCircle, XCircle, Clock } from 'lucide-react';
 
 export const getStatusColor = (status: string) => {
     const colors = {

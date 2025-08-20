@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import ApplicationForm from './ApplicationForm';
-import { useFetchLoanApplications, useSaveLoanApplication, useDeleteLoanApplication } from './hooks';
 import formatDateString from '../shared/date';
+import { useFetchLoanApplications } from './useFetchLoanApplications';
+import { useSaveLoanApplication } from './useSaveLoanApplication';
+import { useDeleteLoanApplication } from './useDeleteLoanApplication';
 
 interface LoanApplication {
-  id: number;
+  id: string;
   amount_requested: number;
   term_in_days: number;
   purpose: string;
@@ -34,7 +36,7 @@ export default function LoanApplicationsPage() {
     }
   }, [session, status, router]);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this application?')) return;
 
     const success = await deleteApplication(id);

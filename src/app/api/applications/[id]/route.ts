@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { LoanApplicationsRepository } from '../../../repository/loan_applications.repository';
+import { ApplicationsRepository } from '../../../repository/applications.repository';
 import getCurrentUser from '@/app/shared/get-user';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
@@ -12,11 +12,11 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     if (!amount_requested || !term_in_days /*|| !purpose*/) {
         return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
-    const existingApplication = await LoanApplicationsRepository.findById(params.id);
+    const existingApplication = await ApplicationsRepository.findById(params.id);
     if (!existingApplication || existingApplication.user_id !== user.id) {
         return NextResponse.json({ error: 'Application not found' }, { status: 404 });
     }
-    const updatedApplication = await LoanApplicationsRepository.update({
+    const updatedApplication = await ApplicationsRepository.update({
         where: { id: params.id },
         data: {
             amount_requested: parseFloat(amount_requested),
@@ -41,12 +41,12 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         return NextResponse.json({ error: 'Missing status field' }, { status: 400 });
     }
 
-    const existingApplication = await LoanApplicationsRepository.findById(id);
+    const existingApplication = await ApplicationsRepository.findById(id);
     if (!existingApplication || existingApplication.user_id !== user.id) {
         return NextResponse.json({ error: 'Application not found' }, { status: 404 });
     }
 
-    const updatedApplication = await LoanApplicationsRepository.update({
+    const updatedApplication = await ApplicationsRepository.update({
         where: { id: id },
         data: {
             status: status,
@@ -59,11 +59,11 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
     const user = await getCurrentUser();
     const { id } = await params;
-    const existingApplication = await LoanApplicationsRepository.findById(id);
+    const existingApplication = await ApplicationsRepository.findById(id);
     if (!existingApplication || existingApplication.user_id !== user.id) {
         return NextResponse.json({ error: 'Application not found' }, { status: 404 });
     }
-    await LoanApplicationsRepository.update({
+    await ApplicationsRepository.update({
         where: { id: id },
         data: {
             is_deleted: true,
@@ -76,7 +76,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     const { id } = await params;
     // const user = await getCurrentUser();
-    const loanApplication = await LoanApplicationsRepository.findById(id, {
+    const loanApplication = await ApplicationsRepository.findById(id, {
         offers: {
             orderBy: {
                 created_at: 'desc',

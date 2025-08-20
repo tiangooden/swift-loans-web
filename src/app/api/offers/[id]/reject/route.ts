@@ -1,4 +1,4 @@
-import { LoanOffersRepository } from '@/app/repository/loan_offers.repository';
+import { LoanOffersRepository } from '@/app/repository/offers.repository';
 import { OFFER_STATUS } from '@/app/shared/constants';
 import { NextResponse } from 'next/server';
 

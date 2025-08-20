@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getCurrentUser from '@/app/shared/get-user';
-import { LoanApplicationsRepository } from '@/app/repository/loan_applications.repository';
-import { LoanOffersRepository } from '@/app/repository/loan_offers.repository';
+import { ApplicationsRepository } from '@/app/repository/applications.repository';
+import { LoanOffersRepository } from '@/app/repository/offers.repository';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -29,12 +29,12 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
   if (!amount || !interest_rate || !term) {
     return NextResponse.json({ error: 'Missing required offer fields' }, { status: 400 });
   }
-  const existingApplication = await LoanApplicationsRepository.findById(id);
+  const existingApplication = await ApplicationsRepository.findById(id);
   if (!existingApplication || existingApplication.user_id !== user.id) {
     return NextResponse.json({ error: 'Application not found or unauthorized' }, { status: 404 });
   }
   try {
-    await LoanApplicationsRepository.update({
+    await ApplicationsRepository.update({
       where: { id: id },
       data: {
         status: status,

@@ -1,12 +1,12 @@
-import { LoanApplicationsRepository } from '@/app/repository/loan_applications.repository';
-import { LoanOffersRepository } from '@/app/repository/loan_offers.repository';
+import { ApplicationsRepository } from '@/app/repository/applications.repository';
+import { LoanOffersRepository } from '@/app/repository/offers.repository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = await params;
     const { loanDetails } = await request.json();
-    await LoanApplicationsRepository.update({
+    await ApplicationsRepository.update({
       where: { id: id },
       data: {
         status: 'countered',

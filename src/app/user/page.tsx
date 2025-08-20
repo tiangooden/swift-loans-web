@@ -1,7 +1,8 @@
 'use client';
 
+import { useFetchUserProfile } from './useFetchUserProfile';
+import { useProfileUpdate } from './useProfileUpdate';
 import UserForm from './UserForm';
-import { useFetchUserProfile, useProfileUpdate } from './hooks';
 
 export default function UserProfilePage() {
     const { userProfile, loading, error, fetchUserProfile } = useFetchUserProfile();

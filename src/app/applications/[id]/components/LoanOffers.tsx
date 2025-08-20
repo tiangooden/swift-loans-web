@@ -1,9 +1,10 @@
 'use client';
 
 import { Check, X } from 'lucide-react';
-import { useAcceptLoanOffer, useRejectLoanOffer } from '../../hooks';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
+import { useAcceptLoanOffer } from '../../useAcceptLoanOffer';
+import { useRejectLoanOffer } from '../../useRejectLoanOffer';
 
 interface LoanOffersProps {
     offers: any[];

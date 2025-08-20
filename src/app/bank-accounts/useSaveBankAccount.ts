@@ -1,45 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useSession } from 'next-auth/react';
+import { useState, useCallback } from 'react';
 import { notifications } from '@/app/shared/notifications';
-
-export interface BankAccount {
-  id?: number;
-  user_id?: number | null;
-  bank_name: string | null;
-  branch_name: string | null;
-  account_name: string | null;
-  account_number: string | null;
-  account_type: string | null;
-}
-
-export const useFetchBankAccounts = () => {
-  const [account, setAccount] = useState<BankAccount | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchAccount = async () => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      if (data.length > 0) {
-        setAccount(data[0]);
-      }
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchAccount();
-  }, []);
-
-  return { account, loading, error, fetchAccount };
-};
+import { BankAccount } from './types';
 
 export const useSaveBankAccount = (onSuccess?: () => void) => {
   const [loading, setLoading] = useState(false);
