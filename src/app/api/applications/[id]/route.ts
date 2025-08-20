@@ -76,7 +76,13 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     const { id } = await params;
     // const user = await getCurrentUser();
-    const loanApplication = await LoanApplicationsRepository.findById(id, { offers: true });
+    const loanApplication = await LoanApplicationsRepository.findById(id, {
+        offers: {
+            orderBy: {
+                created_at: 'desc',
+            }
+        }
+    });
     if (!loanApplication) {
         return NextResponse.json({ error: 'Loan application not found' }, { status: 404 });
     }

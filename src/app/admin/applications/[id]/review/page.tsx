@@ -69,7 +69,7 @@ export default function LoanReviewPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h1 className="text-2xl font-bold text-gray-900">Loan Application Review</h1>
-                    <p className="text-sm text-gray-500 mt-1">Application #{application.id}</p>
+                    <p className="text-sm text-gray-500 mt-1">Application: {application.id}</p>
                   </div>
                   <button
                     onClick={() => router.push('/admin/applications')}
