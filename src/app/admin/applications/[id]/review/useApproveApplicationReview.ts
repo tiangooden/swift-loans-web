@@ -7,6 +7,7 @@ export function useApproveApplicationReview() {
 
     const approveApplicationReview = async (applicationId: string) => {
         setLoading(true);
+        setError(null);
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}/approve`, {
                 method: 'POST',

@@ -21,7 +21,7 @@ export default function LoanReviewPage() {
     counterOfferTerm, setCounterOfferTerm, showCounterOffer, setShowCounterOffer,
     fetchApplication } = useFetchApplicationReview(id as string);
   const { approveApplicationReview, loading: approving, error: approveError } = useApproveApplicationReview();
-  const { rejectApplicationReview } = useRejectApplicationReview();
+  const { rejectApplicationReview, loading: rejecting, error: rejectError } = useRejectApplicationReview();
 
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [decisionReason, setDecisionReason] = useState('');
@@ -35,7 +35,7 @@ export default function LoanReviewPage() {
       notifications.info('Please provide a reason for rejection.')
       return;
     }
-    const success = await rejectApplicationReview(id as string);
+    const success = await rejectApplicationReview(id as string, { decision_reason: decisionReason });
     if (success) {
       setShowRejectModal(false);
       setDecisionReason('');
@@ -204,6 +204,7 @@ export default function LoanReviewPage() {
 
                         <button
                           onClick={handleRejectClick}
+                          disabled={rejecting}
                           className="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 disabled:opacity-50 flex items-center justify-center"
                         >
                           <X className="h-4 w-4 mr-2" />
@@ -296,6 +297,7 @@ export default function LoanReviewPage() {
               </button>
               <button
                 onClick={confirmReject}
+                disabled={rejecting}
                 className="px-6 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
               >
                 Confirm Rejection
