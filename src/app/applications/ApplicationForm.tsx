@@ -1,17 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-interface ApplicationFormProps {
-  data: {
-    id: string;
-    amount_requested: number;
-    term_in_days: number;
-    purpose: string;
-  } | null;
-  onSubmit: (data: any) => void;
-  onCancel: () => void;
-}
+import { ApplicationFormProps } from './types';
 
 export default function ApplicationForm({ data, onSubmit, onCancel }: ApplicationFormProps) {
   const [formData, setFormData] = useState({

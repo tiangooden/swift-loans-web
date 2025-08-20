@@ -3,9 +3,11 @@ import { useState } from 'react';
 
 export const useCounterOfferApplicationReview = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const counterOfferApplicationReview = async (applicationId: string, data: any) => {
     setLoading(true);
+    setError(null);
     try {
       const response = await fetch(`/api/applications/${applicationId}/counter-offer`, {
         method: 'POST',
@@ -19,14 +21,15 @@ export const useCounterOfferApplicationReview = () => {
       }
       notifications.success('Application counter-offered successfully!');
       return true;
-    } catch (error) {
+    } catch (e: any) {
       console.error('Error counter offering application:', error);
       notifications.error('Failed to counter offer application.');
+      setError(e.message);
       return false;
     } finally {
       setLoading(false);
     }
   };
 
-  return { counterOfferApplicationReview, loading };
+  return { counterOfferApplicationReview, loading, error };
 };

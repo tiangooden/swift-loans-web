@@ -11,7 +11,7 @@ import { getStatusColor } from '@/app/shared/status';
 import { useFetchApplicationReview } from './useFetchApplicationReview';
 import { useApproveApplicationReview } from './useApproveApplicationReview';
 import { useRejectApplicationReview } from './useRejectApplicationReview';
-import { useCounterOfferApplicationReview } from './hooks/useCounterOfferApplicationReview';
+import { useCounterOfferApplicationReview } from './useCounterOfferApplicationReview';
 import { useDeleteApplicationReview } from './useDeleteApplicationReview';
 
 export default function LoanReviewPage() {

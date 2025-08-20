@@ -8,17 +8,7 @@ import formatDateString from '../shared/date';
 import { useFetchApplications } from './useFetchApplications';
 import { useSaveApplication } from './useSaveApplication';
 import { useDeleteApplication } from './useDeleteApplication';
-
-interface LoanApplication {
-  id: string;
-  amount_requested: number;
-  term_in_days: number;
-  purpose: string;
-  status: string;
-  submitted_at: string;
-  decided_at?: string;
-  decision_reason?: string;
-}
+import { LoanApplication } from './types';
 
 export default function LoanApplicationsPage() {
   const { data: session, status } = useSession();
@@ -26,8 +16,8 @@ export default function LoanApplicationsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingApplication, setEditingApplication] = useState<LoanApplication | null>(null);
   const { applications, loading, error, fetchApplications } = useFetchApplications();
-  const { saveApplication, saving, saveError } = useSaveApplication();
-  const { deleteApplication, deleting, deleteError } = useDeleteApplication();
+  const { saveApplication, loading: saving, error: saveError } = useSaveApplication();
+  const { deleteApplication, loading: deleting, error: deleteError } = useDeleteApplication();
 
   useEffect(() => {
     if (status === 'loading') return;

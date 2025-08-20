@@ -45,3 +45,14 @@ export interface LoanOffer {
   offer_status: string;
   created_at: string;
 }
+
+export interface ApplicationFormProps {
+  data: {
+    id: string;
+    amount_requested: number;
+    term_in_days: number;
+    purpose: string;
+  } | null;
+  onSubmit: (data: any) => void;
+  onCancel: () => void;
+}

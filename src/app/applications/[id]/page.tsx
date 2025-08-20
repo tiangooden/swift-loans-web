@@ -12,7 +12,6 @@ export default function LoanApplicationDetailsPage() {
     const params = useParams();
     const { application, loading, error, fetchApplicationDetails } = useFetchApplication(params.id as string);
 
-
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',

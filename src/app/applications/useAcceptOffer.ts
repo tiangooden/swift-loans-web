@@ -2,12 +2,12 @@ import { useState, useCallback } from 'react';
 import { notifications } from '../shared/notifications';
 
 export function useAcceptOffer() {
-  const [accepting, setAccepting] = useState(false);
-  const [acceptError, setAcceptError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const acceptOffer = useCallback(async (offerId: string) => {
-    setAccepting(true);
-    setAcceptError(null);
+    setLoading(true);
+    setError(null);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/accept`, {
         method: 'PATCH',
@@ -25,12 +25,12 @@ export function useAcceptOffer() {
       return true;
     } catch (err: any) {
       notifications.error(`Error accepting offer: ${err.message}`);
-      setAcceptError(err.message);
+      setError(err.message);
       return false;
     } finally {
-      setAccepting(false);
+      setLoading(false);
     }
   }, []);
 
-  return { acceptOffer, accepting, acceptError };
+  return { acceptOffer, loading, error };
 }
