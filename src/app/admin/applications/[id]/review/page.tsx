@@ -1,6 +1,7 @@
 'use client';
 
-import { Check, X, DollarSign, Clock, User, Mail, Phone, MapPin, Briefcase, Building, CreditCard, Calendar, AlertCircle } from 'lucide-react';
+import { DollarSign, Clock, User, Mail, Phone, MapPin, Briefcase, Building, CreditCard, Calendar, AlertCircle, X, Check } from 'lucide-react';
+import AdminLoanOffers from './components/AdminLoanOffers';
 import { useRouter } from 'next/navigation';
 import AdminNav from '@/app/admin/components/AdminNav';
 import { useLoanApplicationReview } from './hooks';
@@ -13,7 +14,7 @@ export default function LoanReviewPage() {
   const { application, loading, actionLoading, counterOfferAmount,
     setCounterOfferAmount, counterOfferRate, setCounterOfferRate,
     counterOfferTerm, setCounterOfferTerm, showCounterOffer, setShowCounterOffer,
-    handleAction, getStatusColor } = useLoanApplicationReview();
+    handleAction, getStatusColor, fetchApplication } = useLoanApplicationReview();
 
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [decisionReason, setDecisionReason] = useState('');
@@ -201,6 +202,12 @@ export default function LoanReviewPage() {
 
                   {/* Right Column - Actions & Summary */}
                   <div className="space-y-6">
+                    {/* Loan Offers */}
+                    <AdminLoanOffers
+                      offers={application.offers}
+                      applicationId={application.id}
+                      fetchApplicationDetails={fetchApplication}
+                    />
                     {/* Actions */}
                     <div className="bg-white border border-gray-200 rounded-lg p-6">
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Actions</h3>

@@ -35,7 +35,8 @@ interface LoanApplication {
       monthly_income: number;
       payday_day: number;
     } | null;
-  };
+  },
+  offers: [];
 }
 
 export function useLoanApplicationReview() {
