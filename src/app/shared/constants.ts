@@ -3,7 +3,8 @@ export const APPLICATION_STATUS = {
     OFFERED: 'offered',
     APPROVED: 'approved',
     COUNTERED: 'countered',
-    REJECTED: 'rejected'
+    REJECTED: 'rejected',
+    WITHDRAWN: 'withdrawn'
 }
 
 export const OFFER_STATUS = {

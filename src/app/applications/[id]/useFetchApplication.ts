@@ -9,7 +9,7 @@ export function useFetchApplication(id: string) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchApplicationDetails = useCallback(async () => {
+    const fetchApplications = useCallback(async () => {
         setLoading(true);
         setError(null);
         try {
@@ -29,8 +29,8 @@ export function useFetchApplication(id: string) {
     }, [session, status, id]);
 
     useEffect(() => {
-        fetchApplicationDetails();
+        fetchApplications();
     }, []);
 
-    return { application, loading, error, fetchApplicationDetails };
+    return { application, loading, error, fetchApplications };
 }

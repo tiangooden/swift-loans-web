@@ -1,16 +1,27 @@
 'use client';
 
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Trash } from 'lucide-react';
 import LoanOffers from './components/LoanOffers';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { useFetchApplication } from './useFetchApplication';
+import { useWithdrawApplication } from '@/app/applications/useWithdrawApplication';
 
 export default function LoanApplicationDetailsPage() {
     const router = useRouter();
     const params = useParams();
-    const { application, loading, error, fetchApplicationDetails } = useFetchApplication(params.id as string);
+    const { application, loading, error, fetchApplications } = useFetchApplication(params.id as string);
+    const { withdrawApplication, loading: withdrawing, error: withdrawError } = useWithdrawApplication();
+
+    const handleWithdraw = async () => {
+        if (application) {
+            const success = await withdrawApplication(application.id);
+            if (success) {
+                fetchApplications();
+            }
+        }
+    };
 
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
@@ -75,12 +86,18 @@ export default function LoanApplicationDetailsPage() {
                             <p className="text-gray-600 mt-1">
                                 {formatDateString(application.submitted_at)}
                             </p>
-                        </div>
-                        <div className="flex items-center space-x-2">
                             <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(application.status)}`}>
                                 {getStatusIcon(application.status)}
                                 <span className="ml-1 capitalize">{application.status}</span>
                             </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <button
+                                onClick={handleWithdraw}
+                                className="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 disabled:opacity-50 flex items-center justify-center"
+                            >
+                                <Trash className="h-5 w-5 mr-2" /> Withdraw Application
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -204,7 +221,7 @@ export default function LoanApplicationDetailsPage() {
                     <LoanOffers
                         offers={application.offers}
                         applicationId={application.id}
-                        fetchApplicationDetails={fetchApplicationDetails}
+                        fetchApplicationDetails={fetchApplications}
                     />
                 </div>
             </div>
