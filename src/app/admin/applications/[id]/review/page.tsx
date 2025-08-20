@@ -170,44 +170,10 @@ export default function LoanReviewPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                        <CreditCard className="h-5 w-5 mr-2" />
-                        Bank Account
-                      </h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="text-sm font-medium text-gray-500">Bank Name</label>
-                          <p className="text-gray-900">{application.users.bank_account?.bank_name || 'N/A'}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-500">Branch Name</label>
-                          <p className="text-gray-900">{application.users.bank_account?.branch_name || 'N/A'}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-500">Account Name</label>
-                          <p className="text-gray-900">{application.users.bank_account?.account_name || 'N/A'}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-500">Account Type</label>
-                          <p className="text-gray-900">{application.users.bank_account?.account_type || 'N/A'}</p>
-                        </div>
-                        <div>
-                          <label className="text-sm font-medium text-gray-500">Account Number</label>
-                          <p className="text-gray-900">{application.users.bank_account?.account_number || 'N/A'}</p>
-                        </div>
-                      </div>
-                    </div>
                   </div>
 
                   {/* Right Column - Actions & Summary */}
                   <div className="space-y-6">
-                    {/* Loan Offers */}
-                    <AdminLoanOffers
-                      offers={application.offers}
-                      applicationId={application.id}
-                      fetchApplicationDetails={fetchApplication}
-                    />
                     {/* Actions */}
                     <div className="bg-white border border-gray-200 rounded-lg p-6">
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
@@ -292,6 +258,14 @@ export default function LoanReviewPage() {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="px-6 py-4 bg-gray-50">
+                {/* Loan Offers */}
+                <AdminLoanOffers
+                  offers={application.offers}
+                  applicationId={application.id}
+                  fetchApplicationDetails={fetchApplication}
+                />
               </div>
             </div>
           </div>
