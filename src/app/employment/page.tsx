@@ -1,6 +1,7 @@
 'use client';
 
 import EmploymentForm from './EmploymentForm';
+import { Briefcase } from 'lucide-react';
 import { useFetchEmployment } from './useFetchEmployment';
 import { useSaveEmployment } from './useSaveEmployment';
 
@@ -24,9 +25,7 @@ export default function EmploymentPage() {
         <div className="min-h-screen bg-gray-100 p-4">
             <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
                 <div className="flex items-center mb-6">
-                    <svg className="w-8 h-8 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-2a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                    </svg>
+                    <Briefcase className="w-8 h-8 text-blue-600 mr-3" />
                     <h1 className="text-3xl font-bold text-gray-800">Employment Details</h1>
                 </div>
                 <EmploymentForm data={employment} onSave={saveEmployment} />

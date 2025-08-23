@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Home, FileText, Info, HelpCircle, Mail, LayoutDashboard, CreditCard, LogIn, LogOut, User, Briefcase, ChevronDown, Shield } from 'lucide-react';
+import { Menu, X, Home, FileText, Info, HelpCircle, Mail, LayoutDashboard, CreditCard, LogIn, LogOut, User, Briefcase, ChevronDown, Shield, FileImage } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
 
@@ -161,6 +161,17 @@ export function MobileMenu({ session }: MobileMenuProps) {
                     >
                       <FileText className="h-4 w-4" />
                       <span>Applications</span>
+                    </Link>
+                    <Link
+                      href="/documents"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <FileImage className="h-4 w-4" />
+                      <span>Documents</span>
                     </Link>
                     <button
                       onClick={() => {

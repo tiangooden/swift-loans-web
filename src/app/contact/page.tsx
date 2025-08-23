@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, Send, MessageCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, MessageCircle, ArrowRight } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -251,9 +251,7 @@ const Contact = () => {
             className="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold"
           >
             Visit FAQ Section
-            <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+            <ArrowRight className="w-4 h-4 ml-1" />
           </a>
         </div>
       </div>
