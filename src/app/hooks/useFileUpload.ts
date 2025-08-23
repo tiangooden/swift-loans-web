@@ -25,7 +25,7 @@ export const useFileUpload = (): UseFileUploadResult => {
     }
 
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/file`, formData);
+      await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/file`, formData);
       notifications.success('Files uploaded successfully');
       setSuccess(true);
     } catch (err: any) {
