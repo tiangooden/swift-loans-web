@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { Buffer } from 'buffer';
-
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
-  endpoint:  process.env.OBJECT_HOST,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
-  },
-  forcePathStyle: true,
-});
+import s3Client from '@/app/shared/s3client';
 
 export async function POST(req: NextRequest) {
   try {

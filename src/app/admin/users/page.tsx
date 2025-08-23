@@ -1,8 +1,10 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { Users, Search, Eye, Edit, Trash2, Mail, Phone } from "lucide-react";
+import { Search, Eye, Edit, Trash2, Mail, Phone } from "lucide-react";
 import AdminNav from '../components/AdminNav';
 import formatDateString from '@/app/shared/date';
+import axios from 'axios';
+import { getStatusColor } from '@/app/shared/status';
 
 export default function AdminUsers() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,27 +12,15 @@ export default function AdminUsers() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/users`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    };
     fetchUsers();
   }, []);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'text-green-600 bg-green-100';
-      case 'suspended': return 'text-red-600 bg-red-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      default: return 'text-gray-600 bg-gray-100';
+  const fetchUsers = async () => {
+    try {
+      const res = await axios(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/users`);
+      setUsers(res.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
     }
   };
 

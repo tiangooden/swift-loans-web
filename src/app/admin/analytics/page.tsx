@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { TrendingUp, BarChart3, PieChart, DollarSign, Users, Clock, CheckCircle, AlertTriangle } from "lucide-react";
 import AdminNav from '../components/AdminNav';
+import axios from 'axios';
 
 export default function AdminAnalytics() {
   const [analytics, setAnalytics] = useState({
@@ -11,20 +12,17 @@ export default function AdminAnalytics() {
     pendingApplications: 0,
     approvalRate: 0,
     defaultRate: 0,
-    monthlyData: [],
-    statusDistribution: [],
-    loanAmountDistribution: []
+    monthlyData: [] as any,
+    statusDistribution: [] as any,
+    loanAmountDistribution: [] as any
   });
 
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/analytics`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setAnalytics(data);
+        const res = await axios(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/analytics`);
+
+        setAnalytics(res.data);
       } catch (error) {
         console.error('Error fetching analytics:', error);
         // Fallback to mock data if API fails
@@ -186,12 +184,11 @@ export default function AdminAnalytics() {
                   <div className="flex items-center">
                     <div className="bg-gray-200 rounded-full h-2 w-32 mr-3">
                       <div
-                        className={`h-2 rounded-full ${
-                          item.status === 'active' ? 'bg-green-600' :
-                          item.status === 'pending' ? 'bg-yellow-600' :
-                          item.status === 'paid' ? 'bg-blue-600' :
-                          'bg-red-600'
-                        }`}
+                        className={`h-2 rounded-full ${item.status === 'active' ? 'bg-green-600' :
+                            item.status === 'pending' ? 'bg-yellow-600' :
+                              item.status === 'paid' ? 'bg-blue-600' :
+                                'bg-red-600'
+                          }`}
                         style={{ width: `${(item.count / 2000) * 100}%` }}
                       ></div>
                     </div>

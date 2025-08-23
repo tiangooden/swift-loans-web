@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart3, DollarSign, Users, TrendingUp, Clock, CheckCircle, AlertTriangle, Eye } from "lucide-react";
 import AdminNav from '../components/AdminNav';
+import axios from 'axios';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -17,19 +18,11 @@ export default function AdminDashboard() {
   const fetchDashboardData = async () => {
     try {
       const [statsResponse, loansResponse] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/dashboard-stats`),
-        fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/all?limit=5`)
+        axios(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/dashboard-stats`),
+        axios(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/all?limit=5`)
       ]);
-
-      if (statsResponse.ok) {
-        const statsData = await statsResponse.json();
-        setStats(statsData);
-      }
-
-      if (loansResponse.ok) {
-        const loansData = await loansResponse.json();
-        setRecentLoans(loansData.slice(0, 5));
-      }
+      setStats(statsResponse.data);
+      setRecentLoans(loansResponse.data.slice(0, 5));
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     }
@@ -38,28 +31,6 @@ export default function AdminDashboard() {
   useEffect(() => {
     // fetchDashboardData();
   }, []);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'approved': return 'text-green-600 bg-green-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'rejected': return 'text-red-600 bg-red-100';
-      case 'active': return 'text-blue-600 bg-blue-100';
-      case 'paid': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'approved': return <CheckCircle className="h-4 w-4" />;
-      case 'pending': return <Clock className="h-4 w-4" />;
-      case 'rejected': return <AlertTriangle className="h-4 w-4" />;
-      case 'active': return <CheckCircle className="h-4 w-4" />;
-      case 'paid': return <CheckCircle className="h-4 w-4" />;
-      default: return <Clock className="h-4 w-4" />;
-    }
-  };
 
   return (
     <AdminNav>

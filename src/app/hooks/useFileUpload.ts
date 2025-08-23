@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { notifications } from '../shared/notifications';
 
 interface UseFileUploadResult {
   uploadFiles: (files: FileList) => Promise<void>;
@@ -24,24 +25,12 @@ export const useFileUpload = (): UseFileUploadResult => {
     }
 
     try {
-      const response = await axios.post('/api/file', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      if (response.status === 200) {
-        setSuccess(true);
-      } else {
-        setError('File upload failed.');
-      }
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || err.message);
-      } else {
-        setError('An unexpected error occurred.');
-      }
-      console.error('Error uploading files:', err);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/file`, formData);
+      notifications.success('Files uploaded successfully');
+      setSuccess(true);
+    } catch (err: any) {
+      notifications.error('Failed to uploaded files');
+      setError(err);
     } finally {
       setLoading(false);
     }
