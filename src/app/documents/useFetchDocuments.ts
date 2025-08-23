@@ -4,7 +4,7 @@ import { notifications } from '../shared/notifications';
 
 export const useFetchFile = () => {
     const [documents, setDocuments] = useState<any[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {

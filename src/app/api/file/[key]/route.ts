@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import s3Client from '@/app/shared/s3client';
+import { DocumentsRepository } from '@/app/documents/documents.repository';
 
 export async function GET(req: NextRequest, { params }: { params: { key: string } }) {
   try {
-    const { key } = await params;
+    const { key } = params;
     const command = new GetObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET_NAME,
       Key: key,
@@ -15,5 +16,22 @@ export async function GET(req: NextRequest, { params }: { params: { key: string 
   } catch (error) {
     console.error('Error generating signed URL for download:', error);
     return NextResponse.json({ error: 'Failed to generate signed URL' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest, { params }: { params: { key: string } }) {
+  try {
+    const { key } = params;
+    const document = await DocumentsRepository.find({ where: { key } });
+    await DocumentsRepository.delete({ id: document[0].id });
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Key: key,
+    });
+    await s3Client.send(command);
+    return NextResponse.json({ message: 'File deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting file:', error);
+    return NextResponse.json({ error: 'Failed to delete file' }, { status: 500 });
   }
 }
