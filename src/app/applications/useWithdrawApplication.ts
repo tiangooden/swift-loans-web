@@ -10,11 +10,11 @@ export function useWithdrawApplication() {
         setLoading(true);
         setError(null);
         try {
-            await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}/withdraw`, { status: 'rejected' });
-            notifications.success('Offer rejected successfully!');
+            await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}/withdraw`);
+            notifications.success('Application withdrawn successfully!');
             return true;
         } catch (err: any) {
-            notifications.error(`Error rejecting offer: ${err.message}`);
+            notifications.error(`Error withdrawing application: ${err.message}`);
             setError(err.message);
             return false;
         } finally {
