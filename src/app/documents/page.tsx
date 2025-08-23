@@ -1,12 +1,15 @@
 'use client';
 
-import { FileText } from 'lucide-react';
+import { FileText, File as FileIcon } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { useFileUpload } from '../hooks/useFileUpload';
+import { useFileUpload } from './useFileUpload';
+import { useFetchFile } from './useFetchDocuments';
+import formatDateString from '../shared/date';
 
 export default function DocumentsPage() {
     const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-    const { uploadFiles, loading, error, success } = useFileUpload();
+    const { uploadFiles, loading, success } = useFileUpload();
+    const { loading: loadingFiles, error: errorLoadingFiles, documents } = useFetchFile();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedFiles(event.target.files);
@@ -58,6 +61,27 @@ export default function DocumentsPage() {
                             </>
                         ) : 'Upload All Documents'}
                     </button>
+                </div>
+
+                <div className="mt-10">
+                    <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Uploaded Documents</h2>
+                    {loadingFiles && <p className='text-center'>Loading documents...</p>}
+                    {errorLoadingFiles && <p className="text-red-500">Error: {errorLoadingFiles}</p>}
+                    {!loadingFiles && documents.length > 0 && (
+                        <ul className="border border-gray-200 rounded-lg divide-y divide-gray-200">
+                            {documents.map((doc) => (
+                                <li key={doc.id} className="p-4 flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <FileIcon className="w-5 h-5 text-blue-500 mr-3" />
+                                        <span>{doc.name} ({doc.type})</span>
+                                    </div>
+                                    <span className="text-sm text-gray-500">
+                                        Uploaded: {formatDateString(doc.created_at)}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
             </div>
         </div>

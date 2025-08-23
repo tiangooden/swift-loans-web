@@ -17,10 +17,9 @@ export interface LoanApplication {
   };
   documents?: {
     id: number;
-    document_type: string;
-    file_name: string;
-    file_url: string;
-    uploaded_at: string;
+    name: string;
+    url: string;
+    created_at: string;
   }[];
   employments?: {
     employer_name: string;

@@ -2,14 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { notifications } from '../shared/notifications';
 
-interface UseFileUploadResult {
-  uploadFiles: (files: FileList) => Promise<void>;
-  loading: boolean;
-  error: string | null;
-  success: boolean;
-}
-
-export const useFileUpload = (): UseFileUploadResult => {
+export const useFileUpload = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
