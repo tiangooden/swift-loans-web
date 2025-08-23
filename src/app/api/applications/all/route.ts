@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
             is_deleted: false,
         },
         include: {
-            users: {
+            user: {
                 select: {
                     first_name: true,
                     last_name: true,

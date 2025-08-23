@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         amount_requested: parseFloat(amount_requested),
         term_in_days: parseInt(term_in_days),
         purpose,
-        users: { connect: { id: user.id } },
+        user: { connect: { id: user.id } },
     });
     return NextResponse.json(application, { status: 201 });
 }

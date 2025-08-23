@@ -14,7 +14,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       principal: application.amount_requested,
       term_in_days: application.term_in_days,
       interest_rate: INTEREST_RATE[application.term_in_days?.toString() ?? '14'],
-      applications: { connect: { id } },
+      application: { connect: { id } },
       status: APPLICATION_STATUS.APPROVED,
       created_at: new Date(),
       updated_at: new Date(),
