@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { notifications } from '@/app/shared/notifications';
+import axios from 'axios';
 
 export function useDeleteApplicationReview() {
     const [loading, setLoading] = useState(false);
@@ -9,14 +10,7 @@ export function useDeleteApplicationReview() {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}`, {
-                method: 'DELETE',
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to delete application');
-            }
-
+            await axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}`);
             notifications.success('Application deleted successfully!');
             return true;
         } catch (error: any) {

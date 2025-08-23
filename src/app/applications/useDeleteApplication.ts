@@ -1,20 +1,16 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { notifications } from "../shared/notifications";
+import axios from 'axios';
 
 export function useDeleteApplication() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const deleteApplication = useCallback(async (id: string) => {
+  const deleteApplication = async (id: string) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete loan application');
-      }
+      await axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}`);
       notifications.success('Loan application deleted successfully!');
       return true;
     } catch (err: any) {
@@ -24,7 +20,7 @@ export function useDeleteApplication() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   return { deleteApplication, loading, error };
 }

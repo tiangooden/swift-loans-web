@@ -1,5 +1,6 @@
 import { notifications } from '@/app/shared/notifications';
 import { useState } from 'react';
+import axios from 'axios';
 
 export const useDeleteOffer = () => {
     const [loading, setLoading] = useState(false);
@@ -9,17 +10,7 @@ export const useDeleteOffer = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-                const data = await response.json();
-                throw new Error(data.message || 'Failed to delete offer');
-            }
-            const data = await response.json();
+            const data = (await axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}`)).data;
             notifications.success(data.message || 'Offer deleted successfully!');
             return true;
         } catch (err: any) {

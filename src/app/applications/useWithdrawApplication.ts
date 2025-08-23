@@ -1,24 +1,16 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { notifications } from '../shared/notifications';
+import axios from 'axios';
 
 export function useWithdrawApplication() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const withdrawApplication = useCallback(async (applicationId: string) => {
+    const withdrawApplication = async (applicationId: string) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}/withdraw`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ status: 'rejected' }),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to reject offer');
-            }
+            await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}/withdraw`, { status: 'rejected' });
             notifications.success('Offer rejected successfully!');
             return true;
         } catch (err: any) {
@@ -28,7 +20,7 @@ export function useWithdrawApplication() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    };
 
     return { withdrawApplication, loading, error };
 }

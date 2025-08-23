@@ -1,5 +1,6 @@
 import { notifications } from '@/app/shared/notifications';
 import { useState } from 'react';
+import axios from 'axios';
 
 export const useCounterOfferApplicationReview = () => {
   const [loading, setLoading] = useState(false);
@@ -9,16 +10,7 @@ export const useCounterOfferApplicationReview = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`/api/applications/${applicationId}/counter-offer`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to counter offer application');
-      }
+      await axios.patch(`/api/applications/${applicationId}/counter-offer`, data);
       notifications.success('Application counter-offered successfully!');
       return true;
     } catch (e: any) {

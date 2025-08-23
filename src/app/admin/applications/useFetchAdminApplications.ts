@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export function useFetchAdminApplications() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,11 +13,7 @@ export function useFetchAdminApplications() {
     setError(null);
     const fetchApplications = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/all`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = (await axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/all`)).data;
         setApplications(data);
       } catch (error: any) {
         setError(error.message);

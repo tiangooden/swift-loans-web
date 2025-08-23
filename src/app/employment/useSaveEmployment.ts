@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { notifications } from '../shared/notifications';
 import { Employment } from './types';
+import axios from 'axios';
 
 export function useSaveEmployment(onSuccess?: () => void) {
     const [loading, setLoading] = useState(false);
@@ -10,16 +11,7 @@ export function useSaveEmployment(onSuccess?: () => void) {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedEmployment),
-            });
-            if (!res.ok) {
-                throw new Error(`Failed to update employment details: ${res.statusText}`);
-            }
+            await axios.put(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment`, updatedEmployment);
             notifications.success('Employment updated successfully!');
             if (onSuccess) {
                 onSuccess();

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { notifications } from '@/app/shared/notifications';
 import { User } from './types';
+import axios from 'axios';
 
 export function useUpdateUser(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);
@@ -10,16 +11,7 @@ export function useUpdateUser(onSuccess?: () => void) {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      if (!response.ok) {
-        throw new Error(`Failed to update profile: ${response.statusText}`);
-      }
+      await axios.put(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`, formData);
       notifications.success('Profile updated successfully!');
       if (onSuccess) {
         onSuccess();

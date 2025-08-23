@@ -1,24 +1,20 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { notifications } from '../shared/notifications';
+import axios from 'axios';
 
 export function useSaveApplication() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const saveApplication = useCallback(async (data: any, id?: string) => {
+  const saveApplication = async (data: any, id?: string) => {
     setLoading(true);
     setError(null);
-    const url = id ? `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}` : process.env.NEXT_PUBLIC_SWIFT_LOANS_API + '/api/applications';
-    const method = id ? 'PUT' : 'POST';
+    const url = id ?
+      `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}` :
+      process.env.NEXT_PUBLIC_SWIFT_LOANS_API + '/api/applications';
     try {
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error(`Failed to save loan application: ${response.statusText}`);
-      }
+      id ? await axios.put(url, data) :
+        await axios.post(url, data);
       notifications.success('Loan application saved successfully!');
       return true;
     } catch (err: any) {
@@ -28,7 +24,7 @@ export function useSaveApplication() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   return { saveApplication, loading, error };
 }

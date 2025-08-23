@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { notifications } from '@/app/shared/notifications';
+import axios from 'axios';
 
 export function useApproveApplicationReview() {
     const [loading, setLoading] = useState(false);
@@ -9,12 +10,7 @@ export function useApproveApplicationReview() {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}/approve`, {
-                method: 'PATCH',
-            });
-            if (!response.ok) {
-                throw new Error('Failed to approve application');
-            }
+            await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}/approve`);
             notifications.success('Application approved successfully!');
             return true;
         } catch (error: any) {

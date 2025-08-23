@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { notifications } from '../../shared/notifications';
+import axios from 'axios';
 import { LoanApplication } from '../types';
 
 export function useFetchApplication(id: string) {
@@ -9,28 +10,23 @@ export function useFetchApplication(id: string) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchApplications = useCallback(async () => {
+    useEffect(() => {
+        fetchApplications();
+    }, []);
+
+    const fetchApplications = async () => {
         setLoading(true);
         setError(null);
         try {
-            const applicationResponse = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}`);
-
-            if (!applicationResponse.ok) {
-                throw new Error('Failed to fetch loan application details');
-            }
-            const appData = await applicationResponse.json();
-            setApplication(appData);
+            const data = (await (axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}`))).data;
+            setApplication(data);
         } catch (err: any) {
             notifications.error(err.message);
             setError(err.message);
         } finally {
             setLoading(false);
         }
-    }, [session, status, id]);
-
-    useEffect(() => {
-        fetchApplications();
-    }, []);
+    };
 
     return { application, loading, error, fetchApplications };
 }

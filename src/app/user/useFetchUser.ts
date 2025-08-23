@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { User } from './types';
+import axios from 'axios';
 
 export const useFetchUser = () => {
   const [userProfile, setUserProfile] = useState<User | null>(null);
@@ -12,11 +13,7 @@ export const useFetchUser = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+      const data = await (await axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`)).data;
       setUserProfile(data);
     } catch (e: any) {
       setError(e.message);
@@ -25,5 +22,5 @@ export const useFetchUser = () => {
     }
   };
 
-  return { userProfile, loading, error, fetchUserProfile: fetchUser };
+  return { userProfile, loading, error, fetchUser };
 };

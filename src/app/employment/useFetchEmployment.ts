@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Employment } from './types';
+import axios from 'axios';
 
 export function useFetchEmployment() {
     const [employment, setEmployment] = useState<Employment | null>(null);
@@ -12,11 +13,7 @@ export function useFetchEmployment() {
 
     const fetchEmployment = async () => {
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment`);
-            if (!res.ok) {
-                throw new Error(`Failed to fetch employment details: ${res.statusText}`);
-            }
-            const data = await res.json();
+            const data = (await axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment`)).data;
             setEmployment(data);
         } catch (err: any) {
             setError(err.message);

@@ -1,27 +1,23 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { notifications } from '@/app/shared/notifications';
 import { BankAccount } from './types';
+import axios from 'axios';
 
 export const useSaveBankAccount = (onSuccess?: () => void) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const saveBankAccount = useCallback(async (bankAccount: BankAccount) => {
+  const saveBankAccount = async (bankAccount: BankAccount) => {
     setLoading(true);
     setError(null);
     const method = bankAccount.id ? 'PUT' : 'POST';
-    const url = bankAccount.id ? `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts/${bankAccount.id}` : `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts`;
+    const url = bankAccount.id ?
+      `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts/${bankAccount.id}` :
+      `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts`;
     try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bankAccount),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      bankAccount.id ?
+        await axios.put(url, bankAccount) :
+        await axios.post(url, bankAccount);
       notifications.success(`Bank account ${bankAccount.id ? 'updated' : 'added'} successfully!`);
       if (onSuccess) {
         onSuccess();
@@ -32,7 +28,7 @@ export const useSaveBankAccount = (onSuccess?: () => void) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   return { saveBankAccount, loading, error };
 };

@@ -6,7 +6,7 @@ import UserForm from './UserForm';
 import { User } from 'lucide-react';
 
 export default function UserProfilePage() {
-    const { userProfile, loading, error, fetchUserProfile } = useFetchUser();
+    const { userProfile, loading, error, fetchUser: fetchUserProfile } = useFetchUser();
     const { updateProfile, loading: saving, error: saveError } = useUpdateUser(fetchUserProfile);
 
     if (loading) {

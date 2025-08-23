@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { LoanApplication } from './types';
+import axios from 'axios';
 
 export function useFetchApplicationReview(id: string) {
   const [application, setApplication] = useState<LoanApplication | null>(null);
@@ -14,9 +15,7 @@ export function useFetchApplicationReview(id: string) {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/review`);
-      if (!response.ok) throw new Error('Failed to fetch application');
-      const data = await response.json();
+      const data = (await axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/review`)).data;
       setApplication(data);
     } catch (error: any) {
       console.error('Error fetching application:', error);
