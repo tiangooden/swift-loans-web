@@ -11,7 +11,7 @@ export const useFileUpload = () => {
       for (let i = 0; i < files.length; i++) {
         formData.append('files', files[i]);
       }
-      return axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/file`, formData).then(res => res.data);
+      return axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/files`, formData).then(res => res.data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [useFetchFileKey] });

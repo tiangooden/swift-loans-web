@@ -6,7 +6,7 @@ export const useFetchUser = () => {
   const { data, isFetching, error, refetch } = useQuery<User | null>({
     queryKey: [useFetchUserKey],
     queryFn: async () => {
-      return axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`).then(res => res.data);
+      return axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/users`).then(res => res.data);
     },
   });
 

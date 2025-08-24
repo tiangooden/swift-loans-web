@@ -7,7 +7,7 @@ export const useDeleteFile = () => {
     const queryClient = useQueryClient();
     const { mutateAsync, isPending, error } = useMutation<any, Error, string>({
         mutationFn: async (key: string) => {
-            return axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/file/${key}`).then(res => res.data);
+            return axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/files/${key}`).then(res => res.data);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [useFetchFileKey] });
