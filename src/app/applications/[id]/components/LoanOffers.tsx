@@ -9,25 +9,18 @@ import { useRejectOffer } from '../../useRejectOffer';
 interface LoanOffersProps {
     offers: any[];
     applicationId: string;
-    fetchApplicationDetails: () => void;
 }
 
-export default function LoanOffers({ offers, applicationId, fetchApplicationDetails }: LoanOffersProps) {
-    const { acceptOffer, loading: accepting, error: acceptError } = useAcceptOffer();
-    const { rejectOffer, loading: rejecting, error: rejectError } = useRejectOffer();
+export default function LoanOffers({ offers, applicationId }: LoanOffersProps) {
+    const { mutateAsync: acceptOffer, isPending: accepting, error: acceptError } = useAcceptOffer();
+    const { mutateAsync: rejectOffer, isPending: rejecting, error: rejectError } = useRejectOffer();
 
     const handleAcceptOffer = async (offerId: string) => {
-        const success = await acceptOffer(offerId);
-        if (success) {
-            fetchApplicationDetails();
-        }
+        await acceptOffer(offerId);
     };
 
     const handleRejectOffer = async (offerId: string) => {
-        const success = await rejectOffer(offerId);
-        if (success) {
-            fetchApplicationDetails();
-        }
+        await rejectOffer(offerId);
     };
 
     const formatCurrency = (amount: number) => {

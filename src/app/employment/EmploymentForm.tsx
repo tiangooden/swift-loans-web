@@ -1,15 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { EmploymentDetails } from './hooks';
+import { Employment } from './types';
 
 interface EmploymentFormProps {
-  data: EmploymentDetails | null;
-  onSave: (employment: EmploymentDetails) => void;
+  data: Employment | null | undefined;
+  onSave: (employment: Employment) => void;
 }
 
 export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
-  const [formData, setFormData] = useState<EmploymentDetails>({
+  const [formData, setFormData] = useState<Employment>({
     employer_name: '',
     job_title: '',
     monthly_income: 0,

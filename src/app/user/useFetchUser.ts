@@ -1,26 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { User } from './types';
 import axios from 'axios';
 
 export const useFetchUser = () => {
-  const [userProfile, setUserProfile] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, isFetching, error, refetch } = useQuery<User | null>({
+    queryKey: [useFetchUserKey],
+    queryFn: async () => {
+      return axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`).then(res => res.data);
+    },
+  });
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  const fetchUser = async () => {
-    try {
-      const data = await (await axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`)).data;
-      setUserProfile(data);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { userProfile, loading, error, fetchUser };
+  return { data, isFetching, error, refetch };
 };
+
+export const useFetchUserKey = 'userProfile';

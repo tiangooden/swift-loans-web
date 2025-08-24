@@ -1,27 +1,22 @@
-import { useState } from 'react';
 import { notifications } from '@/app/shared/notifications';
 import axios from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useFetchApplicationReviewsKey } from './useFetchApplicationReview';
 
 export function useDeleteApplicationReview() {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
-    const deleteApplicationReview = async (applicationId: string) => {
-        setLoading(true);
-        setError(null);
-        try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}`);
+    const queryClient = useQueryClient();
+    const { mutateAsync, isPending, error } = useMutation<boolean, Error, string>({
+        mutationFn: async (applicationId: string) => {
+            return axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}`).then(res => res.data);
+        },
+        onSuccess: (_, applicationId) => {
+            queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey, applicationId] });
             notifications.success('Application deleted successfully!');
-            return true;
-        } catch (error: any) {
-            setError(error.message);
-            console.error('Error deleting application:', error);
-            notifications.error(`Error deleting application: ${error.message}`);
-            return false;
-        } finally {
-            setLoading(false);
-        }
-    };
+        },
+        onError: (err) => {
+            notifications.error(`Error deleting application: ${err.message}`);
+        },
+    });
 
-    return { deleteApplicationReview, loading, error };
+    return { mutateAsync, isPending, error };
 }

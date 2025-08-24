@@ -6,19 +6,21 @@ import { useFetchEmployment } from './useFetchEmployment';
 import { useSaveEmployment } from './useSaveEmployment';
 
 export default function EmploymentPage() {
-    const { employment, loading, error, fetchEmployment } = useFetchEmployment();
-    const { saveEmployment, loading: saving, error: saveError } = useSaveEmployment(fetchEmployment);
+    const { data, isFetching, error: fetchError } = useFetchEmployment();
+    const { mutateAsync, isPending, error: saveError } = useSaveEmployment();
 
-    if (loading) {
+    if (isFetching) {
         return <div className="flex justify-center items-center h-screen">Loading employment details...</div>;
     }
 
-    if (saving) {
+    if (isPending) {
         return <div className="flex justify-center items-center h-screen">Saving employment details...</div>;
     }
 
-    if (error || saveError) {
-        return <div className="flex justify-center items-center h-screen text-red-500">Error: {error || saveError}</div>;
+    if (fetchError || saveError) {
+        return <div className="flex justify-center items-center h-screen text-red-500">
+            Error: {fetchError?.message || saveError?.message}
+        </div>;
     }
 
     return (
@@ -28,7 +30,7 @@ export default function EmploymentPage() {
                     <Briefcase className="w-8 h-8 text-blue-600 mr-3" />
                     <h1 className="text-3xl font-bold text-gray-800">Employment Details</h1>
                 </div>
-                <EmploymentForm data={employment} onSave={saveEmployment} />
+                <EmploymentForm data={data} onSave={mutateAsync} />
             </div>
         </div>
     );

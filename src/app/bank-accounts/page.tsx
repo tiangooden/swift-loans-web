@@ -6,8 +6,8 @@ import { useSaveBankAccount } from './useSaveBankAccount';
 import { CreditCard } from 'lucide-react';
 
 const BankAccountsPage = () => {
-  const { account, loading: fetchLoading, error: fetchError, fetchAccount } = useFetchBankAccounts();
-  const { saveBankAccount, loading: saveLoading, error: saveError } = useSaveBankAccount(fetchAccount);
+  const { data: account, isFetching: fetchLoading, error: fetchError } = useFetchBankAccounts();
+  const { mutateAsync, isPending: saveLoading, error: saveError } = useSaveBankAccount();
 
   if (fetchLoading) {
     return <div className="flex justify-center items-center h-screen">Loading bank account...</div>;
@@ -18,7 +18,7 @@ const BankAccountsPage = () => {
   }
 
   if (fetchError || saveError) {
-    return <div className="flex justify-center items-center h-screen text-red-500">Error: {fetchError || saveError}</div>;
+    return <div className="flex justify-center items-center h-screen text-red-500">Error: {fetchError?.message || saveError?.message}</div>;
   }
 
   return (
@@ -28,7 +28,7 @@ const BankAccountsPage = () => {
           <CreditCard className="w-8 h-8 text-blue-600 mr-3" />
           <h1 className="text-3xl font-bold text-gray-800">Bank Account</h1>
         </div>
-        <BankAccountForm account={account} onSave={saveBankAccount} />
+        <BankAccountForm account={account} onSave={mutateAsync} />
       </div>
     </div>
   );

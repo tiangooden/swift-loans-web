@@ -9,9 +9,9 @@ import formatDateString from '../shared/date';
 
 export default function DocumentsPage() {
     const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-    const { uploadFiles, loading, success } = useFileUpload();
-    const { loading: loadingFiles, error: errorLoadingFiles, documents, fetchFiles } = useFetchFile();
-    const { deleteFile, loading: deletingFile } = useDeleteFile();
+    const { data, isPending: isFetchingFiles, error: errorLoadingFiles, refetch: fetchFiles } = useFetchFile();
+    const { mutateAsync: uploadFiles, isPending: isUploadingFiles, isSuccess: isSuccessUploadingFiles } = useFileUpload();
+    const { mutateAsync: deleteFile, isPending: isDeletingFile, error: errorDeleting } = useDeleteFile();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedFiles(event.target.files);
@@ -20,20 +20,14 @@ export default function DocumentsPage() {
     const handleUpload = async () => {
         if (selectedFiles) {
             await uploadFiles(selectedFiles);
-        }
-    };
-
-    const handleDelete = async (fileId: string) => {
-        await deleteFile(fileId);
-        fetchFiles();
-    };
-
-    useEffect(() => {
-        if (success) {
             setSelectedFiles(null);
-            fetchFiles();
         }
-    }, [success]);
+    };
+
+    const handleDelete = async (key: string) => {
+        await deleteFile(key);
+        setSelectedFiles(null);
+    };
 
     return (
         <div className="min-h-screen bg-gray-100 p-4">
@@ -56,10 +50,10 @@ export default function DocumentsPage() {
                 <div className="mt-8 text-center">
                     <button
                         onClick={handleUpload}
-                        disabled={loading}
+                        disabled={isUploadingFiles}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition duration-300 ease-in-out disabled:bg-blue-400 flex items-center justify-center gap-2 mx-auto w-fit"
                     >
-                        {loading ? (
+                        {isUploadingFiles ? (
                             <>
                                 <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -73,14 +67,15 @@ export default function DocumentsPage() {
 
                 <div className="mt-10">
                     <h2 className="text-2xl font-bold text-gray-800 mb-4">Your Uploaded Documents</h2>
-                    {loadingFiles && <p className='text-center'>Loading documents...</p>}
-                    {!loadingFiles && documents.length === 0 && (
+                    {isFetchingFiles && <p className='text-center'>Loading documents...</p>}
+                    {isDeletingFile && <p className='text-center'>Deleting document...</p>}
+                    {!isFetchingFiles && data.length === 0 && (
                         <p className='text-center'>No documents uploaded yet.</p>
                     )}
-                    {errorLoadingFiles && <p className="text-red-500">Error: {errorLoadingFiles}</p>}
-                    {!loadingFiles && documents.length > 0 && (
+                    {errorLoadingFiles && <p className="text-red-500">Error: {errorLoadingFiles.message}</p>}
+                    {!isFetchingFiles && data.length > 0 && (
                         <ul className="border border-gray-200 rounded-lg divide-y divide-gray-200">
-                            {documents.map((doc) => (
+                            {data.map((doc) => (
                                 <li key={doc.id} className="p-4 flex items-center justify-between">
                                     <div className="flex items-center">
                                         <FileIcon className="w-5 h-5 text-blue-500 mr-3" />
@@ -91,10 +86,10 @@ export default function DocumentsPage() {
                                             Uploaded: {formatDateString(doc.created_at)}
                                         </span>
                                         <button
-                                            onClick={() => handleDelete(doc.id)}
+                                            onClick={() => handleDelete(doc.key)}
                                             className="text-red-500 hover:text-red-700"
                                             title="Delete file"
-                                            disabled={deletingFile}
+                                            disabled={isDeletingFile}
                                         >
                                             <Trash2 className="w-5 h-5" />
                                         </button>

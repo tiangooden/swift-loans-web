@@ -1,29 +1,22 @@
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notifications } from '@/app/shared/notifications';
 import { User } from './types';
 import axios from 'axios';
+import { useFetchUserKey } from './useFetchUser';
 
-export function useUpdateUser(onSuccess?: () => void) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const updateProfile = async (formData: User) => {
-    setLoading(true);
-    setError(null);
-    try {
-      await axios.put(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`, formData);
+export function useUpdateUser() {
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending, error } = useMutation<any, Error, User>({
+    mutationFn: async (formData: User) => {
+      return axios.put(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/user`, formData).then(res => res.data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [useFetchUserKey] });
       notifications.success('Profile updated successfully!');
-      if (onSuccess) {
-        onSuccess();
-      }
-      return true;
-    } catch (e: any) {
+    },
+    onError: () => {
       notifications.error('An error occurred while updating profile.');
-      setError(e.message);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-  return { updateProfile, loading, error };
+    },
+  });
+  return { mutateAsync, isPending, error };
 };

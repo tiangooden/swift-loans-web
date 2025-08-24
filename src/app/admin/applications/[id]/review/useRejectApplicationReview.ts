@@ -1,27 +1,22 @@
-import { useState } from 'react';
 import { notifications } from '@/app/shared/notifications';
 import axios from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useFetchApplicationReviewsKey } from './useFetchApplicationReview';
 
 export function useRejectApplicationReview() {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
-    const rejectApplicationReview = async (applicationId: string, data: { decision_reason: string }) => {
-        setLoading(true);
-        setError(null);
-        try {
-            await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}/reject`, data);
+    const queryClient = useQueryClient();
+    const { mutateAsync, isPending, error } = useMutation<boolean, Error, { id: string; decision_reason: string }>({
+        mutationFn: async ({ id, decision_reason }) => {
+            return axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/reject`, { decision_reason }).then(res => res.data);
+        },
+        onSuccess: (_, applicationId) => {
+            queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey, applicationId] });
             notifications.success('Application rejected successfully!');
-            return true;
-        } catch (error: any) {
-            setError(error.message);
-            console.error('Error rejecting application:', error);
-            notifications.error(`Error rejecting application: ${error.message}`);
-            return false;
-        } finally {
-            setLoading(false);
-        }
-    };
+        },
+        onError: (err) => {
+            notifications.error(`Error rejecting application: ${err.message}`);
+        },
+    });
 
-    return { rejectApplicationReview, loading, error };
+    return { mutateAsync, isPending, error };
 }

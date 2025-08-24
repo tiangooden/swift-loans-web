@@ -6,19 +6,23 @@ import UserForm from './UserForm';
 import { User } from 'lucide-react';
 
 export default function UserProfilePage() {
-    const { userProfile, loading, error, fetchUser: fetchUserProfile } = useFetchUser();
-    const { updateProfile, loading: saving, error: saveError } = useUpdateUser(fetchUserProfile);
+    const { data, isFetching, error: fetchError } = useFetchUser();
+    const { mutateAsync, isPending, error: saveError } = useUpdateUser();
 
-    if (loading) {
+    if (isFetching) {
         return <div className="flex justify-center items-center h-screen">Loading profile...</div>;
     }
 
-    if (saving) {
+    if (isPending) {
         return <div className="flex justify-center items-center h-screen">Saving profile...</div>;
     }
 
-    if (error || saveError) {
-        return <div className="flex justify-center items-center h-screen text-red-500">Error: {error || saveError}</div>;
+    if (fetchError || saveError) {
+        return (
+            <div className="flex justify-center items-center h-screen text-red-500">
+                Error: {fetchError?.message || saveError?.message}
+            </div>
+        );
     }
 
     return (
@@ -28,7 +32,7 @@ export default function UserProfilePage() {
                     <User className="w-8 h-8 text-blue-600 mr-3" />
                     <h1 className="text-3xl font-bold text-gray-800">User Profile</h1>
                 </div>
-                <UserForm data={userProfile} onSave={updateProfile} />
+                <UserForm data={data} onSave={mutateAsync} />
             </div>
         </div>
     );

@@ -17,11 +17,11 @@ import { useDeleteOffer } from './useDeleteOffer';
 
 export default function LoanReviewPage() {
   const router = useRouter();
-  const { id } = useParams();
-  const { application, loading, fetchApplication } = useFetchApplicationReview(id as string);
-  const { approveApplicationReview, loading: approveLoading } = useApproveApplicationReview();
-  const { rejectApplicationReview, loading: rejectLoading } = useRejectApplicationReview();
-  const { counterOfferApplicationReview, loading: counterLoading } = useCounterOfferApplicationReview();
+  const id = (useParams()).id?.toString();
+  const { data: application, isPending: loading, error } = useFetchApplicationReview(id);
+  const { mutateAsync: approveApplicationReview, isPending: approveLoading } = useApproveApplicationReview();
+  const { mutateAsync: rejectApplicationReview, isPending: rejectLoading } = useRejectApplicationReview();
+  const { mutateAsync: counterOfferApplicationReview, isPending: counterLoading } = useCounterOfferApplicationReview();
 
   const [counterOfferAmount, setCounterOfferAmount] = useState('');
   const [counterOfferRate, setCounterOfferRate] = useState('');
@@ -39,11 +39,9 @@ export default function LoanReviewPage() {
       notifications.info('Please provide a reason for rejection.')
       return;
     }
-    const success = await rejectApplicationReview(id as string, { decision_reason: decisionReason });
-    if (success) {
-      router.push('/admin/applications');
-      setDecisionReason('');
-    }
+    await rejectApplicationReview({ id: id as string, decision_reason: decisionReason });
+    router.push('/admin/applications');
+    setDecisionReason('');
   };
 
   if (loading) {
@@ -266,11 +264,8 @@ export default function LoanReviewPage() {
                                   interest_rate: parseFloat(counterOfferRate),
                                   term_in_days: parseInt(counterOfferTerm),
                                 };
-                                const success = await counterOfferApplicationReview(id as string, loanDetails);
-                                if (success) {
-                                  fetchApplication();
-                                  setShowCounterOffer(false);
-                                }
+                                const success = await counterOfferApplicationReview({ id: id as string, data: loanDetails });
+                                setShowCounterOffer(false);
                               }}
                               disabled={counterLoading}
                               className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center"
@@ -287,8 +282,8 @@ export default function LoanReviewPage() {
               <div className="px-6 py-4 bg-gray-50">
                 {/* Loan Offers */}
                 <AdminLoanOffers
+                  applicationId={application.id}
                   offers={application.offers}
-                  fetchApplication={fetchApplication}
                 />
               </div>
             </div>

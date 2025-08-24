@@ -21,9 +21,11 @@ export async function GET(req: NextRequest, { params }: { params: { key: string 
 
 export async function DELETE(req: NextRequest, { params }: { params: { key: string } }) {
   try {
-    const { key } = params;
-    const document = await DocumentsRepository.find({ where: { key } });
-    await DocumentsRepository.delete({ id: document[0].id });
+    const { key } = await params;
+    console.log(key);
+    const documents = await DocumentsRepository.find({ where: { key } });
+    console.log(documents);
+    await DocumentsRepository.delete({ id: documents[0].id });
     const command = new DeleteObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET_NAME,
       Key: key,

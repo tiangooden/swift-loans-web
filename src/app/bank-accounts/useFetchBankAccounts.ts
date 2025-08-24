@@ -1,28 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { BankAccount } from './types';
 import axios from 'axios';
 
 export const useFetchBankAccounts = () => {
-  const [account, setAccount] = useState<BankAccount | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, isFetching, error, refetch } = useQuery<BankAccount | null>({
+    queryKey: [useFetchBankAccountsKey],
+    queryFn: async () => {
+      return axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts`).then(res => res.data);
+    },
+  });
 
-  useEffect(() => {
-    fetchAccount();
-  }, []);
-
-  const fetchAccount = async () => {
-    try {
-      const data = (await axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts`)).data;
-      if (data.length > 0) {
-        setAccount(data[0]);
-      }
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { account, loading, error, fetchAccount };
+  return { data, isFetching, error, refetch };
 };
+
+export const useFetchBankAccountsKey = 'bankAccount';

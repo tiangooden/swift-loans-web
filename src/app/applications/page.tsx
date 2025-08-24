@@ -10,15 +10,16 @@ import { useFetchApplications } from './useFetchApplications';
 import { useSaveApplication } from './useSaveApplication';
 import { useDeleteApplication } from './useDeleteApplication';
 import { LoanApplication } from './types';
+import { getStatusColor, getStatusIcon } from '../shared/status';
 
 export default function LoanApplicationsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [editingApplication, setEditingApplication] = useState<LoanApplication | null>(null);
-  const { applications, loading, error, fetchApplications } = useFetchApplications();
-  const { saveApplication, loading: saving, error: saveError } = useSaveApplication();
-  const { deleteApplication, loading: deleting, error: deleteError } = useDeleteApplication();
+  const { data: applications, isFetching: loading, error: fetchError, refetch: fetchApplications } = useFetchApplications();
+  const { mutateAsync: saveApplication, isPending: saving, error: saveError } = useSaveApplication();
+  const { mutateAsync: deleteApplication, isPending: deleting, error: deleteError } = useDeleteApplication();
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -27,32 +28,15 @@ export default function LoanApplicationsPage() {
     }
   }, [session, status, router]);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (key: string) => {
     if (!confirm('Are you sure you want to delete this application?')) return;
-
-    const success = await deleteApplication(id);
-    if (success) {
-      fetchApplications();
-    }
+    await deleteApplication(key);
   };
 
   const handleFormSubmit = async (data: any) => {
-    const success = await saveApplication(data, editingApplication?.id);
-    if (success) {
-      fetchApplications();
-      setShowForm(false);
-      setEditingApplication(null);
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      approved: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
-      cancelled: 'bg-gray-100 text-gray-800',
-    };
-    return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+    saveApplication({ data, id: editingApplication?.id });
+    setShowForm(false);
+    setEditingApplication(null);
   };
 
   if (loading) {
@@ -67,8 +51,8 @@ export default function LoanApplicationsPage() {
     return <div className="flex justify-center items-center h-screen">Deleting application...</div>;
   }
 
-  if (error || saveError || deleteError) {
-    return <div className="flex justify-center items-center h-screen text-red-600">Error: {error || saveError || deleteError}</div>;
+  if (fetchError || saveError || deleteError) {
+    return <div className="flex justify-center items-center h-screen text-red-600">Error: {fetchError || saveError || deleteError}</div>;
   }
 
   return (
@@ -125,7 +109,7 @@ export default function LoanApplicationsPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(application.status)}`}>
-                            {application.status}
+                            {getStatusIcon(application.status)} {application.status}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

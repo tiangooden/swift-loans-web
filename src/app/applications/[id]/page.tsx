@@ -11,15 +11,12 @@ import { useWithdrawApplication } from '@/app/applications/useWithdrawApplicatio
 export default function LoanApplicationDetailsPage() {
     const router = useRouter();
     const params = useParams();
-    const { application, loading, error, fetchApplications } = useFetchApplication(params.id as string);
-    const { withdrawApplication, loading: withdrawing, error: withdrawError } = useWithdrawApplication();
+    const { data: application, isFetching: loading, error } = useFetchApplication(params.id as string);
+    const { mutateAsync: withdrawApplication, isPending: withdrawing, error: withdrawError } = useWithdrawApplication();
 
     const handleWithdraw = async () => {
         if (application) {
-            const success = await withdrawApplication(application.id);
-            if (success) {
-                router.push('/applications');
-            }
+            await withdrawApplication(application.id);
         }
     };
 
@@ -34,11 +31,15 @@ export default function LoanApplicationDetailsPage() {
         return <div className="flex justify-center items-center h-screen">Loading application details...</div>;
     }
 
-    if (error) {
+    if (withdrawing) {
+        return <div className="flex justify-center items-center h-screen">Withdrawing application...</div>;
+    }
+
+    if (error || withdrawError) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold text-red-600 mb-4">Error: {error}</h2>
+                    <h2 className="text-2xl font-bold text-red-600 mb-4">Error: {error?.message || withdrawError.message}</h2>
                     <button
                         onClick={() => router.push('/applications')}
                         className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"
@@ -221,7 +222,6 @@ export default function LoanApplicationDetailsPage() {
                     <LoanOffers
                         offers={application.offers}
                         applicationId={application.id}
-                        fetchApplicationDetails={fetchApplications}
                     />
                 </div>
             </div>

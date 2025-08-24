@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const bankAccounts = await BankAccountsRepository.find({
         where: { user_id: user.id, is_deleted: false },
     });
-    return NextResponse.json(bankAccounts);
+    return NextResponse.json(bankAccounts[0]);
 }
 
 export async function POST(request: NextRequest) {

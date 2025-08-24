@@ -1,24 +1,22 @@
-import { useState } from 'react';
 import axios from 'axios';
 import { notifications } from '../shared/notifications';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useFetchFileKey } from './useFetchDocuments';
 
 export const useDeleteFile = () => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
-    const deleteFile = async (key: string) => {
-        setLoading(true);
-        setError(null);
-        try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/file/${key}`);
+    const queryClient = useQueryClient();
+    const { mutateAsync, isPending, error } = useMutation<any, Error, string>({
+        mutationFn: async (key: string) => {
+            return axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/file/${key}`).then(res => res.data);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [useFetchFileKey] });
             notifications.success('File deleted successfully');
-        } catch (err: any) {
-            notifications.error('Failed to delete file');
-            setError(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+        },
+        onError: (err) => {
+            notifications.error(`Failed to delete file: ${err.message}`);
+        },
+    });
 
-    return { deleteFile, loading, error };
+    return { mutateAsync, isPending, error };
 };

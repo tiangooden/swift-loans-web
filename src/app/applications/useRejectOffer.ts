@@ -1,26 +1,22 @@
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notifications } from '../shared/notifications';
 import axios from 'axios';
+import { useFetchApplicationKey } from './[id]/useFetchApplication';
 
 export function useRejectOffer() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const rejectOffer = async (offerId: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/reject`);
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending, error } = useMutation({
+    mutationFn: async (offerId: string) => {
+      return axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/reject`).then(res => res.data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [useFetchApplicationKey] });
       notifications.success('Offer rejected successfully!');
-      return true;
-    } catch (err: any) {
+    },
+    onError: (err: any) => {
       notifications.error(`Error rejecting offer: ${err.message}`);
-      setError(err.message);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+  });
 
-  return { rejectOffer, loading, error };
+  return { mutateAsync, isPending, error };
 }

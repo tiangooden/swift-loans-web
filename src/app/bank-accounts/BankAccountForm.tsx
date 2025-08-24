@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { BankAccount } from './hooks';
+import { BankAccount } from './types';
 
 interface BankAccountFormProps {
-  account: BankAccount | null;
+  account: BankAccount | null | undefined;
   onSave: (bankAccount: BankAccount) => Promise<void>;
 }
 

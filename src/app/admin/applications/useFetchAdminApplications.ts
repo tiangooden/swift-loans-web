@@ -1,31 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 export function useFetchAdminApplications() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [applications, setApplications] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-    const fetchApplications = async () => {
-      try {
-        const data = (await axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/all`)).data;
-        setApplications(data);
-      } catch (error: any) {
-        setError(error.message);
-        console.error('Error fetching loan applications:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchApplications();
-  }, []);
+  const { data = [], isPending, error } = useQuery<any[], Error>({
+    queryKey: [useFetchAdminApplicationsKey],
+    queryFn: async () => {
+      return axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/all`).then(res => res.data);
+    },
+  });
 
-  const filteredLoans = applications.filter((loan: any) => {
+  const filteredLoans = data.filter((loan: any) => {
     const matchesSearch = loan.user?.first_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       loan.user?.last_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       loan.id.toString().toLowerCase().includes(searchTerm.toLowerCase());
@@ -38,8 +26,10 @@ export function useFetchAdminApplications() {
     setSearchTerm,
     filterStatus,
     setFilterStatus,
-    applications: filteredLoans,
-    loading,
+    data: filteredLoans,
+    isPending,
     error
   };
 }
+
+export const useFetchAdminApplicationsKey = 'adminApplications';

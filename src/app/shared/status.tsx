@@ -9,6 +9,7 @@ export const getStatusColor = (status: string) => {
         offered: 'bg-orange-100 text-orange-800',
         rejected: 'bg-red-100 text-red-800',
         countered: 'bg-yellow-100 text-gray-800',
+        withdrawn: 'text-blue-600 bg-blue-100',
         active: 'text-green-600 bg-green-100',
         pending: 'text-yellow-600 bg-yellow-100',
         paid: 'text-blue-600 bg-blue-100',
@@ -27,6 +28,7 @@ export const getStatusIcon = (status: string) => {
         case 'offered': return <Clock className="h-4 w-4" />;
         case 'pending': return <Clock className="h-4 w-4" />;
         case 'countered': return <Clock className="h-4 w-4" />;
+        case 'withdrawn': return <CheckCircle className="h-4 w-4" />;
         case 'active': return <CheckCircle />;
         case 'pending': return <Clock />;
         case 'paid': return <CheckCircle />;

@@ -1,27 +1,22 @@
 import { notifications } from '@/app/shared/notifications';
-import { useState } from 'react';
 import axios from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useFetchApplicationReviewsKey } from './useFetchApplicationReview';
 
 export const useCounterOfferApplicationReview = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const counterOfferApplicationReview = async (applicationId: string, data: any) => {
-    setLoading(true);
-    setError(null);
-    try {
-      await axios.patch(`/api/applications/${applicationId}/counter-offer`, data);
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending, error } = useMutation<boolean, Error, { id: string; data: any }>({
+    mutationFn: async ({ id, data }) => {
+      return axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/counter-offer`, data).then(res => res.data);
+    },
+    onSuccess: (_, applicationId) => {
+      queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey, applicationId] });
       notifications.success('Application counter-offered successfully!');
-      return true;
-    } catch (e: any) {
-      console.error('Error counter offering application:', error);
-      notifications.error('Failed to counter offer application.');
-      setError(e.message);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    onError: (err) => {
+      notifications.error(`Failed to counter offer application: ${err.message}`);
+    },
+  });
 
-  return { counterOfferApplicationReview, loading, error };
+  return { mutateAsync, isPending, error };
 };

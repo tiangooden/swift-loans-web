@@ -1,29 +1,23 @@
-import { useState } from 'react';
 import { notifications } from '../shared/notifications';
 import { Employment } from './types';
 import axios from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useFetchEmploymentKey } from './useFetchEmployment';
 
-export function useSaveEmployment(onSuccess?: () => void) {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
-    const saveEmployment = async (updatedEmployment: Employment) => {
-        setLoading(true);
-        setError(null);
-        try {
-            await axios.put(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment`, updatedEmployment);
+export function useSaveEmployment() {
+    const queryClient = useQueryClient();
+    const { mutateAsync, isPending, error } = useMutation<any, Error, Employment>({
+        mutationFn: async (updatedEmployment: Employment) => {
+            return axios.put(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment`, updatedEmployment).then(res => res.data);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [useFetchEmploymentKey] });
             notifications.success('Employment updated successfully!');
-            if (onSuccess) {
-                onSuccess();
-            }
-            return true;
-        } catch (err: any) {
-            notifications.error(`Error updating employment details`);
-            setError(err.message);
-            return false;
-        } finally {
-            setLoading(false);
-        }
-    };
-    return { saveEmployment, loading, error };
+        },
+        onError: (err) => {
+            notifications.error(`Error updating employment details: ${err.message}`);
+        },
+    });
+
+    return { mutateAsync, isPending, error };
 }

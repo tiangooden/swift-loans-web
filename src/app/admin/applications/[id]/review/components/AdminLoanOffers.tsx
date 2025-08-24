@@ -1,23 +1,17 @@
 'use client';
 
-import { Check, X, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { AdminLoanOffersProps } from '../types';
 import { useDeleteOffer } from '../useDeleteOffer';
 
-export default function AdminLoanOffers({ offers, fetchApplication }: AdminLoanOffersProps) {
-    const { deleteOffer, loading: isDeleting, error: deleteError } = useDeleteOffer();
+export default function AdminLoanOffers({ applicationId, offers }: AdminLoanOffersProps) {
+    const { mutateAsync: deleteOffer, isPending: isDeleting } = useDeleteOffer();
 
-    const handleDeleteOffer = async (id: string) => {
+    const handleDeleteOffer = async (offerId: string) => {
         if (window.confirm('Are you sure you want to delete this offer?')) {
-            try {
-                const success = await deleteOffer(id);
-                if (success) {
-                    fetchApplication();
-                }
-            } catch (error: any) {
-            }
+            await deleteOffer({ applicationId, offerId });
         }
     };
 
