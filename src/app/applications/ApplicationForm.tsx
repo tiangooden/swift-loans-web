@@ -44,6 +44,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel }: Applicatio
           required
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           placeholder="1000.00"
+          autoComplete="on"
         />
       </div>
 

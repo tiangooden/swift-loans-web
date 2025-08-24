@@ -72,6 +72,7 @@ export default function AdminUsers() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search by name, email, or phone..."
                   className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  autoComplete="on"
                 />
               </div>
             </div>

@@ -73,6 +73,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
           />
         </div>
         <div>
@@ -85,6 +86,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
           />
         </div>
         <div>
@@ -97,6 +99,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
           />
         </div>
         <div>
@@ -109,6 +112,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
           />
         </div>
         <div>
@@ -121,6 +125,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
           />
         </div>
         <div>
@@ -133,6 +138,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
           />
         </div>
         <div>
@@ -145,6 +151,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
           />
         </div>
         <div>
@@ -157,6 +164,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
           />
         </div>
         <div>
@@ -169,6 +177,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
           />
         </div>
         <div>
@@ -181,6 +190,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
           />
         </div>
       </div>

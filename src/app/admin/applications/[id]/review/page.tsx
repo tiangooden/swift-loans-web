@@ -230,6 +230,7 @@ export default function LoanReviewPage() {
                                 onChange={(e) => setCounterOfferAmount(e.target.value)}
                                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 placeholder="Enter amount"
+                                autoComplete="on"
                               />
                             </div>
                             <div>
@@ -241,6 +242,7 @@ export default function LoanReviewPage() {
                                 onChange={(e) => setCounterOfferRate(e.target.value)}
                                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 placeholder="Enter rate"
+                                autoComplete="on"
                               />
                             </div>
                             <div>
@@ -251,6 +253,7 @@ export default function LoanReviewPage() {
                                 onChange={(e) => setCounterOfferTerm(e.target.value)}
                                 className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 placeholder="Enter term"
+                                autoComplete="on"
                               />
                             </div>
                             <button

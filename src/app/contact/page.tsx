@@ -141,6 +141,7 @@ const Contact = () => {
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="John Doe"
                       required
+                      autoComplete="on"
                     />
                   </div>
                   <div>
@@ -155,6 +156,7 @@ const Contact = () => {
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="john@example.com"
                       required
+                      autoComplete="on"
                     />
                   </div>
                 </div>
@@ -171,6 +173,7 @@ const Contact = () => {
                       onChange={handleInputChange}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="(555) 123-4567"
+                      autoComplete="on"
                     />
                   </div>
                   <div>

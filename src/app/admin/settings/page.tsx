@@ -64,6 +64,7 @@ export default function AdminSettings() {
                   value={settings.siteName}
                   onChange={(e) => handleChange('siteName', e.target.value)}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  autoComplete="on"
                 />
               </div>
               <div>
@@ -73,6 +74,7 @@ export default function AdminSettings() {
                   onChange={(e) => handleChange('siteDescription', e.target.value)}
                   rows={3}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  autoComplete="on"
                 />
               </div>
               <div>
@@ -82,6 +84,7 @@ export default function AdminSettings() {
                   value={settings.supportEmail}
                   onChange={(e) => handleChange('supportEmail', e.target.value)}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  autoComplete="on"
                 />
               </div>
             </div>
@@ -104,6 +107,7 @@ export default function AdminSettings() {
                     value={settings.maxLoanAmount}
                     onChange={(e) => handleChange('maxLoanAmount', parseInt(e.target.value))}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                    autoComplete="on"
                   />
                 </div>
                 <div>
@@ -113,6 +117,7 @@ export default function AdminSettings() {
                     value={settings.minLoanAmount}
                     onChange={(e) => handleChange('minLoanAmount', parseInt(e.target.value))}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                    autoComplete="on"
                   />
                 </div>
                 <div>
@@ -123,6 +128,7 @@ export default function AdminSettings() {
                     value={settings.interestRate}
                     onChange={(e) => handleChange('interestRate', parseFloat(e.target.value))}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                    autoComplete="on"
                   />
                 </div>
                 <div>
@@ -132,6 +138,7 @@ export default function AdminSettings() {
                     value={settings.processingFee}
                     onChange={(e) => handleChange('processingFee', parseInt(e.target.value))}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                    autoComplete="on"
                   />
                 </div>
               </div>
@@ -142,6 +149,7 @@ export default function AdminSettings() {
                   value={settings.latePaymentFee}
                   onChange={(e) => handleChange('latePaymentFee', parseInt(e.target.value))}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  autoComplete="on"
                 />
               </div>
             </div>
@@ -259,6 +267,7 @@ export default function AdminSettings() {
                   value={settings.termsUrl}
                   onChange={(e) => handleChange('termsUrl', e.target.value)}
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                  autoComplete="on"
                 />
               </div>
               <div>

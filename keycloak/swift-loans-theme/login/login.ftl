@@ -11,12 +11,12 @@
             <form id="kc-form-login" action="${url.loginAction}" method="post">
                 <div class="form-group">
                     <label for="username" class="form-label">Email or Username</label>
-                    <input id="username" class="form-input" name="username" value="${(login.username!'')}" type="text" autofocus>
+                    <input id="username" class="form-input" name="username" value="${(login.username!'')}" type="text" autoComplete="on" autofocus>
                 </div>
                 
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
-                    <input id="password" class="form-input" name="password" type="password">
+                    <input id="password" class="form-input" name="password" type="password" autoComplete="on">
                 </div>
                 
                 <#if realm.rememberMe>

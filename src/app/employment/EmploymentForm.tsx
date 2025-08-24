@@ -50,6 +50,7 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
+            autoComplete="on"
           />
         </div>
         <div>
@@ -62,6 +63,7 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
+            autoComplete="on"
           />
         </div>
         <div>
@@ -74,6 +76,7 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
+            autoComplete="on"
           />
         </div>
         <div>
@@ -88,6 +91,7 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
             min="1"
             max="31"
             required
+            autoComplete="on"
           />
         </div>
       </div>
