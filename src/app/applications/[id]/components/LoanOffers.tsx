@@ -5,6 +5,7 @@ import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { useAcceptOffer } from '../../useAcceptOffer';
 import { useRejectOffer } from '../../useRejectOffer';
+import formatCurrency from '@/app/shared/currency';
 
 interface LoanOffersProps {
     offers: any[];
@@ -21,13 +22,6 @@ export default function LoanOffers({ offers, applicationId }: LoanOffersProps) {
 
     const handleRejectOffer = async (offerId: string) => {
         await rejectOffer(offerId);
-    };
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-        }).format(amount);
     };
 
     return (

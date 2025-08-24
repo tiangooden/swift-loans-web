@@ -5,6 +5,7 @@ import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { AdminLoanOffersProps } from '../types';
 import { useDeleteOffer } from '../useDeleteOffer';
+import formatCurrency from '@/app/shared/currency';
 
 export default function AdminLoanOffers({ applicationId, offers }: AdminLoanOffersProps) {
     const { mutateAsync: deleteOffer, isPending: isDeleting } = useDeleteOffer();
@@ -13,13 +14,6 @@ export default function AdminLoanOffers({ applicationId, offers }: AdminLoanOffe
         if (window.confirm('Are you sure you want to delete this offer?')) {
             await deleteOffer({ applicationId, offerId });
         }
-    };
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-        }).format(amount);
     };
 
     return (

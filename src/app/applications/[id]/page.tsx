@@ -7,6 +7,7 @@ import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { useFetchApplication } from './useFetchApplication';
 import { useWithdrawApplication } from '@/app/applications/useWithdrawApplication';
+import formatCurrency from '@/app/shared/currency';
 
 export default function LoanApplicationDetailsPage() {
     const router = useRouter();
@@ -18,13 +19,6 @@ export default function LoanApplicationDetailsPage() {
         if (application) {
             await withdrawApplication(application.id);
         }
-    };
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-        }).format(amount);
     };
 
     if (loading) {
