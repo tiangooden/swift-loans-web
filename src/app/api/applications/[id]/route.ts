@@ -77,6 +77,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     const { id } = await params;
     // const user = await getCurrentUser();
     const loanApplication = await ApplicationsRepository.findById(id, {
+        id: true,
+        amount_requested: true,
+        term_in_days: true,
+        purpose: true,
         offers: {
             orderBy: {
                 created_at: 'desc',
