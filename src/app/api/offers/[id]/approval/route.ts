@@ -18,6 +18,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
                         user: {
                             select: {
                                 first_name: true,
+                                middle_name: true,
                                 last_name: true,
                                 trn: true,
                                 bank_account: {
