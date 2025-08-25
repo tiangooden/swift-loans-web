@@ -1,3 +1,4 @@
+import { includes } from 'zod';
 import { offers, Prisma } from '../../generated/prisma';
 import { prisma } from '../shared/prisma';
 
@@ -13,9 +14,11 @@ export const OffersRepository = {
     cursor?: Prisma.offersWhereUniqueInput;
     where?: Prisma.offersWhereInput;
     orderBy?: Prisma.offersOrderByWithRelationInput;
+    // include?: Prisma.offersInclude;
+    select?: Prisma.offersSelect;
   }): Promise<offers[]> => {
-    const { skip, take, cursor, where, orderBy } = params;
-    return prisma.offers.findMany({ skip, take, cursor, where, orderBy });
+    const { skip, take, cursor, where, orderBy,  select } = params;
+    return prisma.offers.findMany({ skip, take, cursor, where, orderBy, select });
   },
 
   update: async (params: {

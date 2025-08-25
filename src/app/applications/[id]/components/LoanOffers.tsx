@@ -10,13 +10,13 @@ import formatCurrency from '@/app/shared/currency';
 
 interface LoanOffersProps {
     offers: any[];
-    applicationId: string;
 }
 
-export default function LoanOffers({ offers, applicationId }: LoanOffersProps) {
+export default function LoanOffers({ offers }: LoanOffersProps) {
     const { mutateAsync: acceptOffer, isPending: accepting, error: acceptError } = useAcceptOffer();
     const { mutateAsync: rejectOffer, isPending: rejecting, error: rejectError } = useRejectOffer();
-    const { mutateAsync: generateApprovalLetter, isPending: generatingApprovalLetter, error: errorGeneratingApprovalLetter } = useGenerateApprovalLetter();
+    const { mutateAsync: generateApprovalLetter, isPending: isGeneratingApprovalLetter,
+        error: errorGeneratingApprovalLetter } = useGenerateApprovalLetter();
 
     const handleAcceptOffer = async (offerId: string) => {
         await acceptOffer(offerId);
@@ -77,10 +77,11 @@ export default function LoanOffers({ offers, applicationId }: LoanOffersProps) {
                                                     <X className="h-5 w-5" />
                                                 </button>
                                                 <button
+                                                    type='button'
                                                     onClick={() => handleDownloanApprovalLetter(offer.id)}
                                                     className="text-blue-600 hover:text-blue-900"
                                                     title="Download Approval Letter"
-                                                    disabled={generatingApprovalLetter}
+                                                    disabled={isGeneratingApprovalLetter}
                                                 >
                                                     <Download className="h-5 w-5" />
                                                 </button>
