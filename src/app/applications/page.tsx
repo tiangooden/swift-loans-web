@@ -7,10 +7,10 @@ import { useRouter } from 'next/navigation';
 import ApplicationForm from './ApplicationForm';
 import formatDateString from '../shared/date';
 import { useFetchApplications } from './useFetchApplications';
-import { useSaveApplication } from './useSaveApplication';
-import { useDeleteApplication } from './useDeleteApplication';
 import { LoanApplication } from './types';
 import { getStatusColor, getStatusIcon } from '../shared/status';
+import { useDeleteApplication } from './[id]/useDeleteApplication';
+import { useSaveApplication } from './[id]/useSaveApplication';
 
 export default function LoanApplicationsPage() {
   const { data: session, status } = useSession();

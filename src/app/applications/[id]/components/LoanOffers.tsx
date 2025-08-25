@@ -3,8 +3,9 @@
 import { Check, Download, Upload, X } from 'lucide-react';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
-import { useAcceptOffer } from '../../useAcceptOffer';
-import { useRejectOffer } from '../../useRejectOffer';
+import { useAcceptOffer } from '../useAcceptOffer';
+import { useGenerateApprovalLetter } from '../useGenerateApprovalLetter';
+import { useRejectOffer } from '../useRejectOffer';
 import formatCurrency from '@/app/shared/currency';
 
 interface LoanOffersProps {
@@ -15,6 +16,7 @@ interface LoanOffersProps {
 export default function LoanOffers({ offers, applicationId }: LoanOffersProps) {
     const { mutateAsync: acceptOffer, isPending: accepting, error: acceptError } = useAcceptOffer();
     const { mutateAsync: rejectOffer, isPending: rejecting, error: rejectError } = useRejectOffer();
+    const { mutateAsync: generateApprovalLetter, isPending: generatingApprovalLetter, error: errorGeneratingApprovalLetter } = useGenerateApprovalLetter();
 
     const handleAcceptOffer = async (offerId: string) => {
         await acceptOffer(offerId);
@@ -23,6 +25,10 @@ export default function LoanOffers({ offers, applicationId }: LoanOffersProps) {
     const handleRejectOffer = async (offerId: string) => {
         await rejectOffer(offerId);
     };
+
+    const handleDownloanApprovalLetter = async (id: string) => {
+        await generateApprovalLetter(id);
+    }
 
     return (
         <div className="lg:col-span-3 bg-white rounded-lg shadow">
@@ -62,6 +68,7 @@ export default function LoanOffers({ offers, applicationId }: LoanOffersProps) {
                                                 >
                                                     <Check className="h-5 w-5" />
                                                 </button>
+
                                                 <button
                                                     onClick={() => handleRejectOffer(offer.id)}
                                                     className="text-red-600 hover:text-red-900"
@@ -70,9 +77,10 @@ export default function LoanOffers({ offers, applicationId }: LoanOffersProps) {
                                                     <X className="h-5 w-5" />
                                                 </button>
                                                 <button
-                                                    onClick={() => console.log('generate approval doc')}
+                                                    onClick={() => handleDownloanApprovalLetter(offer.id)}
                                                     className="text-blue-600 hover:text-blue-900"
                                                     title="Download Approval Letter"
+                                                    disabled={generatingApprovalLetter}
                                                 >
                                                     <Download className="h-5 w-5" />
                                                 </button>

@@ -3,7 +3,8 @@ import { generatePdf } from '../../shared/pdf-generator';
 
 export async function POST(request: NextRequest) {
     try {
-        const pdfBuf = await generatePdf('approval.docx', await request.json());
+        const data = await request.json();
+        const pdfBuf = await generatePdf('approval.docx', data);
         return new NextResponse(pdfBuf, {
             headers: {
                 'Content-Type': 'application/pdf',

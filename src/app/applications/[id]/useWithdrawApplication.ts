@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { notifications } from '../shared/notifications';
 import axios from 'axios';
-import { useFetchApplicationKey } from './[id]/useFetchApplication';
+import { useFetchApplicationKey } from './useFetchApplication';
+import { notifications } from '@/app/shared/notifications';
 
 export function useWithdrawApplication() {
     const queryClient = useQueryClient();

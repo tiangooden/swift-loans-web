@@ -6,8 +6,8 @@ import LoanOffers from './components/LoanOffers';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { useFetchApplication } from './useFetchApplication';
-import { useWithdrawApplication } from '@/app/applications/useWithdrawApplication';
 import formatCurrency from '@/app/shared/currency';
+import { useWithdrawApplication } from './useWithdrawApplication';
 
 export default function LoanApplicationDetailsPage() {
     const router = useRouter();
@@ -212,7 +212,6 @@ export default function LoanApplicationDetailsPage() {
                             </div>
                         </div>
                     </div>
-
                     <LoanOffers
                         offers={application.offers}
                         applicationId={application.id}

@@ -1,20 +1,20 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { notifications } from '../shared/notifications';
 import axios from 'axios';
-import { useFetchApplicationKey } from './[id]/useFetchApplication';
+import { useFetchApplicationKey } from './useFetchApplication';
+import { notifications } from '@/app/shared/notifications';
 
-export function useRejectOffer() {
+export function useAcceptOffer() {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending, error } = useMutation({
     mutationFn: async (offerId: string) => {
-      return axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/reject`).then(res => res.data);
+      return axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/accept`).then(res => res.data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [useFetchApplicationKey] });
-      notifications.success('Offer rejected successfully!');
+      notifications.success('Offer accepted successfully!');
     },
     onError: (err: any) => {
-      notifications.error(`Error rejecting offer: ${err.message}`);
+      notifications.error(`Error accepting offer: ${err.message}`);
     },
   });
 
