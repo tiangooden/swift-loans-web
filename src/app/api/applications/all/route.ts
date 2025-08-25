@@ -6,7 +6,8 @@ export async function GET(request: NextRequest) {
         where: {
             is_deleted: false,
         },
-        include: {
+        select: {
+            
             user: {
                 select: {
                     first_name: true,

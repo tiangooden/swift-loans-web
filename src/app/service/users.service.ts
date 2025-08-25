@@ -129,12 +129,12 @@ export class UsersService {
       throw new Error('User with this identity already exists');
     }
 
-    if (input.email) {
-      const existingEmail = await UsersRepository.findByEmail(input.email);
-      if (existingEmail) {
-        throw new Error('User with this email already exists');
-      }
-    }
+    // if (input.email) {
+    //   const existingEmail = await UsersRepository.findByEmail(input.email);
+    //   if (existingEmail) {
+    //     throw new Error('User with this email already exists');
+    //   }
+    // }
 
     if (input.trn) {
       const existingTRN = await UsersRepository.findMany({

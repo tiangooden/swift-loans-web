@@ -2,12 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { wordTemplateToPdf } from '../../../../shared/pdf';
 import { OffersRepository } from '@/app/repository/offers.repository';
 import formatDateString from '@/app/shared/date';
-import { off } from 'process';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
     try {
         const { id } = await params;
-        const offers = await OffersRepository.find({
+        const offers = await OffersRepository.findMany({
             where: { id },
             select: {
                 principal: true,
@@ -36,22 +35,25 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
                 }
             }
         });
-        const { application, ...offer } = offers[0] as any;
+        const { application, ...offerWithoutApplication } = offers[0] as any;
         const { user } = application;
-        const { bank_account, ...user2 } = user;
+        const { first_name, last_name } = user;
+        const { bank_account, ...userWithoutAccount } = user;
         const disbursementDate = new Date();
         const disbursement_date = formatDateString(disbursementDate);
-        const { principal, interest_rate, term_in_days } = offer;
+        const { principal, interest_rate, term_in_days } = offerWithoutApplication;
         const repaymentDate = disbursementDate.setDate(disbursementDate.getDate() + term_in_days);
         const repayment_date = formatDateString(repaymentDate);
         const amount_to_be_repaid = parseFloat(principal) + (principal * (interest_rate / 100));
-        const info = { ...user2, ...offer, ...bank_account, repayment_date, amount_to_be_repaid, disbursement_date };
-        console.log(info)
+        const info = {
+            ...userWithoutAccount, ...offerWithoutApplication, ...bank_account,
+            repayment_date, amount_to_be_repaid, disbursement_date
+        };
         const pdfBuf = await wordTemplateToPdf('approval.docx', info);
         return new NextResponse(pdfBuf, {
             headers: {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename=approval.pdf`,
+                'Content-Disposition': `attachment; filename=Swift Loans Approval for ${first_name} ${last_name}.pdf`,
             },
         });
     } catch (error) {

@@ -6,9 +6,9 @@ import { OffersRepository } from '@/app/repository/offers.repository';
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   const { id } = params;
   try {
-    const loanOffers = await OffersRepository.find({
+    const loanOffers = await OffersRepository.findMany({
       where: {
-        applications: {
+        application: {
           id: id
         },
       },

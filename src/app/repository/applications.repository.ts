@@ -7,10 +7,10 @@ export const ApplicationsRepository = {
     return prisma.applications.create({ data });
   },
 
-  findById: async (id: string, include?: Prisma.applicationsInclude): Promise<applications | null> => {
+  findById: async (id: string, select?: Prisma.applicationsSelect): Promise<applications | null> => {
     return prisma.applications.findUnique({
       where: { id },
-      include,
+      select,
     });
   },
 
@@ -20,10 +20,10 @@ export const ApplicationsRepository = {
     cursor?: Prisma.applicationsWhereUniqueInput;
     where?: Prisma.applicationsWhereInput;
     orderBy?: Prisma.applicationsOrderByWithRelationInput;
-    include?: Prisma.applicationsInclude;
+    select?: Prisma.applicationsSelect;
   }): Promise<applications[]> => {
-    const { skip, take, cursor, where, orderBy, include } = params;
-    return prisma.applications.findMany({ skip, take, cursor, where, orderBy, include });
+    const { skip, take, cursor, where, orderBy, select } = params;
+    return prisma.applications.findMany({ skip, take, cursor, where, orderBy, select });
   },
 
   update: async (params: {
