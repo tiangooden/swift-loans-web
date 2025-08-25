@@ -1,7 +1,7 @@
+import { notifications } from '@/app/shared/notifications';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { notifications } from "../shared/notifications";
 import axios from 'axios';
-import { useFetchApplicationKey } from './[id]/useFetchApplication';
+import { useFetchApplicationsKey } from '../useFetchApplications';
 
 export function useDeleteApplication() {
   const queryClient = useQueryClient();
@@ -10,7 +10,7 @@ export function useDeleteApplication() {
       return axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${key}`).then(res => res.data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [useFetchApplicationKey] });
+      queryClient.invalidateQueries({ queryKey: [useFetchApplicationsKey] });
       notifications.success('Loan application deleted successfully!');
     },
     onError: (err: any) => {

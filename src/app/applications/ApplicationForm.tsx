@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { ApplicationFormProps } from './types';
 
 export default function ApplicationForm({ data, onSubmit, onCancel }: ApplicationFormProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(data || {
     id: '',
     amount_requested: 15000,
     term_in_days: 14,

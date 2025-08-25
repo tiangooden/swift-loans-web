@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     const user = await getCurrentUser();
     const body = await request.json();
     const { amount_requested, term_in_days, purpose } = body;
-    if (!amount_requested || !term_in_days /*|| !purpose*/) {
+    if (!amount_requested || !term_in_days || !purpose) {
         return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
     const application = await ApplicationsRepository.create({

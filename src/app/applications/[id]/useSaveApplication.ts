@@ -1,7 +1,7 @@
+import { notifications } from '@/app/shared/notifications';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { notifications } from '../shared/notifications';
 import axios from 'axios';
-import { useFetchApplicationKey } from './[id]/useFetchApplication';
+import { useFetchApplicationsKey } from '../useFetchApplications';
 
 export function useSaveApplication() {
   const queryClient = useQueryClient();
@@ -14,7 +14,7 @@ export function useSaveApplication() {
         axios.post(url, data).then(res => res.data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [useFetchApplicationKey] });
+      queryClient.invalidateQueries({ queryKey: [useFetchApplicationsKey] });
       notifications.success('Application saved successfully!');
     },
     onError: (err: any) => {
