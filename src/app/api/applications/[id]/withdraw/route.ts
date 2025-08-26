@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { APPLICATION_STATUS } from '@/app/shared/constants';
-import { ApplicationsRepository } from '@/app/repository/applications.repository';
+import { ApplicationsRepository } from '../../applications.repository';
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
     try {

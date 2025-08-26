@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import getCurrentUser from '@/app/shared/get-user';
-import prisma from '@/app/shared/prisma';
+import { ReferencesRepository } from '../references.repository';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
@@ -9,7 +9,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
     if (!user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
-    const references = await prisma.references.findMany({
+    const references = await ReferencesRepository.findMany({
       where: { id },
     });
     return NextResponse.json(references[0] || {});
@@ -33,7 +33,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ message: 'Reference ID is required' }, { status: 400 });
     }
 
-    const updatedReference = await prisma.references.update({
+    const updatedReference = await ReferencesRepository.update({
       where: {
         id,
         user_id: user.id, // Ensure user can only update their own references
@@ -60,7 +60,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       return NextResponse.json({ message: 'Reference ID is required' }, { status: 400 });
     }
 
-    await prisma.references.update({
+    await ReferencesRepository.update({
       where: {
         id,
         user_id: user.id, // Ensure user can only delete their own references

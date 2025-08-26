@@ -24,21 +24,14 @@ export async function PUT(request: Request) {
         },
     });
     let updatedEmployment;
-    const body = await request.json();
+    const data = await request.json();
     if (existingEmployment && existingEmployment.length) {
         updatedEmployment = await EmploymentsRepository.update({
             where: {
                 user_id: user.id,
             },
             data: {
-                employer_name: body.employer_name,
-                employer_phone_number: body.employer_phone_number,
-                job_title: body.job_title,
-                date_of_employment: body.date_of_employment ? new Date(body.date_of_employment) : undefined,
-                gross_salary: body.gross_salary,
-                payday_day: body.payday_day,
-                pay_cycle: body.pay_cycle,
-                total_expenses_per_cycle: body.total_expenses_per_cycle,
+                ...data,
                 updated_at: new Date(),
             },
         });
@@ -49,14 +42,7 @@ export async function PUT(request: Request) {
                     id: user.id,
                 }
             },
-            employer_name: body.employer_name,
-            employer_phone_number: body.employer_phone_number,
-            job_title: body.job_title,
-            date_of_employment: body.date_of_employment ? new Date(body.date_of_employment) : undefined,
-            gross_salary: body.gross_salary,
-            payday_day: body.payday_day,
-            pay_cycle: body.pay_cycle,
-            total_expenses_per_cycle: body.total_expenses_per_cycle,
+            ...data,
         });
     }
     return NextResponse.json(updatedEmployment);

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notifications } from '../../shared/notifications';
 import axios from 'axios';
-import { useFetchApplicationsKey } from '../useFetchApplications';
+import { useFetchApplicationKey } from './useFetchApplication';
 
 export function useRejectOffer() {
   const queryClient = useQueryClient();
@@ -10,7 +10,7 @@ export function useRejectOffer() {
       return axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/reject`).then(res => res.data);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [useFetchApplicationsKey] });
+      queryClient.invalidateQueries({ queryKey: [useFetchApplicationKey] });
       notifications.success('Offer rejected successfully!');
     },
     onError: (err: any) => {

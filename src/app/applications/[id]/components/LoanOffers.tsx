@@ -8,7 +8,7 @@ import { useGenerateApprovalLetter } from '../useGenerateApprovalLetter';
 import { useRejectOffer } from '../useRejectOffer';
 import formatCurrency from '@/app/shared/currency';
 
-export default function LoanOffers(offers: any) {
+export default function LoanOffers({ offers }: any) {
     const { mutateAsync: acceptOffer, isPending: accepting, error: acceptError } = useAcceptOffer();
     const { mutateAsync: rejectOffer, isPending: rejecting, error: rejectError } = useRejectOffer();
     const { mutateAsync: generateApprovalLetter, isPending: isGeneratingApprovalLetter,
@@ -25,7 +25,7 @@ export default function LoanOffers(offers: any) {
     const handleDownloanApprovalLetter = async (id: string) => {
         await generateApprovalLetter(id);
     }
-
+    console.log(offers)
     return (
         <div className="lg:col-span-3 bg-white rounded-lg shadow">
             <div className="p-6">
@@ -44,7 +44,7 @@ export default function LoanOffers(offers: any) {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {offers.map(({id, principal, interest_rate, term_in_days, status, created_at}: any) => (
+                                {offers.map(({ id, principal, interest_rate, term_in_days, status, created_at }: any) => (
                                     <tr key={id}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{formatCurrency(principal)}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{interest_rate}%</td>

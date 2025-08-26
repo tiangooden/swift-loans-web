@@ -4,14 +4,7 @@ import { ApplicationsRepository } from '../applications.repository';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     const user = await getCurrentUser();
-    // if (!user || !user.roles.includes('admin')) {
-    //     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    // }
-    const body = await request.json();
-    const { amount_requested, term_in_days, purpose } = body;
-    if (!amount_requested || !term_in_days /*|| !purpose*/) {
-        return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
+    const data = await request.json();
     const existingApplication = await ApplicationsRepository.findById(params.id);
     if (!existingApplication || existingApplication.user_id !== user.id) {
         return NextResponse.json({ error: 'Application not found' }, { status: 404 });
@@ -19,9 +12,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const updatedApplication = await ApplicationsRepository.update({
         where: { id: params.id },
         data: {
-            amount_requested: parseFloat(amount_requested),
-            term_in_days: parseInt(term_in_days),
-            purpose,
+            ...data,
             updated_at: new Date(),
         },
     });
@@ -30,9 +21,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
     const user = await getCurrentUser();
-    // if (!user || !user.roles.includes('admin')) {
-    //     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    // }
     const { id } = await params;
     const body = await request.json();
     const { status } = body;
@@ -81,6 +69,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         amount_requested: true,
         term_in_days: true,
         purpose: true,
+        status: true,
         offers: {
             orderBy: {
                 created_at: 'desc',

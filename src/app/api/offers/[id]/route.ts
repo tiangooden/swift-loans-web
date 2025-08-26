@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getCurrentUser from '@/app/shared/get-user';
-import { ApplicationsRepository } from '@/app/repository/applications.repository';
 import { OffersRepository } from '@/app/repository/offers.repository';
+import { ApplicationsRepository } from '../../applications/applications.repository';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   const { id } = params;

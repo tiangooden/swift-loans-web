@@ -13,15 +13,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
     const user = await getCurrentUser();
-    const body = await request.json();
-    const { amount_requested, term_in_days, purpose } = body;
-    if (!amount_requested || !term_in_days || !purpose) {
-        return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
+    const data = await request.json();
     const application = await ApplicationsRepository.create({
-        amount_requested: parseFloat(amount_requested),
-        term_in_days: parseInt(term_in_days),
-        purpose,
+        ...data,
         user: { connect: { id: user.id } },
     });
     return NextResponse.json(application, { status: 201 });
