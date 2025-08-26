@@ -26,7 +26,7 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
     }
   }, [data]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     const typedValue = type === "number" ? Number(value) : value;
     const checked = (e.target as HTMLInputElement).checked;
@@ -123,15 +123,18 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
         </div>
         <div>
           <label htmlFor="pay_cycle" className="block text-sm font-medium text-gray-700">Pay Cycle</label>
-          <input
-            type="text"
+          <select
             id="pay_cycle"
             name="pay_cycle"
             value={formData.pay_cycle || ''}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            autoComplete="on"
-          />
+          >
+            <option value="">Select Pay Cycle</option>
+            <option value="weekly">Weekly</option>
+            <option value="fortnightly">Fortnightly</option>
+            <option value="monthly">Monthly</option>
+          </select>
         </div>
         <div>
           <label htmlFor="total_expenses_per_cycle" className="block text-sm font-medium text-gray-700">Total Expenses Per Cycle</label>
