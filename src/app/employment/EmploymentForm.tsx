@@ -11,9 +11,13 @@ interface EmploymentFormProps {
 export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
   const [formData, setFormData] = useState<Employment>({
     employer_name: '',
+    employer_phone_number: '',
     job_title: '',
-    monthly_income: 0,
+    date_of_employment: undefined,
+    gross_salary: 0,
     payday_day: 0,
+    pay_cycle: '',
+    total_expenses_per_cycle: 0,
   });
 
   useEffect(() => {
@@ -54,6 +58,18 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
           />
         </div>
         <div>
+          <label htmlFor="employer_phone_number" className="block text-sm font-medium text-gray-700">Employer Phone Number</label>
+          <input
+            type="text"
+            id="employer_phone_number"
+            name="employer_phone_number"
+            value={formData.employer_phone_number || ''}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            autoComplete="on"
+          />
+        </div>
+        <div>
           <label htmlFor="job_title" className="block text-sm font-medium text-gray-700">Job Title</label>
           <input
             type="text"
@@ -67,15 +83,26 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
           />
         </div>
         <div>
-          <label htmlFor="monthly_income" className="block text-sm font-medium text-gray-700">Monthly Income</label>
+          <label htmlFor="date_of_employment" className="block text-sm font-medium text-gray-700">Date of Employment</label>
           <input
-            type="number"
-            id="monthly_income"
-            name="monthly_income"
-            value={formData.monthly_income || 0}
+            type="date"
+            id="date_of_employment"
+            name="date_of_employment"
+            value={formData.date_of_employment ? new Date(formData.date_of_employment).toISOString().split('T')[0] : ''}
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            required
+            autoComplete="on"
+          />
+        </div>
+        <div>
+          <label htmlFor="gross_salary" className="block text-sm font-medium text-gray-700">Gross Salary</label>
+          <input
+            type="number"
+            id="gross_salary"
+            name="gross_salary"
+            value={formData.gross_salary || 0}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             autoComplete="on"
           />
         </div>
@@ -91,6 +118,30 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
             min="1"
             max="31"
             required
+            autoComplete="on"
+          />
+        </div>
+        <div>
+          <label htmlFor="pay_cycle" className="block text-sm font-medium text-gray-700">Pay Cycle</label>
+          <input
+            type="text"
+            id="pay_cycle"
+            name="pay_cycle"
+            value={formData.pay_cycle || ''}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            autoComplete="on"
+          />
+        </div>
+        <div>
+          <label htmlFor="total_expenses_per_cycle" className="block text-sm font-medium text-gray-700">Total Expenses Per Cycle</label>
+          <input
+            type="number"
+            id="total_expenses_per_cycle"
+            name="total_expenses_per_cycle"
+            value={formData.total_expenses_per_cycle || 0}
+            onChange={handleChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             autoComplete="on"
           />
         </div>

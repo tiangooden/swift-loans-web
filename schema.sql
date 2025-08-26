@@ -51,7 +51,7 @@ CREATE TABLE employments (
     user_id INT UNIQUE NOT NULL,
     employer_name VARCHAR(255),
     job_title VARCHAR(100),
-    monthly_income DECIMAL(12,2),
+    gross_salary DECIMAL(12,2),
     payday_day INT,
     is_deleted BOOLEAN DEFAULT false,
     deleted_at TIMESTAMP(6),

@@ -5,7 +5,7 @@ export interface LoanApplication {
   status: string;
   created_at: string;
   purpose: string;
-  monthly_income: number;
+  gross_salary: number;
   users: {
     first_name: string;
     last_name: string;
@@ -28,7 +28,7 @@ export interface LoanApplication {
       employer_name: string;
       job_title: string;
       start_date: string;
-      monthly_income: number;
+      gross_salary: number;
       payday_day: number;
     } | null;
   },

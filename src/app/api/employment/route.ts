@@ -32,9 +32,13 @@ export async function PUT(request: Request) {
             },
             data: {
                 employer_name: body.employer_name,
+                employer_phone_number: body.employer_phone_number,
                 job_title: body.job_title,
-                monthly_income: body.monthly_income,
+                date_of_employment: body.date_of_employment ? new Date(body.date_of_employment) : undefined,
+                gross_salary: body.gross_salary,
                 payday_day: body.payday_day,
+                pay_cycle: body.pay_cycle,
+                total_expenses_per_cycle: body.total_expenses_per_cycle,
                 updated_at: new Date(),
             },
         });
@@ -46,9 +50,13 @@ export async function PUT(request: Request) {
                 }
             },
             employer_name: body.employer_name,
+            employer_phone_number: body.employer_phone_number,
             job_title: body.job_title,
-            monthly_income: body.monthly_income,
+            date_of_employment: body.date_of_employment ? new Date(body.date_of_employment) : undefined,
+            gross_salary: body.gross_salary,
             payday_day: body.payday_day,
+            pay_cycle: body.pay_cycle,
+            total_expenses_per_cycle: body.total_expenses_per_cycle,
         });
     }
     return NextResponse.json(updatedEmployment);

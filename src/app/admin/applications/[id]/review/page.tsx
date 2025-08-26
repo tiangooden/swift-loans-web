@@ -173,7 +173,7 @@ export default function LoanReviewPage() {
                         </div>
                         <div>
                           <label className="text-sm font-medium text-gray-500">Monthly Salary</label>
-                          <p className="text-gray-900">${application.users.employment?.monthly_income || 'N/A'}</p>
+                          <p className="text-gray-900">${application.users.employment?.gross_salary || 'N/A'}</p>
                         </div>
                         <div>
                           <label className="text-sm font-medium text-gray-500">Pay Day</label>

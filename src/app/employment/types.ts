@@ -1,6 +1,10 @@
 export interface Employment {
     employer_name: string;
+    employer_phone_number?: string;
     job_title: string;
-    monthly_income: number;
+    date_of_employment?: Date;
+    gross_salary?: number;
     payday_day: number;
+    pay_cycle?: string;
+    total_expenses_per_cycle?: number;
 }

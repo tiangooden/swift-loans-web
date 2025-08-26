@@ -160,7 +160,7 @@ export default function LoanApplicationDetailsPage() {
                                             </div>
                                             <div>
                                                 <dt className="text-sm font-medium text-gray-500">Monthly Income</dt>
-                                                <dd className="text-gray-900">{formatCurrency(application.employments[0].monthly_income)}</dd>
+                                                <dd className="text-gray-900">{formatCurrency(application.employments[0].gross_salary)}</dd>
                                             </div>
                                             <div>
                                                 <dt className="text-sm font-medium text-gray-500">Employment Length</dt>

@@ -24,7 +24,7 @@ export interface LoanApplication {
   employments?: {
     employer_name: string;
     job_title: string;
-    monthly_income: number;
+    gross_salary: number;
     employment_length: string;
   }[];
   bank_account?: {
