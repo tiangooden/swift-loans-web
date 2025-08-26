@@ -64,12 +64,11 @@ const Terms = () => {
               </p>
               <h3 className="text-lg font-semibold">Eligibility Requirements</h3>
               <ul className="list-disc pl-6 space-y-2">
-                <li>Must be at least 18 years of age</li>
-                <li>Must be a U.S. citizen or permanent resident</li>
-                <li>Must have a regular source of income</li>
-                <li>Must have an active checking account</li>
-                <li>Must provide valid contact information</li>
-                <li>Must meet state-specific lending requirements</li>
+                <li>Must be currently employed for minimum period of 6 months</li>
+                <li>Most recent payslips, 6 if fortnightly paid 3 if paid monthly or last 3 months bank statement</li>
+                <li>Must provide a passport photograph (no older than 3 months) along with copy of passport/ Driver’s License/ National ID</li>
+                <li>Must provide Proof of Residence (does not have to be in your name)</li>
+                <li>Telephone references (co-worker, family member, friend)</li>
               </ul>
             </div>
           </section>
@@ -98,24 +97,19 @@ const Terms = () => {
             <div className="space-y-4 text-gray-700">
               <h3 className="text-lg font-semibold">Interest Rates and Fees</h3>
               <p>
-                Our finance charges range from $15 to $25 per $100 borrowed, depending on the loan amount and term.
-                The Annual Percentage Rate (APR) for our loans ranges from 200% to 600%.
+                Loans must be repaid with interest at the rate of 25% Fortnightly or 30% Monthly.
               </p>
               <div className="bg-blue-50 p-4 rounded-lg">
                 <h4 className="font-semibold text-blue-900 mb-2">Example Loan:</h4>
                 <ul className="text-blue-800 space-y-1">
-                  <li>Loan Amount: $500</li>
+                  <li>Loan Amount: $10,000</li>
                   <li>Term: 14 days</li>
-                  <li>Finance Fee: $75</li>
-                  <li>Total Repayment: $575</li>
-                  <li>APR: 391%</li>
+                  <li>Total Repayment: $12,500</li>
                 </ul>
               </div>
-              <h3 className="text-lg font-semibold">Additional Fees</h3>
+              <h3 className="text-lg font-semibold">Late Fee</h3>
               <ul className="list-disc pl-6 space-y-2">
-                <li>Failed payment fee: $25 per occurrence</li>
-                <li>Extension fee: Varies by state (where permitted)</li>
-                <li>No prepayment penalties</li>
+                <li>If the Borrower fails to make a repayment on the stipulated date, a daily late fee of $500 will be applied (in addition to the initially agreed interest charged on the borrowed amount)</li>
               </ul>
             </div>
           </section>
@@ -127,6 +121,9 @@ const Terms = () => {
               5. Repayment Terms
             </h2>
             <div className="space-y-4 text-gray-700">
+              <p>
+                Disbursement & Repayment of loans will only be facilitated through Bank Transfers.
+              </p>
               <p>
                 Loan repayment is due in full on the agreed-upon due date. Payment will be automatically withdrawn from your
                 designated bank account unless alternative arrangements are made.
@@ -194,6 +191,30 @@ const Terms = () => {
                 We reserve the right to modify these Terms at any time. Any changes will be posted on our website with an
                 updated effective date. Your continued use of our services after changes are posted constitutes acceptance
                 of the new Terms.
+              </p>
+            </div>
+          </section>
+
+          {/* Section 10 */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              10. Notices
+            </h2>
+            <div className="space-y-4 text-gray-700">
+              <p>
+                Any notice or communication under this Loan must be in writing and sent via Email or Whatsapp.
+              </p>
+            </div>
+          </section>
+
+          {/* Section 11 */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              11. Entire Agreement
+            </h2>
+            <div className="space-y-4 text-gray-700">
+              <p>
+                This Agreement contains the entire understanding between the parties and supersedes and cancels all prior agreements of the parties, whether oral or written, with respect to such subject matter.
               </p>
             </div>
           </section>
