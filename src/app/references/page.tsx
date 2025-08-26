@@ -5,7 +5,7 @@ import ReferencesContent from './ReferencesContent';
 
 const ReferencesPage: React.FC = () => {
   return (
-    <div className="container mx-auto p-4">
+    <div className="min-h-screen bg-gray-50 py-8">
       <ReferencesContent />
     </div>
   );

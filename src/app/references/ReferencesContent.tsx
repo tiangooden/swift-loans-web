@@ -87,7 +87,7 @@ const ReferencesContent: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  if (isFetching || isAdding || isUpdating || isDeleting) return <div className="text-center py-8">Loading...</div>;
+  if (isFetching || isAdding || isUpdating || isDeleting) return <div className="flex justify-center items-center h-screen">Loading...</div>;
   if (fetchError) return <div className="text-center py-8 text-red-500">Error: {fetchError.message}</div>;
   if (addError) return <div className="text-center py-8 text-red-500">Error adding reference: {addError.message}</div>;
   if (updateError) return <div className="text-center py-8 text-red-500">Error updating reference: {updateError.message}</div>;
@@ -96,7 +96,7 @@ const ReferencesContent: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800">Your References</h2>
+        <h2 className="text-2xl font-semibold text-gray-800">References</h2>
         <button
           onClick={openAddModal}
           className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
