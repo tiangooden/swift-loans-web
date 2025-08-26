@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, User, CreditCard, Briefcase, FileText, LogOut } from 'lucide-react';
+import { ChevronDown, User, CreditCard, Briefcase, FileText, LogOut, Share2 } from 'lucide-react';
 import Image from 'next/image';
 import { signOut } from 'next-auth/react';
 
@@ -50,6 +50,14 @@ export function UserDropdown({ session }: UserDropdownProps) {
           >
             <CreditCard className="h-4 w-4" />
             <span>Bank Account</span>
+          </Link>
+          <Link
+            href="/social-medias"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+            onClick={() => setIsDropdownOpen(false)}
+          >
+            <Share2 className="h-4 w-4" />
+            <span>Social Media</span>
           </Link>
           <Link
             href="/employment"
