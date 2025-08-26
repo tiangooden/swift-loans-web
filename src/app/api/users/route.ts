@@ -29,6 +29,7 @@ export async function PUT(request: NextRequest) {
             first_name: data.first_name,
             middle_name: data.middle_name,
             last_name: data.last_name,
+            alias: data.alias,
             email: data.email,
             dob: data.dob ? new Date(data.dob) : null,
             phone_number: data.phone_number,

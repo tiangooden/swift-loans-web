@@ -1,7 +1,7 @@
-import { ApplicationsRepository } from '@/app/repository/applications.repository';
 import { OffersRepository } from '@/app/repository/offers.repository';
 import { APPLICATION_STATUS } from '@/app/shared/constants';
 import { NextRequest, NextResponse } from 'next/server';
+import { ApplicationsRepository } from '../../applications.repository';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {

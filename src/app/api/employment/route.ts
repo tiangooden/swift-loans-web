@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { EmploymentDetailsRepository as EmploymentRepository } from '@/app/employment/employments.repository';
 import getCurrentUser from '@/app/shared/get-user';
+import { EmploymentsRepository } from './employments.repository';
 
 export async function GET(request: Request) {
     const user = await getCurrentUser();
-    const employmentDetails = await EmploymentRepository.find({
+    const employmentDetails = await EmploymentsRepository.find({
         where: {
             user_id: user.id,
         },
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
     const user = await getCurrentUser();
-    const existingEmployment = await EmploymentRepository.find({
+    const existingEmployment = await EmploymentsRepository.find({
         where: {
             user_id: user.id,
         },
@@ -26,7 +26,7 @@ export async function PUT(request: Request) {
     let updatedEmployment;
     const body = await request.json();
     if (existingEmployment && existingEmployment.length) {
-        updatedEmployment = await EmploymentRepository.update({
+        updatedEmployment = await EmploymentsRepository.update({
             where: {
                 user_id: user.id,
             },
@@ -43,7 +43,7 @@ export async function PUT(request: Request) {
             },
         });
     } else {
-        updatedEmployment = await EmploymentRepository.create({
+        updatedEmployment = await EmploymentsRepository.create({
             user: {
                 connect: {
                     id: user.id,

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { toast } from 'sonner';
+import { notifications } from '../shared/notifications';
 
 interface UpdateReferencePayload {
   id: string;
@@ -20,10 +20,10 @@ export const useUpdateReference = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['references'] });
-      toast.success('Reference updated successfully!');
+      notifications.success('Reference updated successfully!');
     },
     onError: (error) => {
-      toast.error(`Failed to update reference: ${error.message}`);
+      notifications.error(`Failed to update reference: ${error.message}`);
     },
   });
 };

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { BankAccountsRepository } from '@/app/bank-accounts/bank_accounts.repository';
 import getCurrentUser from '@/app/shared/get-user';
+import { BankAccountsRepository } from './bank_accounts.repository';
 
 export async function GET(request: NextRequest) {
     const user = await getCurrentUser();

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ApplicationsRepository } from '@/app/repository/applications.repository';
+import { ApplicationsRepository } from '../applications.repository';
 
 export async function GET(request: NextRequest) {
     const loanApplications = await ApplicationsRepository.findMany({

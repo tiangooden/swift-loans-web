@@ -1,7 +1,8 @@
-import { employments, Prisma } from '../../generated/prisma';
-import { prisma } from '../shared/prisma';
+import prisma from "@/app/shared/prisma";
+import { employments, Prisma } from "@/generated/prisma";
 
-export const EmploymentDetailsRepository = {
+
+export const EmploymentsRepository = {
 
   create: async (data: Prisma.employmentsCreateInput): Promise<employments> => {
     return prisma.employments.create({ data });

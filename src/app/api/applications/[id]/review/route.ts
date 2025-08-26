@@ -1,5 +1,5 @@
-import { ApplicationsRepository } from '@/app/repository/applications.repository';
 import { NextRequest, NextResponse } from 'next/server';
+import { ApplicationsRepository } from '../../applications.repository';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {

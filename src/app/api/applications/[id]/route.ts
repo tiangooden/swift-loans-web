@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ApplicationsRepository } from '../../../repository/applications.repository';
 import getCurrentUser from '@/app/shared/get-user';
+import { ApplicationsRepository } from '../applications.repository';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     const user = await getCurrentUser();

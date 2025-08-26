@@ -1,5 +1,6 @@
-import { bank_accounts, Prisma } from '../../generated/prisma';
-import { prisma } from '../shared/prisma';
+import prisma from "@/app/shared/prisma";
+import { bank_accounts, Prisma } from "@/generated/prisma";
+
 
 export const BankAccountsRepository = {
 
