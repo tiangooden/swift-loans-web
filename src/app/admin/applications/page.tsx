@@ -60,16 +60,16 @@ export default function AdminLoans() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {
-                filteredLoans.map(({ id, users, amount_requested, term_in_days, status, submitted_at }: any) => (
+                filteredLoans.map(({ id, user, amount_requested, term_in_days, status, submitted_at }: any) => (
                   <tr key={id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {id}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
-                        {users?.first_name} {users?.last_name}
+                        {user?.first_name} {user?.last_name}
                       </div>
-                      <div className="text-sm text-gray-500">{users?.email}</div>
+                      <div className="text-sm text-gray-500">{user?.email}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       ${amount_requested?.toLocaleString()}

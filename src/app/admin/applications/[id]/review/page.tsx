@@ -141,19 +141,19 @@ export default function LoanReviewPage() {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="text-sm font-medium text-gray-500">Full Name</label>
-                          <p className="text-gray-900">{application.users.first_name} {application.users.last_name}</p>
+                          <p className="text-gray-900">{application.user.first_name} {application.user.last_name}</p>
                         </div>
                         <div>
                           <label className="text-sm font-medium text-gray-500">Email</label>
-                          <p className="text-gray-900">{application.users.email}</p>
+                          <p className="text-gray-900">{application.user.email}</p>
                         </div>
                         <div>
                           <label className="text-sm font-medium text-gray-500">Phone</label>
-                          <p className="text-gray-900">{application.users.phone_number}</p>
+                          <p className="text-gray-900">{application.user.phone_number}</p>
                         </div>
                         <div>
                           <label className="text-sm font-medium text-gray-500">Address</label>
-                          <p className="text-gray-900">{application.users.street_address}, {application.users.city}, {application.users.state} {application.users.zip_code}</p>
+                          <p className="text-gray-900">{application.user.street_address}, {application.user.city}, {application.user.state} {application.user.zip_code}</p>
                         </div>
                       </div>
                     </div>
@@ -165,19 +165,19 @@ export default function LoanReviewPage() {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="text-sm font-medium text-gray-500">Employer</label>
-                          <p className="text-gray-900">{application.users.employment?.employer_name || 'N/A'}</p>
+                          <p className="text-gray-900">{application.user.employment?.employer_name || 'N/A'}</p>
                         </div>
                         <div>
                           <label className="text-sm font-medium text-gray-500">Job Title</label>
-                          <p className="text-gray-900">{application.users.employment?.job_title || 'N/A'}</p>
+                          <p className="text-gray-900">{application.user.employment?.job_title || 'N/A'}</p>
                         </div>
                         <div>
                           <label className="text-sm font-medium text-gray-500">Monthly Salary</label>
-                          <p className="text-gray-900">${application.users.employment?.gross_salary || 'N/A'}</p>
+                          <p className="text-gray-900">${application.user.employment?.gross_salary || 'N/A'}</p>
                         </div>
                         <div>
                           <label className="text-sm font-medium text-gray-500">Pay Day</label>
-                          <p className="text-gray-900">{application.users.employment?.payday_day}</p>
+                          <p className="text-gray-900">{application.user.employment?.payday_day}</p>
                         </div>
                       </div>
                     </div>

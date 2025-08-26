@@ -7,7 +7,10 @@ export async function GET(request: NextRequest) {
             is_deleted: false,
         },
         select: {
-            
+            id: true,
+            term_in_days: true,
+            status: true,
+            amount_requested: true,
             user: {
                 select: {
                     first_name: true,

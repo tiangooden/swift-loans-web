@@ -5,6 +5,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   try {
     const { id } = await params;
     const application = await ApplicationsRepository.findById(id, {
+      status: true,
+      amount_requested: true,
+      term_in_days: true,
+      purpose: true,
       user: {
         select: {
           first_name: true,

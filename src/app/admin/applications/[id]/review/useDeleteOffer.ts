@@ -9,8 +9,8 @@ export const useDeleteOffer = () => {
         mutationFn: async ({ applicationId, offerId }) => {
             return axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}`).then(res => res.data);
         },
-        onSuccess: (_, { applicationId }) => {
-            queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey, applicationId] });
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey] });
             notifications.success('Offer deleted successfully!');
         },
         onError: (err) => {

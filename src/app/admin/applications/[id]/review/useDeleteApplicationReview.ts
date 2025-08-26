@@ -9,8 +9,8 @@ export function useDeleteApplicationReview() {
         mutationFn: async (applicationId: string) => {
             return axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}`).then(res => res.data);
         },
-        onSuccess: (_, applicationId) => {
-            queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey, applicationId] });
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey] });
             notifications.success('Application deleted successfully!');
         },
         onError: (err) => {

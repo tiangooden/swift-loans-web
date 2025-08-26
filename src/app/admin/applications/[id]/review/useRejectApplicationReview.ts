@@ -9,8 +9,8 @@ export function useRejectApplicationReview() {
         mutationFn: async ({ id, decision_reason }) => {
             return axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/reject`, { decision_reason }).then(res => res.data);
         },
-        onSuccess: (_, applicationId) => {
-            queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey, applicationId] });
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey] });
             notifications.success('Application rejected successfully!');
         },
         onError: (err) => {

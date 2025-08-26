@@ -6,7 +6,7 @@ export interface LoanApplication {
   created_at: string;
   purpose: string;
   gross_salary: number;
-  users: {
+  user: {
     first_name: string;
     last_name: string;
     email: string;
