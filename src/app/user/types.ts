@@ -1,15 +1,20 @@
 export interface User {
-  id: number;
+  id?: string;
   identity: string;
-  email?: string;
-  first_name?: string;
-  middle_name?: string;
-  last_name?: string;
-  dob?: string;
-  phone_number?: string;
-  trn?: string;
-  street_address?: string;
-  city?: string;
-  country?: string;
-  status?: string;
+  alias?: string | null;
+  first_name?: string | null;
+  middle_name?: string | null;
+  last_name?: string | null;
+  email?: string | null;
+  dob?: Date | null;
+  phone_number?: string | null;
+  trn?: string | null;
+  street_address?: string | null;
+  city?: string | null;
+  country?: string | null;
+  status?: string | null;
+  is_deleted?: boolean | null;
+  deleted_at?: Date | null;
+  created_at?: Date | null;
+  updated_at?: Date | null;
 }

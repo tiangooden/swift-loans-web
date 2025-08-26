@@ -10,13 +10,14 @@ interface UserFormProps {
 
 export default function UserForm({ data, onSave }: UserFormProps) {
   const [formData, setFormData] = useState<User>({
-    id: 0,
+    id: undefined,
     identity: '',
+    alias: '',
     email: '',
     first_name: '',
     middle_name: '',
     last_name: '',
-    dob: '',
+    dob: null,
     phone_number: '',
     trn: '',
     street_address: '',
@@ -103,6 +104,19 @@ export default function UserForm({ data, onSave }: UserFormProps) {
           />
         </div>
         <div>
+          <label htmlFor="alias" className="block text-sm font-medium text-gray-700">Alias</label>
+          <input
+            type="text"
+            name="alias"
+            id="alias"
+            value={formData.alias || ''}
+            onChange={handleChange}
+            readOnly={!isEditing}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            {... (isEditing && { autoComplete: 'on' })}
+          />
+        </div>
+        <div>
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
           <input
             type="email"
@@ -121,7 +135,7 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             type="date"
             name="dob"
             id="dob"
-            value={formData.dob ? new Date(formData.dob).toISOString().split('T')[0] : ''}
+            value={formData.dob instanceof Date ? formData.dob.toISOString().split('T')[0] : formData.dob ? new Date(formData.dob).toISOString().split('T')[0] : ''}
             onChange={handleChange}
             readOnly={!isEditing}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
