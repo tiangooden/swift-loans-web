@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import s3Client from '@/app/shared/s3client';
-import { DocumentsRepository } from '@/app/documents/documents.repository';
+import { DocumentsRepository } from '@/app/api/files/documents.repository';
 
 export async function GET(req: NextRequest, { params }: { params: { key: string } }) {
   try {
@@ -23,7 +23,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { key: stri
   try {
     const { key } = await params;
     console.log(key);
-    const documents = await DocumentsRepository.find({ where: { key } });
+    const documents = await DocumentsRepository.findMany({ where: { key } });
     console.log(documents);
     await DocumentsRepository.delete({ id: documents[0].id });
     const command = new DeleteObjectCommand({

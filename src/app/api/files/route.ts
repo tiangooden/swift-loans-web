@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { Buffer } from 'buffer';
 import s3Client from '@/app/shared/s3client';
-import { DocumentsRepository } from '@/app/repository/documents.repository';
 import getCurrentUser from '@/app/shared/get-user';
 import cuid from 'cuid';
+import { DocumentsRepository } from './documents.repository';
 
 export async function GET(req: NextRequest) {
   try {

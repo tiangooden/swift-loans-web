@@ -1,5 +1,5 @@
-import { documents, Prisma } from '../../generated/prisma';
-import { prisma } from '../shared/prisma';
+import { documents, Prisma } from '../../../generated/prisma';
+import { prisma } from '../../shared/prisma';
 
 export const DocumentsRepository = {
 
@@ -7,7 +7,7 @@ export const DocumentsRepository = {
     return prisma.documents.create({ data });
   },
 
-  find: async (params: {
+  findMany: async (params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.documentsWhereUniqueInput;

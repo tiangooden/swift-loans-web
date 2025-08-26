@@ -68,6 +68,14 @@ export function UserDropdown({ session }: UserDropdownProps) {
             <span>Employment</span>
           </Link>
           <Link
+            href="/references"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
+            onClick={() => setIsDropdownOpen(false)}
+          >
+            <FileText className="h-4 w-4" />
+            <span>References</span>
+          </Link>
+          <Link
             href="/documents"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
             onClick={() => setIsDropdownOpen(false)}

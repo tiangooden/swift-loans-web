@@ -1,4 +1,4 @@
-import { UsersRepository } from './users.repository'
+import { UsersRepository } from '../api/users/users.repository'
 
 export const UserService = {
     findByIdentity: async (identity: string) => {

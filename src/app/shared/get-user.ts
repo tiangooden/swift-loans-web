@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import { UsersRepository } from "../user/users.repository";
+import { UsersRepository } from "../api/users/users.repository";
 import { UnauthorizedError } from "./http-errors";
 
 export default async function getCurrentUser() {
