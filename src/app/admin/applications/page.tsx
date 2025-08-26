@@ -7,11 +7,11 @@ import { useFetchAdminApplications } from './useFetchAdminApplications';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 
 export default function AdminLoans() {
-  const { searchTerm, setSearchTerm, filterStatus, setFilterStatus, applications: loanApplications, loading } = useFetchAdminApplications();
+  const { searchTerm, setSearchTerm, filterStatus, setFilterStatus, data: loanApplications, isPending } = useFetchAdminApplications();
 
   const filteredLoans = loanApplications;
 
-  if (loading) {
+  if (isPending) {
     return <div className="flex justify-center items-center h-screen">Loading applications...</div>;
   }
 
@@ -60,36 +60,36 @@ export default function AdminLoans() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {
-                filteredLoans.map((loan: any) => (
-                  <tr key={loan.id}>
+                filteredLoans.map(({ id, users, amount_requested, term_in_days, status, submitted_at }: any) => (
+                  <tr key={id}>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {loan.id}
+                      {id}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
-                        {loan.users?.first_name} {loan.users?.last_name}
+                        {users?.first_name} {users?.last_name}
                       </div>
-                      <div className="text-sm text-gray-500">{loan.users?.email}</div>
+                      <div className="text-sm text-gray-500">{users?.email}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      ${loan.amount_requested?.toLocaleString()}
+                      ${amount_requested?.toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {loan.term_in_days} days
+                      {term_in_days} days
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(loan.status)}`}>
-                        {getStatusIcon(loan.status)}
-                        <span className="ml-1">{loan.status}</span>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
+                        {getStatusIcon(status)}
+                        <span className="ml-1">{status}</span>
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatDateString(loan.submitted_at)}
+                      {formatDateString(submitted_at)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
                         <a
-                          href={`/admin/applications/${loan.id}/review`}
+                          href={`/admin/applications/${id}/review`}
                           className="text-blue-600 hover:text-blue-900"
                           title="Review Application"
                         >

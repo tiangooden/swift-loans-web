@@ -214,7 +214,6 @@ export default function LoanApplicationDetailsPage() {
                     </div>
                     <LoanOffers
                         offers={application.offers}
-                        applicationId={application.id}
                     />
                 </div>
             </div>

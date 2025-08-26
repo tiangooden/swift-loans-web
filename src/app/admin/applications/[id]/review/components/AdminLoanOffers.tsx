@@ -33,21 +33,21 @@ export default function AdminLoanOffers({ applicationId, offers }: AdminLoanOffe
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {offers.map((offer: any) => (
-                                <tr key={offer.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{formatCurrency(offer.principal)}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{offer.interest_rate}%</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{offer.term_in_days}</td>
+                            {offers.map(({ id, principal, interest_rate, term_in_days, status, created_at }: any) => (
+                                <tr key={id}>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{formatCurrency(principal)}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{interest_rate}%</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{term_in_days}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(offer.status)}`}>
-                                            {getStatusIcon(offer.status)}&nbsp;{offer.status}
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
+                                            {getStatusIcon(status)}&nbsp;{status}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDateString(offer.created_at)}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDateString(created_at)}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div className="flex items-center space-x-2">
                                             <button
-                                                onClick={() => handleDeleteOffer(offer.id)}
+                                                onClick={() => handleDeleteOffer(id)}
                                                 className="text-red-400 hover:text-red-900 disabled:opacity-50"
                                                 title="Delete Offer"
                                                 disabled={isDeleting}
