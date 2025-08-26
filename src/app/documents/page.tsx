@@ -9,8 +9,8 @@ import formatDateString from '../shared/date';
 
 export default function DocumentsPage() {
     const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-    const { data, isPending: isFetchingFiles, error: errorLoadingFiles, refetch: fetchFiles } = useFetchFile();
-    const { mutateAsync: uploadFiles, isPending: isUploadingFiles, isSuccess: isSuccessUploadingFiles } = useFileUpload();
+    const { data, isPending: isFetchingFiles, error: errorLoadingFiles } = useFetchFile();
+    const { mutateAsync: uploadFiles, isPending: isUploadingFiles, isSuccess: isSuccessUploadingFiles, error: errorUploading } = useFileUpload();
     const { mutateAsync: deleteFile, isPending: isDeletingFile, error: errorDeleting } = useDeleteFile();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +28,26 @@ export default function DocumentsPage() {
         await deleteFile(key);
         setSelectedFiles(null);
     };
+
+    if (isFetchingFiles) {
+        return <div className="flex justify-center items-center h-screen">Loading files...</div>;
+    }
+
+    if (isUploadingFiles) {
+        return <div className="flex justify-center items-center h-screen">Uploading files...</div>;
+    }
+
+    if (isDeletingFile) {
+        return <div className="flex justify-center items-center h-screen">Deleting...</div>;
+    }
+
+    if (errorLoadingFiles || errorUploading || errorDeleting) {
+        return (
+            <div className="flex justify-center items-center h-screen text-red-500">
+                Error: {errorLoadingFiles?.message || errorUploading?.message || errorDeleting?.message}
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 p-4">
@@ -72,7 +92,6 @@ export default function DocumentsPage() {
                     {!isFetchingFiles && data.length === 0 && (
                         <p className='text-center'>No documents uploaded yet.</p>
                     )}
-                    {errorLoadingFiles && <p className="text-red-500">Error: {errorLoadingFiles.message}</p>}
                     {!isFetchingFiles && data.length > 0 && (
                         <ul className="border border-gray-200 rounded-lg divide-y divide-gray-200">
                             {data.map((doc) => (
