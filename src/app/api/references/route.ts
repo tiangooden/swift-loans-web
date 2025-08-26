@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const data = await request.json();
+    const { name, email, phone, relationship } = await request.json();
 
     const newReference = await ReferencesRepository.create({
       user: {
@@ -38,7 +38,10 @@ export async function POST(request: Request) {
           id: user.id,
         }
       },
-      ...data,
+      name,
+      email,
+      phone,
+      relationship,
     });
 
     return NextResponse.json(newReference, { status: 201 });

@@ -33,10 +33,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No files uploaded' }, { status: 400 });
     }
 
-    const uploadResults = await Promise.all(files.map(async (file) => {
+    const id = cuid();
+    await Promise.all(files.map(async (file) => {
       const arrayBuffer = await file.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
-      const id = cuid();
       const command = new PutObjectCommand({
         Bucket: process.env.AWS_S3_BUCKET_NAME,
         Key: id,
@@ -57,11 +57,7 @@ export async function POST(req: NextRequest) {
       });
       return { filename: file.name, status: 'success' };
     }));
-
-    return NextResponse.json({
-      message: 'Files uploaded successfully',
-      results: uploadResults
-    });
+    return NextResponse.json({ key: id, });
   } catch (error) {
     console.error('Error uploading file:', error);
     return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });

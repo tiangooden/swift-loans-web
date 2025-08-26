@@ -12,10 +12,12 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-    const user = await getCurrentUser();
-    const data = await request.json();
+    const user = await getCurrentUser(); const body = await request.json();
+    const { amount_requested, term_in_days, purpose } = body;
     const application = await ApplicationsRepository.create({
-        ...data,
+        amount_requested: parseFloat(amount_requested),
+        term_in_days: parseInt(term_in_days),
+        purpose,
         user: { connect: { id: user.id } },
     });
     return NextResponse.json(application, { status: 201 });
