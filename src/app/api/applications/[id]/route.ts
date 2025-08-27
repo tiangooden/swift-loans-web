@@ -2,21 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import getCurrentUser from '@/app/shared/get-user';
 import { ApplicationsRepository } from '../applications.repository';
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-    const user = await getCurrentUser();
-    const data = await request.json();
-    const existingApplication = await ApplicationsRepository.findById(params.id);
-    if (!existingApplication || existingApplication.user_id !== user.id) {
-        return NextResponse.json({ error: 'Application not found' }, { status: 404 });
-    }
-    const updatedApplication = await ApplicationsRepository.update({
-        where: { id: params.id },
-        data: {
-            ...data,
-            updated_at: new Date(),
-        },
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+    const { id } = await params;
+    // const user = await getCurrentUser();
+    const loanApplication = await ApplicationsRepository.findById(id, {
+        id: true,
+        amount_requested: true,
+        term_in_days: true,
+        purpose: true,
+        status: true,
+        offers: {
+            orderBy: {
+                created_at: 'desc',
+            }
+        }
     });
-    return NextResponse.json(updatedApplication);
+    if (!loanApplication) {
+        return NextResponse.json({ error: 'Loan application not found' }, { status: 404 });
+    }
+    return NextResponse.json(loanApplication);
 }
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
@@ -44,6 +48,23 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     return NextResponse.json(updatedApplication);
 }
 
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+    const user = await getCurrentUser();
+    const data = await request.json();
+    const existingApplication = await ApplicationsRepository.findById(params.id);
+    if (!existingApplication || existingApplication.user_id !== user.id) {
+        return NextResponse.json({ error: 'Application not found' }, { status: 404 });
+    }
+    const updatedApplication = await ApplicationsRepository.update({
+        where: { id: params.id },
+        data: {
+            ...data,
+            updated_at: new Date(),
+        },
+    });
+    return NextResponse.json(updatedApplication);
+}
+
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
     const user = await getCurrentUser();
     const { id } = await params;
@@ -59,30 +80,4 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
         },
     });
     return NextResponse.json({ message: 'Application deleted successfully' });
-}
-
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-    const { id } = await params;
-    // const user = await getCurrentUser();
-    const loanApplication = await ApplicationsRepository.findById(id, {
-        id: true,
-        amount_requested: true,
-        term_in_days: true,
-        purpose: true,
-        status: true,
-        offers: {
-            orderBy: {
-                created_at: 'desc',
-            }
-        }
-    });
-    if (!loanApplication) {
-        return NextResponse.json({ error: 'Loan application not found' }, { status: 404 });
-    }
-    // Check if the user is the owner of the application or an admin
-    // const isAdmin = user.roles.includes('admin');
-    // if (loanApplication.user_id !== user.id && !isAdmin) {
-    //     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    // }
-    return NextResponse.json(loanApplication);
 }

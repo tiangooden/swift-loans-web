@@ -1,18 +1,25 @@
 'use client';
 
-import { Check, Download, Upload, X } from 'lucide-react';
+import { Check, Download, X } from 'lucide-react';
+import FileUploadButton from '@/app/shared/components/FileUploadButton';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { useAcceptOffer } from '../useAcceptOffer';
 import { useGenerateApprovalLetter } from '../useGenerateApprovalLetter';
 import { useRejectOffer } from '../useRejectOffer';
 import formatCurrency from '@/app/shared/currency';
+import { useUploadApprovalLetter } from '../useUploadApprovalLetter';
+import { useFileUpload } from '@/app/documents/useFileUpload';
 
 export default function LoanOffers({ offers }: any) {
     const { mutateAsync: acceptOffer, isPending: accepting, error: acceptError } = useAcceptOffer();
     const { mutateAsync: rejectOffer, isPending: rejecting, error: rejectError } = useRejectOffer();
     const { mutateAsync: generateApprovalLetter, isPending: isGeneratingApprovalLetter,
         error: errorGeneratingApprovalLetter } = useGenerateApprovalLetter();
+    const { mutateAsync: uploadApprovalLetter, isPending: isUploadingApprovalLetter,
+        error: errorUploadingApprovalLetter } = useUploadApprovalLetter();
+    const { mutateAsync: uploadFiles, isPending: isUploadingFiles, isSuccess: isSuccessUploadingFiles,
+        error: errorUploading } = useFileUpload();
 
     const handleAcceptOffer = async (offerId: string) => {
         await acceptOffer(offerId);
@@ -25,7 +32,14 @@ export default function LoanOffers({ offers }: any) {
     const handleDownloanApprovalLetter = async (id: string) => {
         await generateApprovalLetter(id);
     }
-    console.log(offers)
+
+    const handleUploadApprovalLetter = async (offerId: string, file: File) => {
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        const key = await uploadFiles(dataTransfer.files);
+        await uploadApprovalLetter({ offerId, key });
+    };
+
     return (
         <div className="lg:col-span-3 bg-white rounded-lg shadow">
             <div className="p-6">
@@ -81,13 +95,11 @@ export default function LoanOffers({ offers }: any) {
                                                 >
                                                     <Download className="h-5 w-5" />
                                                 </button>
-                                                <button
-                                                    onClick={() => console.log('upload approval doc')}
-                                                    className="text-blue-600 hover:text-blue-900"
+                                                <FileUploadButton
+                                                    onFileUpload={(file) => handleUploadApprovalLetter(id, file)}
                                                     title="Upload Approval Letter"
-                                                >
-                                                    <Upload className="h-5 w-5" />
-                                                </button>
+                                                    className="text-blue-600 hover:text-blue-900"
+                                                />
                                             </div>
                                         </td>
                                     </tr>
