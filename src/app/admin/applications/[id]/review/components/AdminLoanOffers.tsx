@@ -1,19 +1,25 @@
 'use client';
 
-import { Trash2 } from 'lucide-react';
+import { Download, Trash2 } from 'lucide-react';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { AdminLoanOffersProps } from '../types';
 import { useDeleteOffer } from '../useDeleteOffer';
 import formatCurrency from '@/app/shared/currency';
+import { useDownloadSignedApproval } from '../useDownloadSignedApproval';
 
 export default function AdminLoanOffers({ applicationId, offers }: AdminLoanOffersProps) {
+    const { mutateAsync: downloadSignedApproval, isPending: isDownloading } = useDownloadSignedApproval();
     const { mutateAsync: deleteOffer, isPending: isDeleting } = useDeleteOffer();
 
     const handleDeleteOffer = async (offerId: string) => {
         if (window.confirm('Are you sure you want to delete this offer?')) {
             await deleteOffer({ applicationId, offerId });
         }
+    };
+
+    const handleSignedApprovalDownload = async (id: any) => {
+        await downloadSignedApproval(id);
     };
 
     return (
@@ -33,7 +39,7 @@ export default function AdminLoanOffers({ applicationId, offers }: AdminLoanOffe
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {offers.map(({ id, principal, interest_rate, term_in_days, status, created_at }: any) => (
+                            {offers.map(({ id, principal, interest_rate, approval_file_key, term_in_days, status, created_at }: any) => (
                                 <tr key={id}>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{formatCurrency(principal)}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{interest_rate}%</td>
@@ -53,6 +59,14 @@ export default function AdminLoanOffers({ applicationId, offers }: AdminLoanOffe
                                                 disabled={isDeleting}
                                             >
                                                 <Trash2 className="h-5 w-5" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleSignedApprovalDownload(approval_file_key)}
+                                                className="text-blue-600 hover:text-blue-900 disabled:opacity-50"
+                                                title="Download Signed Approval"
+                                                disabled={isDownloading}
+                                            >
+                                                <Download />
                                             </button>
                                         </div>
                                     </td>

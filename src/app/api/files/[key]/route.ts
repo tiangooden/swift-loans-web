@@ -11,8 +11,8 @@ export async function GET(req: NextRequest, { params }: { params: { key: string 
       Bucket: process.env.AWS_S3_BUCKET_NAME,
       Key: key,
     });
-    const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL expires in 1 hour
-    return NextResponse.json({ signedUrl });
+    const signed_url = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL expires in 1 hour
+    return NextResponse.json({ signed_url });
   } catch (error) {
     console.error('Error generating signed URL for download:', error);
     return NextResponse.json({ error: 'Failed to generate signed URL' }, { status: 500 });

@@ -6,13 +6,12 @@ import axios from 'axios';
 export function useGenerateApprovalLetter() {
   const { mutateAsync, isPending, error } = useMutation({
     mutationFn: async (offerId: string) => {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/approval`, {}, {
+      return await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/approval`, {}, {
         responseType: 'blob',
       });
-      downloadFileInBrowser('approval.pdf', res.data);
-      return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (data: any) => {
+      downloadFileInBrowser('approval.pdf', data.data);
       notifications.success('Approval letter generated successfully!');
     },
     onError: (error) => {

@@ -1,7 +1,7 @@
 'use client';
 
 import { Check, Download, X } from 'lucide-react';
-import FileUploadButton from '@/app/shared/components/FileUploadButton';
+import FileUploadButton from '@/app/shared/component/FileUploadButton';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { useAcceptOffer } from '../useAcceptOffer';
