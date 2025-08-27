@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { OffersRepository } from '@/app/repository/offers.repository';
+import { OffersRepository } from '../../offers.repository';
 import { OFFER_STATUS } from '@/app/shared/constants';
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {

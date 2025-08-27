@@ -1,4 +1,4 @@
-import { OffersRepository } from '@/app/repository/offers.repository';
+import { OffersRepository } from '@/app/api/offers/offers.repository';
 import { APPLICATION_STATUS } from '@/app/shared/constants';
 import { NextRequest, NextResponse } from 'next/server';
 import { ApplicationsRepository } from '../../applications.repository';

@@ -54,8 +54,7 @@ export async function POST(req: NextRequest) {
             id: user.id
           }
         },
-      });
-      return { filename: file.name, status: 'success' };
+      });;
     }));
     return NextResponse.json({ key: id, });
   } catch (error) {

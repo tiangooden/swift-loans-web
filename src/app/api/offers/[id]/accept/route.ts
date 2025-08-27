@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { OffersRepository } from '@/app/repository/offers.repository';
 import { OFFER_STATUS } from '@/app/shared/constants';
+import { OffersRepository } from '../../offers.repository';
 
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   const { id } = await params;

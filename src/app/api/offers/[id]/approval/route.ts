@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { wordTemplateToPdf } from '../../../../shared/pdf';
-import { OffersRepository } from '@/app/repository/offers.repository';
 import formatDateString from '@/app/shared/date';
+import { OffersRepository } from '../../offers.repository';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
     try {
