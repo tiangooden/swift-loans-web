@@ -17,8 +17,6 @@ const Dashboard = async () => {
       memberSince: formatDateString(user.created_at)
     };
   } catch (error) {
-    console.error('Error fetching user data:', error);
-    // Redirect to login if not authenticated
     redirect(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/auth/signin`);
   }
 

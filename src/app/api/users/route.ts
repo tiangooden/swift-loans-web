@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { UsersRepository } from '@/app/api/users/users.repository';
+import redis from '@/app/shared/redis';
 
 export async function GET(request: NextRequest) {
     const session = await getServerSession(authOptions);
@@ -9,10 +10,18 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
     }
     const { id, provider } = session.user as any;
+
+    let cached = await redis.get(id);
+    if (cached) {
+        return NextResponse.json(JSON.parse(cached));
+    }
+
     const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
     if (!user) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
+
+    await redis.set(`id`, JSON.stringify(user), "EX", 60);
     return NextResponse.json(user);
 }
 
@@ -42,5 +51,6 @@ export async function PUT(request: NextRequest) {
     if (!updatedUser) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
+    await redis.del(id);
     return NextResponse.json(updatedUser);
 }

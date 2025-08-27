@@ -17,6 +17,7 @@
     "bluebird": "^3.7.2",
     "cuid": "^3.0.0",
     "docxtemplater": "^3.47.0",
+    "ioredis": "^5.7.0",
     "libreoffice-convert": "^1.5.1",
     "lucide-react": "^0.536.0",
     "next": "15.4.5",
