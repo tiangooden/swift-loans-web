@@ -14,7 +14,6 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       where: { id: id },
       data: {
         status: OFFER_STATUS.ACCEPTED,
-        updated_at: new Date(),
       },
     });
     return NextResponse.json({ message: 'Offer accepted successfully' }, { status: 200 });

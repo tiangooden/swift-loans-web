@@ -19,7 +19,7 @@ model bank_accounts {
   is_deleted     Boolean?  @default(false)
   deleted_at     DateTime? @db.Timestamp(6)
   created_at     DateTime? @default(now()) @db.Timestamp(6)
-  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @updatedAt @db.Timestamp(6)
   user           users     @relation(fields: [user_id], references: [id])
 
   @@index([user_id], map: "idx_bank_accounts_user_id")
@@ -36,7 +36,7 @@ model capital {
   is_deleted   Boolean?  @default(false)
   deleted_at   DateTime? @db.Timestamp(6)
   created_at   DateTime? @default(now()) @db.Timestamp(6)
-  updated_at   DateTime? @default(now()) @db.Timestamp(6)
+  updated_at   DateTime? @updatedAt @db.Timestamp(6)
 
   @@index([capital_type], map: "idx_capital_capital_type")
   @@index([currency], map: "idx_capital_currency")
@@ -54,7 +54,7 @@ model documents {
   is_deleted Boolean?     @default(false)
   deleted_at DateTime?    @db.Timestamp(6)
   created_at DateTime?    @default(now()) @db.Timestamp(6)
-  updated_at DateTime?    @default(now()) @db.Timestamp(6)
+  updated_at DateTime?    @updatedAt @db.Timestamp(6)
   user       users?       @relation(fields: [user_id], references: [id])
   repayments repayments[]
 
@@ -79,7 +79,7 @@ model employments {
   is_deleted               Boolean?  @default(false)
   deleted_at               DateTime? @db.Timestamp(6)
   created_at               DateTime? @default(now()) @db.Timestamp(6)
-  updated_at               DateTime? @default(now()) @db.Timestamp(6)
+  updated_at               DateTime? @updatedAt @db.Timestamp(6)
   user                     users     @relation(fields: [user_id], references: [id])
 
   @@index([is_deleted], map: "idx_employments_is_deleted")
@@ -100,7 +100,7 @@ model applications {
   is_deleted       Boolean?  @default(false)
   deleted_at       DateTime? @db.Timestamp(6)
   created_at       DateTime? @default(now()) @db.Timestamp(6)
-  updated_at       DateTime? @default(now()) @db.Timestamp(6)
+  updated_at       DateTime? @updatedAt @db.Timestamp(6)
   user             users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   offers           offers[]
 
@@ -121,7 +121,7 @@ model offers {
   is_deleted        Boolean?      @default(false)
   deleted_at        DateTime?     @db.Timestamp(6)
   created_at        DateTime?     @default(now()) @db.Timestamp(6)
-  updated_at        DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?     @updatedAt @db.Timestamp(6)
   application       applications? @relation(fields: [application_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   loans             loans[]
 
@@ -138,7 +138,7 @@ model loans {
   is_deleted   Boolean?     @default(false)
   deleted_at   DateTime?    @db.Timestamp(6)
   created_at   DateTime?    @default(now()) @db.Timestamp(6)
-  updated_at   DateTime?    @default(now()) @db.Timestamp(6)
+  updated_at   DateTime?    @updatedAt @db.Timestamp(6)
   repayments   repayments[]
   offers       offers       @relation(fields: [offer_id], references: [id])
 
@@ -156,7 +156,7 @@ model notifications {
   is_deleted Boolean?  @default(false)
   deleted_at DateTime? @db.Timestamp(6)
   created_at DateTime? @default(now()) @db.Timestamp(6)
-  updated_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @updatedAt @db.Timestamp(6)
   user       users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([created_at], map: "idx_notifications_created_at")
@@ -176,7 +176,7 @@ model repayments {
   is_deleted            Boolean?   @default(false)
   deleted_at            DateTime?  @db.Timestamp(6)
   created_at            DateTime?  @default(now()) @db.Timestamp(6)
-  updated_at            DateTime?  @default(now()) @db.Timestamp(6)
+  updated_at            DateTime?  @updatedAt @db.Timestamp(6)
   loans                 loans?     @relation(fields: [loan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   document              documents? @relation(fields: [document_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
@@ -194,7 +194,7 @@ model settings {
   is_deleted  Boolean?  @default(false)
   deleted_at  DateTime? @db.Timestamp(6)
   created_at  DateTime? @default(now()) @db.Timestamp(6)
-  updated_at  DateTime? @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @updatedAt @db.Timestamp(6)
 
   @@index([is_deleted], map: "idx_settings_is_deleted")
 }

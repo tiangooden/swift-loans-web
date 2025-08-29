@@ -41,8 +41,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const updatedApplication = await ApplicationsRepository.update({
         where: { id: id },
         data: {
-            status: status,
-            updated_at: new Date(),
+            status: status
         },
     });
     return NextResponse.json(updatedApplication);
@@ -57,10 +56,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
     const updatedApplication = await ApplicationsRepository.update({
         where: { id: params.id },
-        data: {
-            ...data,
-            updated_at: new Date(),
-        },
+        data,
     });
     return NextResponse.json(updatedApplication);
 }

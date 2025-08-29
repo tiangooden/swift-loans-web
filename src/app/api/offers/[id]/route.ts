@@ -52,7 +52,6 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       where: { id: id },
       data: {
         status: status,
-        updated_at: new Date(),
       },
     });
     const newOffer = await OffersRepository.create({
@@ -65,8 +64,6 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       interest_rate: parseFloat(interest_rate),
       term_in_days: parseInt(term),
       status: status,
-      created_at: new Date(),
-      updated_at: new Date(),
     });
     return NextResponse.json(newOffer, { status: 201 });
   } catch (error) {

@@ -11,15 +11,12 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       where: { id: id },
       data: {
         status: APPLICATION_STATUS.COUNTERED,
-        updated_at: new Date(),
       },
     });
     await OffersRepository.create({
       ...data,
       application_id: id,
       status: APPLICATION_STATUS.OFFERED,
-      created_at: new Date(),
-      updated_at: new Date(),
     });
     return NextResponse.json({ message: 'Loan application approved and offer created successfully' });
   } catch (error) {

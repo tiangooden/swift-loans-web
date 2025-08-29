@@ -16,8 +16,6 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       interest_rate: INTEREST_RATE[application.term_in_days?.toString() ?? '14'],
       application: { connect: { id } },
       status: APPLICATION_STATUS.APPROVED,
-      created_at: new Date(),
-      updated_at: new Date(),
     });
     return NextResponse.json({ message: 'Loan application approved and offer created successfully' });
   } catch (error) {
