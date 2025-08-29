@@ -16,7 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Swift Loans",
+  title: {
+    template: "%s | Swift Loans",
+    default: "Swift Loans",
+  },
   description: "",
 };
 

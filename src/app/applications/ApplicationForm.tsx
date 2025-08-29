@@ -2,6 +2,10 @@
 
 import { useState } from 'react';
 import { ApplicationFormProps } from './types';
+import FormInput from '../shared/component/FormInput';
+import FormSelect from '../shared/component/FormSelect';
+import FormButton from '../shared/component/FormButton';
+import FormTextArea from '../shared/component/FormTextArea';
 
 export default function ApplicationForm({ data, onSubmit, onCancel, errors, saving }: ApplicationFormProps) {
   const [formData, setFormData] = useState(data || {
@@ -10,7 +14,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors, savi
     purpose: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     onSubmit(formData);
   };
@@ -29,54 +33,48 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors, savi
       </div>
 
       <div>
-        <label htmlFor="amount_requested" className="block text-sm font-medium text-gray-700 mb-2">
-          Amount Requested ($)
-        </label>
-        <input
+        <FormInput
+          label="Amount Requested ($)"
           type="number"
           id="amount_requested"
           name="amount_requested"
           value={formData.amount_requested || ''}
           onChange={handleChange}
-          min="0"
-          step="5000"
+          min={0}
+          // step="5000"
           required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           placeholder="1000.00"
-          autoComplete="on"
         />
       </div>
 
       <div>
-        <label htmlFor="term_in_days" className="block text-sm font-medium text-gray-700 mb-2">
-          Term (days)
-        </label>
-        <select
+        <FormSelect
+          label="Term (days)"
           id="term_in_days"
           name="term_in_days"
           value={formData.term_in_days || ''}
           onChange={handleChange}
           required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-        >
-          <option value="" disabled>Select term duration</option>
-          <option value="14">14 days</option>
-          <option value="28">28 days</option>
-        </select>
+          options={[
+            { value: '', label: 'Select term duration' },
+            { value: '14', label: '14 days' },
+            { value: '28', label: '28 days' },
+          ]}
+        />
       </div>
 
       <div>
         <label htmlFor="purpose" className="block text-sm font-medium text-gray-700 mb-2">
           Purpose
         </label>
-        <textarea
+        <FormTextArea
+          label="Purpose"
           id="purpose"
           name="purpose"
           value={formData.purpose || ''}
           onChange={handleChange}
           rows={3}
           required
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           placeholder="Describe the purpose of this loan..."
         />
       </div>
@@ -84,23 +82,20 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors, savi
         {errors.map((e, i) => <p key={i}>* {e}</p>)}
       </div>
       <div className="flex space-x-3 pt-4">
-        <button
+        <FormButton
           type="button"
           disabled={saving}
-          className={`flex-1 py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
-    ${saving ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
           onClick={handleSubmit}
         >
           {data ? 'Update Application' : 'Submit Application'}
-        </button>
+        </FormButton>
 
-        <button
+        <FormButton
           type="button"
           onClick={onCancel}
-          className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-200"
         >
           Cancel
-        </button>
+        </FormButton>
       </div>
     </form>
   );

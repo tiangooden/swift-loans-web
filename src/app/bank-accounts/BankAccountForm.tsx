@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { BankAccount } from './types';
+import FormInput from '../shared/component/FormInput';
+import FormSelect from '../shared/component/FormSelect';
+import FormButton from '../shared/component/FormButton';
 
 interface BankAccountFormProps {
   account: BankAccount | null | undefined;
@@ -40,81 +43,68 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave
     <form className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="bank_name" className="block text-sm font-medium text-gray-700">Bank Name</label>
-          <input
-            type="text"
-            name="bank_name"
+          <FormInput
+            label="Bank Name"
             id="bank_name"
+            name="bank_name"
             value={formData.bank_name || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
-            autoComplete="on"
           />
         </div>
         <div>
-          <label htmlFor="branch_name" className="block text-sm font-medium text-gray-700">Branch Name</label>
-          <input
-            type="text"
-            name="branch_name"
+          <FormInput
+            label="Branch Name"
             id="branch_name"
+            name="branch_name"
             value={formData.branch_name || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
-            autoComplete="on"
           />
         </div>
         <div>
-          <label htmlFor="account_name" className="block text-sm font-medium text-gray-700">Account Name</label>
-          <input
-            type="text"
-            name="account_name"
+          <FormInput
+            label="Account Name"
             id="account_name"
+            name="account_name"
             value={formData.account_name || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
-            autoComplete="on"
           />
         </div>
         <div>
-          <label htmlFor="account_number" className="block text-sm font-medium text-gray-700">Account Number</label>
-          <input
-            type="text"
-            name="account_number"
+          <FormInput
+            label="Account Number"
             id="account_number"
+            name="account_number"
             value={formData.account_number || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
             required
-            autoComplete="on"
           />
         </div>
         <div>
-          <label htmlFor="account_type" className="block text-sm font-medium text-gray-700">Account Type</label>
-          <select
-            name="account_type"
+          <FormSelect
+            label="Account Type"
             id="account_type"
+            name="account_type"
             value={formData.account_type || ''}
             onChange={handleChange}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
+            options={[
+              { value: '', label: 'Select Account Type' },
+              { value: 'Savings', label: 'Savings' },
+              { value: 'Checking', label: 'Checking' }
+            ]}
             required
-          >
-            <option value="">Select Account Type</option>
-            <option value="Savings">Savings</option>
-            <option value="Checking">Checking</option>
-          </select>
+          />
         </div>
       </div>
       <div className="flex justify-end">
-        <button
+        <FormButton
           type="button"
           onClick={handleSubmit}
-          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
           Save Bank Account Details
-        </button>
+        </FormButton>
       </div>
     </form>
   );

@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { User } from './types';
+import FormInput from '../shared/component/FormInput';
+import FormButton from '../shared/component/FormButton';
 
 interface UserFormProps {
   data: User | null | undefined;
@@ -65,157 +67,114 @@ export default function UserForm({ data, onSave }: UserFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">First Name</label>
-          <input
-            type="text"
-            name="first_name"
-            id="first_name"
+          <FormInput
+            label={'First Name'}
+            id={'first_name'}
+            name={'first_name'}
             value={formData.first_name || ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
         <div>
-          <label htmlFor="middle_name" className="block text-sm font-medium text-gray-700">Middle Name</label>
-          <input
-            type="text"
-            name="middle_name"
-            id="middle_name"
+          <FormInput
+            label={'Middle Name'}
+            id={'middle_name'}
+            name={'middle_name'}
             value={formData.middle_name || ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
         <div>
-          <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">Last Name</label>
-          <input
-            type="text"
-            name="last_name"
-            id="last_name"
+          <FormInput
+            label={'Last Name'}
+            id={'last_name'}
+            name={'last_name'}
             value={formData.last_name || ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
         <div>
-          <label htmlFor="alias" className="block text-sm font-medium text-gray-700">Alias</label>
-          <input
-            type="text"
-            name="alias"
-            id="alias"
+          <FormInput
+            label={'Alias'}
+            id={'alias'}
+            name={'alias'}
             value={formData.alias || ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
+          <FormInput
+            label={'Email'}
+            id={'email'}
+            name={'email'}
+            type={'email'}
             value={formData.email || ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
         <div>
-          <label htmlFor="dob" className="block text-sm font-medium text-gray-700">Date of Birth</label>
-          <input
-            type="date"
-            name="dob"
-            id="dob"
+          <FormInput
+            label={'Date of Birth'}
+            id={'dob'}
+            name={'dob'}
+            type={'date'}
             value={formData.dob instanceof Date ? formData.dob.toISOString().split('T')[0] : formData.dob ? new Date(formData.dob).toISOString().split('T')[0] : ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
         <div>
-          <label htmlFor="phone_number" className="block text-sm font-medium text-gray-700">Phone Number</label>
-          <input
-            type="text"
-            name="phone_number"
-            id="phone_number"
+          <FormInput
+            label={'Phone Number'}
+            id={'phone_number'}
+            name={'phone_number'}
             value={formData.phone_number || ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
         <div>
-          <label htmlFor="trn" className="block text-sm font-medium text-gray-700">TRN</label>
-          <input
-            type="text"
-            name="trn"
-            id="trn"
+          <FormInput
+            label={'TRN'}
+            id={'trn'}
+            name={'trn'}
             value={formData.trn || ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
         <div>
-          <label htmlFor="street_address" className="block text-sm font-medium text-gray-700">Street Address</label>
-          <input
-            type="text"
-            name="street_address"
-            id="street_address"
+          <FormInput
+            label={'Street Address'}
+            id={'street_address'}
+            name={'street_address'}
             value={formData.street_address || ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
         <div>
-          <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
-          <input
-            type="text"
-            name="city"
-            id="city"
+          <FormInput
+            label={'City'}
+            id={'city'}
+            name={'city'}
             value={formData.city || ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
         <div>
-          <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
-          <input
-            type="text"
-            name="country"
-            id="country"
+          <FormInput
+            label={'Country'}
+            id={'country'}
+            name={'country'}
             value={formData.country || ''}
             onChange={handleChange}
-            readOnly={!isEditing}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
-            {... (isEditing && { autoComplete: 'on' })}
-          />
+            readOnly={!isEditing} />
         </div>
       </div>
       <div className="flex justify-end space-x-3">
-        <button
+        <FormButton
           type="submit"
-          className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           disabled={loading}
         >
           {loading ? 'Saving...' : 'Save'}
-        </button>
+        </FormButton>
       </div>
     </form>
   );
