@@ -6,6 +6,7 @@ interface FormButtonProps {
   type?: 'button' | 'submit' | 'reset';
   className?: string;
   disabled?: boolean;
+  color?: 'blue' | 'red';
 }
 
 const FormButton: React.FC<FormButtonProps> = ({
@@ -14,12 +15,14 @@ const FormButton: React.FC<FormButtonProps> = ({
   type = 'button',
   className = '',
   disabled = false,
+  color = 'blue',
 }) => {
+  const colorClasses = color === 'red' ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700';
   return (
     <button
       type={type}
       onClick={onClick}
-      className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${className}`}
+      className={`${colorClasses} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${className}`}
       disabled={disabled}
     >
       {children}

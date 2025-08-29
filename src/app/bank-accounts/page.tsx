@@ -1,6 +1,8 @@
 'use client';
 
+import { notifications } from '../shared/notifications';
 import BankAccountForm from './BankAccountForm';
+import { BankAccount } from './types';
 import { useFetchBankAccounts } from './useFetchBankAccounts';
 import { useSaveBankAccount } from './useSaveBankAccount';
 import { CreditCard } from 'lucide-react';
@@ -13,12 +15,14 @@ const BankAccountsPage = () => {
     return <div className="flex justify-center items-center h-screen">Loading bank account...</div>;
   }
 
-  if (saveLoading) {
-    return <div className="flex justify-center items-center h-screen">Saving bank account...</div>;
-  }
-
-  if (fetchError || saveError) {
-    return <div className="flex justify-center items-center h-screen text-red-500">Error: {fetchError?.message || saveError?.message}</div>;
+  async function handleSave(bankAccount: BankAccount): Promise<void> {
+    try {
+      const res = mutateAsync(bankAccount);
+      notifications.success(`Bank account ${bankAccount.id ? 'updated' : 'added'} successfully!`);
+      return res;
+    } catch (err) {
+      notifications.error(`Failed to ${bankAccount.id ? 'update' : 'save'} bank account: ${err}`);
+    }
   }
 
   return (
@@ -28,7 +32,7 @@ const BankAccountsPage = () => {
           <CreditCard className="w-8 h-8 text-blue-600 mr-3" />
           <h1 className="text-3xl font-bold text-gray-800">Bank Account</h1>
         </div>
-        <BankAccountForm account={account} onSave={mutateAsync} />
+        <BankAccountForm account={account} onSave={handleSave} />
       </div>
     </div>
   );

@@ -1,29 +1,25 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { notifications } from '@/app/shared/notifications';
 import { BankAccount } from './types';
 import axios from 'axios';
 import { useFetchBankAccountsKey } from './useFetchBankAccounts';
+import { HttpError } from '../shared/http-errors';
 
 export const useSaveBankAccount = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending, error } = useMutation<any, Error, BankAccount>({
     mutationFn: async (bankAccount: BankAccount) => {
-      const url = bankAccount.id ?
-        `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts/${bankAccount.id}` :
-        `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts`;
-
-      if (bankAccount.id) {
-        return axios.put(url, bankAccount).then(res => res.data);
-      } else {
-        return axios.post(url, bankAccount).then(res => res.data);
+      try {
+        const url = bankAccount.id ?
+          `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts/${bankAccount.id}` :
+          `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/bank-accounts`;
+        const res = bankAccount.id ?
+          await axios.put(url, bankAccount) :
+          await axios.post(url, bankAccount);
+        queryClient.invalidateQueries({ queryKey: [useFetchBankAccountsKey] });
+        return res.data;
+      } catch (e: any) {
+        throw new HttpError(e.response?.status || 500, e.response?.data);
       }
-    },
-    onSuccess: (_, bankAccount) => {
-      queryClient.invalidateQueries({ queryKey: [useFetchBankAccountsKey] });
-      notifications.success(`Bank account ${bankAccount.id ? 'updated' : 'added'} successfully!`);
-    },
-    onError: (e: any, bankAccount) => {
-      notifications.error(`Failed to ${bankAccount.id ? 'update' : 'add'} bank account: ` + e.message);
     },
   });
 

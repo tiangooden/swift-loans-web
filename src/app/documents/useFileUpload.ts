@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { notifications } from '../shared/notifications';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetchFileKey } from './useFetchDocuments';
+import { HttpError } from '../shared/http-errors';
 
 export const useFileUpload = () => {
   const queryClient = useQueryClient();
@@ -11,14 +11,13 @@ export const useFileUpload = () => {
       for (let i = 0; i < files.length; i++) {
         formData.append('files', files[i]);
       }
-      return axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/files`, formData).then(res => res.data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [useFetchFileKey] });
-      notifications.success('Files uploaded successfully');
-    },
-    onError: (err) => {
-      notifications.error(`Failed to upload files: ${err.message}`);
+      try {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/files`, formData);
+        queryClient.invalidateQueries({ queryKey: [useFetchFileKey] });
+        return res.data;
+      } catch (e: any) {
+        throw new HttpError(e.response?.status || 500, e.response?.data);
+      }
     },
   });
 

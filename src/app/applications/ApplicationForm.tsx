@@ -79,7 +79,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors, savi
         />
       </div>
       <div className="">
-        {errors.map((e, i) => <p key={i}>* {e}</p>)}
+        {errors && errors.map((e, i) => <p key={i}>* {e}</p>)}
       </div>
       <div className="flex space-x-3 pt-4">
         <FormButton
@@ -93,6 +93,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors, savi
         <FormButton
           type="button"
           onClick={onCancel}
+          color="red"
         >
           Cancel
         </FormButton>

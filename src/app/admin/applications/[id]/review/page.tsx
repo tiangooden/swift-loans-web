@@ -40,9 +40,14 @@ export default function LoanReviewPage() {
       notifications.info('Please provide a reason for rejection.')
       return;
     }
-    await rejectApplicationReview({ id: id as string, decision_reason: decisionReason });
-    router.push('/admin/applications');
-    setDecisionReason('');
+    try {
+      await rejectApplicationReview({ id: id as string, decision_reason: decisionReason });
+      router.push('/admin/applications');
+      setDecisionReason('');
+      notifications.success('Application rejected successfully!');
+    } catch (err) {
+      notifications.error(`Failed to reject application: ${err}`);
+    }
   };
 
   if (loading) {
@@ -192,6 +197,7 @@ export default function LoanReviewPage() {
                           onClick={async () => {
                             const success = await approveApplicationReview(id as string);
                             if (success) {
+                              notifications.success('Application approved successfully!');
                               router.push('/admin/applications');
                             }
                           }}
@@ -243,6 +249,7 @@ export default function LoanReviewPage() {
                                 });
                                 setShowCounterOffer(false);
                                 router.push('/admin/applications');
+                                notifications.success('Application counter-offered successfully!');
                               }}
                               disabled={counterLoading}
                             >
@@ -280,6 +287,7 @@ export default function LoanReviewPage() {
             <div className="flex justify-end space-x-4">
               <FormButton
                 onClick={() => setShowRejectModal(false)}
+                color="red"
               >
                 Cancel
               </FormButton>

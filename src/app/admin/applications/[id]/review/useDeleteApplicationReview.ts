@@ -1,20 +1,19 @@
-import { notifications } from '@/app/shared/notifications';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetchApplicationReviewsKey } from './useFetchApplicationReview';
+import { HttpError } from '@/app/shared/http-errors';
 
 export function useDeleteApplicationReview() {
     const queryClient = useQueryClient();
     const { mutateAsync, isPending, error } = useMutation<boolean, Error, string>({
         mutationFn: async (applicationId: string) => {
-            return axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}`).then(res => res.data);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey] });
-            notifications.success('Application deleted successfully!');
-        },
-        onError: (err) => {
-            notifications.error(`Error deleting application: ${err.message}`);
+            try {
+                const res = await axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${applicationId}`);
+                queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey] });
+                return res.data;
+            } catch (e: any) {
+                throw new HttpError(e.response?.status || 500, e.response?.data);
+            }
         },
     });
 

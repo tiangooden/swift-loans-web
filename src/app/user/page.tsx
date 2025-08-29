@@ -3,7 +3,9 @@
 import { useFetchUser } from './useFetchUser';
 import { useUpdateUser } from './useUpdateUser';
 import UserForm from './UserForm';
+import { notifications } from '../shared/notifications';
 import { User } from 'lucide-react';
+import { User as UserType } from './types';
 
 export default function UserProfilePage() {
     const { data, isFetching, error: fetchError } = useFetchUser();
@@ -13,16 +15,14 @@ export default function UserProfilePage() {
         return <div className="flex justify-center items-center h-screen">Loading profile...</div>;
     }
 
-    if (isPending) {
-        return <div className="flex justify-center items-center h-screen">Saving profile...</div>;
-    }
-
-    if (fetchError || saveError) {
-        return (
-            <div className="flex justify-center items-center h-screen text-red-500">
-                Error: {fetchError?.message || saveError?.message}
-            </div>
-        );
+    async function handleSave(user: UserType): Promise<void> {
+        try {
+            const res = await mutateAsync(user);
+            notifications.success('Profile updated successfully!');
+            return res;
+        } catch (e: any) {
+            notifications.error('Profile failed to update');
+        }
     }
 
     return (
@@ -32,7 +32,7 @@ export default function UserProfilePage() {
                     <User className="w-8 h-8 text-blue-600 mr-3" />
                     <h1 className="text-3xl font-bold text-gray-800">User Profile</h1>
                 </div>
-                <UserForm data={data} onSave={mutateAsync} />
+                <UserForm data={data} onSave={handleSave} />
             </div>
         </div>
     );

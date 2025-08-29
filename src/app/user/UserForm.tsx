@@ -7,7 +7,7 @@ import FormButton from '../shared/component/FormButton';
 
 interface UserFormProps {
   data: User | null | undefined;
-  onSave: (user: User) => Promise<boolean>;
+  onSave: (user: User) => Promise<void>;
 }
 
 export default function UserForm({ data, onSave }: UserFormProps) {
@@ -52,10 +52,8 @@ export default function UserForm({ data, onSave }: UserFormProps) {
     setLoading(true);
     setError(null);
     try {
-      const success = await onSave(formData);
-      if (success) {
-        setIsEditing(false);
-      }
+      await onSave(formData);
+      setIsEditing(false);
     } catch (err: any) {
       setError(err.message);
     } finally {

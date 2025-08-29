@@ -3,27 +3,24 @@ import { notifications } from '@/app/shared/notifications';
 import { SocialMedia } from './types';
 import axios from 'axios';
 import { useFetchSocialMediasKey } from './useFetchSocialMedias';
+import { HttpError } from '../shared/http-errors';
 
 export const useSaveSocialMedia = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending, error } = useMutation<any, Error, SocialMedia>({
     mutationFn: async (socialMedia: SocialMedia) => {
-      const url = socialMedia.id ?
-        `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/social-medias/${socialMedia.id}` :
-        `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/social-medias`;
-
-      if (socialMedia.id) {
-        return axios.put(url, socialMedia).then(res => res.data);
-      } else {
-        return axios.post(url, socialMedia).then(res => res.data);
+      try {
+        const url = socialMedia.id ?
+          `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/social-medias/${socialMedia.id}` :
+          `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/social-medias`;
+        const res = socialMedia.id ?
+          await axios.put(url, socialMedia) :
+          await axios.post(url, socialMedia);
+        queryClient.invalidateQueries({ queryKey: [useFetchSocialMediasKey] });
+        return res.data;
+      } catch (e: any) {
+        throw new HttpError(e.response?.status || 500, e.response?.data);
       }
-    },
-    onSuccess: (_, socialMedia) => {
-      queryClient.invalidateQueries({ queryKey: [useFetchSocialMediasKey] });
-      notifications.success(`Social media account ${socialMedia.id ? 'updated' : 'added'} successfully!`);
-    },
-    onError: (e: any, socialMedia) => {
-      notifications.error(`Failed to ${socialMedia.id ? 'update' : 'add'} social media account: ` + e.message);
     },
   });
 

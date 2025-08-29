@@ -7,6 +7,7 @@ import { AdminLoanOffersProps } from '../types';
 import { useDeleteOffer } from '../useDeleteOffer';
 import formatCurrency from '@/app/shared/currency';
 import { useDownloadSignedApproval } from '../useDownloadSignedApproval';
+import { notifications } from '@/app/shared/notifications';
 
 export default function AdminLoanOffers({ applicationId, offers }: AdminLoanOffersProps) {
     const { mutateAsync: downloadSignedApproval, isPending: isDownloading } = useDownloadSignedApproval();
@@ -14,12 +15,14 @@ export default function AdminLoanOffers({ applicationId, offers }: AdminLoanOffe
 
     const handleDeleteOffer = async (offerId: string) => {
         if (window.confirm('Are you sure you want to delete this offer?')) {
-            await deleteOffer({ applicationId, offerId });
+            await deleteOffer(offerId);
+            notifications.success('Offer deleted successfully!');
         }
     };
 
     const handleSignedApprovalDownload = async (id: any) => {
         await downloadSignedApproval(id);
+        notifications.success('File downloaded successfully!');
     };
 
     return (

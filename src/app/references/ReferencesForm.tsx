@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { PlusCircle, Edit, Trash2, Search, XCircle } from 'lucide-react';
+import { Edit, Trash2, XCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useAddReference } from './useAddReference';
 import { useDeleteReference } from './useDeleteReference';
@@ -9,6 +9,7 @@ import { useFetchReferences } from './useFetchReferences';
 import { useUpdateReference } from './useUpdateReference';
 import FormButton from '../shared/component/FormButton';
 import FormInput from '../shared/component/FormInput';
+import { notifications } from '../shared/notifications';
 
 interface Reference {
   id: string;
@@ -49,15 +50,12 @@ const ReferencesForm: React.FC = () => {
   const handleAddEdit = async () => {
     if (!session) return;
     try {
-      if (currentReference) {
-        await updateReference({ id: currentReference.id, ...form });
-      } else {
-        await addReference(form);
-      }
+      currentReference ? await updateReference({ id: currentReference.id, ...form }) : await addReference(form);
+      notifications.success('Reference added successfully!');
       setIsModalOpen(false);
       setCurrentReference(null);
     } catch (err) {
-      console.error('Failed to save reference:', err);
+      notifications.error(`Failed to ${currentReference ? 'update' : 'save'} reference: ${err}`);
     }
   };
 
@@ -65,8 +63,9 @@ const ReferencesForm: React.FC = () => {
     if (!session) return;
     try {
       await deleteReference(id);
+      notifications.success('Reference deleted successfully!');
     } catch (err) {
-      console.error('Failed to delete reference:', err);
+      notifications.error(`Failed to delete reference:${err}`);
     }
   };
 
@@ -80,11 +79,7 @@ const ReferencesForm: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  if (isFetching || isAdding || isUpdating || isDeleting) return <div className="flex justify-center items-center h-screen">Loading...</div>;
-  if (fetchError) return <div className="text-center py-8 text-red-500">Error: {fetchError.message}</div>;
-  if (addError) return <div className="text-center py-8 text-red-500">Error adding reference: {addError.message}</div>;
-  if (updateError) return <div className="text-center py-8 text-red-500">Error updating reference: {updateError.message}</div>;
-  if (deleteError) return <div className="text-center py-8 text-red-500">Error deleting reference: {deleteError.message}</div>;
+  if (isFetching) return <div className="flex justify-center items-center h-screen">Loading...</div>;
 
   return (
     <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
@@ -223,6 +218,7 @@ const ReferencesForm: React.FC = () => {
                 <FormButton
                   type="button"
                   onClick={() => setIsModalOpen(false)}
+                  color="red"
                 >
                   Cancel
                 </FormButton>

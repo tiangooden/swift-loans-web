@@ -4,6 +4,8 @@ import EmploymentForm from './EmploymentForm';
 import { Briefcase } from 'lucide-react';
 import { useFetchEmployment } from './useFetchEmployment';
 import { useSaveEmployment } from './useSaveEmployment';
+import { Employment } from './types';
+import { notifications } from '../shared/notifications';
 
 export default function EmploymentPage() {
     const { data, isFetching, error: fetchError } = useFetchEmployment();
@@ -13,14 +15,13 @@ export default function EmploymentPage() {
         return <div className="flex justify-center items-center h-screen">Loading employment details...</div>;
     }
 
-    if (isPending) {
-        return <div className="flex justify-center items-center h-screen">Saving employment details...</div>;
-    }
-
-    if (fetchError || saveError) {
-        return <div className="flex justify-center items-center h-screen text-red-500">
-            Error: {fetchError?.message || saveError?.message}
-        </div>;
+    async function handleSave(employment: Employment): Promise<void> {
+        try {
+            await mutateAsync(employment);
+            notifications.success('Employment updated successfully!');
+        } catch (err) {
+            notifications.error(`Failed to ${employment.id ? 'update' : 'save'} reference: ${err}`);
+        }
     }
 
     return (
@@ -30,7 +31,7 @@ export default function EmploymentPage() {
                     <Briefcase className="w-8 h-8 text-blue-600 mr-3" />
                     <h1 className="text-3xl font-bold text-gray-800">Employment Details</h1>
                 </div>
-                <EmploymentForm data={data} onSave={mutateAsync} />
+                <EmploymentForm data={data} onSave={handleSave} />
             </div>
         </div>
     );

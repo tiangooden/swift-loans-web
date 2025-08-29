@@ -1,4 +1,5 @@
 export interface Employment {
+    id?: string;
     employer_name: string;
     employer_phone_number?: string;
     job_title: string;

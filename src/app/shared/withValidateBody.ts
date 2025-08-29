@@ -8,7 +8,10 @@ export function withValidateBody<T extends ZodSchema<any>>(schema: T) {
             schema.parse(body);
             return handler(req);
         } catch (e: any) {
-            return NextResponse.json(e.issues.map((i: any) => i.message), { status: 400 });
+            return NextResponse.json(
+                e.issues.map(({ message, path }: { message: string, path: string[] }) => ({ message, path })),
+                { status: 400 }
+            );
         }
     };
 }

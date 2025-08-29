@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { notifications } from '../shared/notifications';
+import { HttpError } from '../shared/http-errors';
 
 interface UpdateReferencePayload {
   id: string;
@@ -12,18 +13,17 @@ interface UpdateReferencePayload {
 
 export const useUpdateReference = () => {
   const queryClient = useQueryClient();
-  return useMutation({
+  const { mutateAsync, isPending, error } = useMutation({
     mutationFn: async (payload: UpdateReferencePayload) => {
       const { id, ...data } = payload;
-      const response = await axios.put(`/api/references/${id}`, data);
-      return response.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['references'] });
-      notifications.success('Reference updated successfully!');
-    },
-    onError: (error) => {
-      notifications.error(`Failed to update reference: ${error.message}`);
+      try {
+        const res = await axios.put(`/api/references/${id}`, data);
+        queryClient.invalidateQueries({ queryKey: ['references'] });
+        return res.data;
+      } catch (e: any) {
+        throw new HttpError(e.response?.status || 500, e.response?.data);
+      }
     },
   });
+  return { mutateAsync, isPending, error };
 };

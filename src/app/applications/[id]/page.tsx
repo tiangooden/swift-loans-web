@@ -8,6 +8,7 @@ import formatDateString from '@/app/shared/date';
 import { useFetchApplication } from './useFetchApplication';
 import formatCurrency from '@/app/shared/currency';
 import { useWithdrawApplication } from './useWithdrawApplication';
+import { notifications } from '@/app/shared/notifications';
 
 export default function LoanApplicationDetailsPage() {
     const router = useRouter();
@@ -18,6 +19,7 @@ export default function LoanApplicationDetailsPage() {
     const handleWithdraw = async () => {
         if (application) {
             await withdrawApplication(application.id);
+            notifications.success('Application withdrawn successfully!');
         }
     };
 
@@ -33,7 +35,7 @@ export default function LoanApplicationDetailsPage() {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold text-red-600 mb-4">Error: {error?.message || withdrawError.message}</h2>
+                    <h2 className="text-2xl font-bold text-red-600 mb-4">Error: {error?.message || withdrawError?.message}</h2>
                     <button
                         onClick={() => router.push('/applications')}
                         className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200"

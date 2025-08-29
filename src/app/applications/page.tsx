@@ -33,7 +33,12 @@ export default function LoanApplicationsPage() {
 
   const handleDelete = async (key: string) => {
     if (!confirm('Are you sure you want to delete this application?')) return;
-    await deleteApplication(key);
+    try {
+      await deleteApplication(key);
+      notifications.success('Loan application deleted successfully!');
+    } catch (err) {
+      notifications.error(`Failed to delete loan application: ${err}`);
+    }
   };
 
   const handleFormSubmit = async (data: any) => {

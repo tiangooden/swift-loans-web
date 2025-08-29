@@ -6,6 +6,7 @@ import { useFileUpload } from './useFileUpload';
 import { useFetchFile } from './useFetchDocuments';
 import { useDeleteFile } from './useDeleteFile';
 import formatDateString from '../shared/date';
+import { notifications } from '../shared/notifications';
 
 export default function DocumentsPage() {
     const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
@@ -19,34 +20,24 @@ export default function DocumentsPage() {
 
     const handleUpload = async () => {
         if (selectedFiles) {
-            await uploadFiles(selectedFiles);
-            setSelectedFiles(null);
+            try {
+                await uploadFiles(selectedFiles);
+                setSelectedFiles(null);
+                notifications.success('Files uploaded successfully');
+            } catch (err) {
+                notifications.error(`Failed to upload files: ${err}`);
+            }
         }
     };
 
     const handleDelete = async (key: string) => {
         await deleteFile(key);
         setSelectedFiles(null);
+        notifications.success('File deleted successfully');
     };
 
     if (isFetchingFiles) {
         return <div className="flex justify-center items-center h-screen">Loading files...</div>;
-    }
-
-    if (isUploadingFiles) {
-        return <div className="flex justify-center items-center h-screen">Uploading files...</div>;
-    }
-
-    if (isDeletingFile) {
-        return <div className="flex justify-center items-center h-screen">Deleting...</div>;
-    }
-
-    if (errorLoadingFiles || errorUploading || errorDeleting) {
-        return (
-            <div className="flex justify-center items-center h-screen text-red-500">
-                Error: {errorLoadingFiles?.message || errorUploading?.message || errorDeleting?.message}
-            </div>
-        );
     }
 
     return (

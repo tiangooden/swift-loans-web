@@ -10,6 +10,8 @@ import { useRejectOffer } from '../useRejectOffer';
 import formatCurrency from '@/app/shared/currency';
 import { useUploadApprovalLetter } from '../useUploadApprovalLetter';
 import { useFileUpload } from '@/app/documents/useFileUpload';
+import { notifications } from '@/app/shared/notifications';
+import downloadFileInBrowser from '@/app/shared/download';
 
 export default function LoanOffers({ offers }: any) {
     const { mutateAsync: acceptOffer, isPending: accepting, error: acceptError } = useAcceptOffer();
@@ -23,14 +25,18 @@ export default function LoanOffers({ offers }: any) {
 
     const handleAcceptOffer = async (offerId: string) => {
         await acceptOffer(offerId);
+        notifications.success('Offer accepted successfully!');
     };
 
     const handleRejectOffer = async (offerId: string) => {
         await rejectOffer(offerId);
+        notifications.success('Offer rejected successfully!');
     };
 
     const handleDownloanApprovalLetter = async (id: string) => {
-        await generateApprovalLetter(id);
+        const res = await generateApprovalLetter(id);
+        downloadFileInBrowser('approval.pdf', res);
+        notifications.success('Approval letter generated successfully!');
     }
 
     const handleUploadApprovalLetter = async (offerId: string, file: File) => {
@@ -38,6 +44,7 @@ export default function LoanOffers({ offers }: any) {
         dataTransfer.items.add(file);
         const key = await uploadFiles(dataTransfer.files);
         await uploadApprovalLetter({ offerId, key });
+        notifications.success('Approval letter uploaded successfully!');
     };
 
     return (

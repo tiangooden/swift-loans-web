@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { notifications } from '@/app/shared/notifications';
+import { HttpError } from '../shared/http-errors';
 
 interface ReferenceForm {
   name: string;
@@ -13,14 +13,13 @@ export const useAddReference = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending, error } = useMutation<any, Error, ReferenceForm>({
     mutationFn: async (formData: ReferenceForm) => {
-      return axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/references`, formData).then(res => res.data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['references'] });
-      notifications.success('Reference added successfully!');
-    },
-    onError: () => {
-      notifications.error('An error occurred while adding the reference.');
+      try {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/references`, formData);
+        queryClient.invalidateQueries({ queryKey: ['references'] });
+        return res.data;
+      } catch (e: any) {
+        throw new HttpError(e.response?.status || 500, e.response?.data);
+      }
     },
   });
   return { mutateAsync, isPending, error };
