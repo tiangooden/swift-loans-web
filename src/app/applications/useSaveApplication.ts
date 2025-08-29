@@ -1,7 +1,7 @@
-import { notifications } from '@/app/shared/notifications';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { useFetchApplicationsKey } from '../useFetchApplications';
+import { useFetchApplicationsKey } from './useFetchApplications';
+import { HttpError } from '../shared/http-errors';
 
 export function useSaveApplication() {
   const queryClient = useQueryClient();
@@ -10,15 +10,13 @@ export function useSaveApplication() {
       const url = id ?
         `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}` :
         `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications`;
-      return id ? axios.put(url, data).then(res => res.data) :
-        axios.post(url, data).then(res => res.data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [useFetchApplicationsKey] });
-      notifications.success('Application saved successfully!');
-    },
-    onError: (err: any) => {
-      notifications.error(`Error saving application: ${err.message}`);
+      try {
+        const res = id ? await axios.put(url, data) : await axios.post(url, data);
+        queryClient.invalidateQueries({ queryKey: [useFetchApplicationsKey] });
+        return res.data;
+      } catch (e: any) {
+        throw new HttpError(e.response?.status || 500, e.response?.data);
+      }
     },
   });
 

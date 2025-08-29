@@ -3,9 +3,8 @@
 import { useState } from 'react';
 import { ApplicationFormProps } from './types';
 
-export default function ApplicationForm({ data, onSubmit, onCancel }: ApplicationFormProps) {
+export default function ApplicationForm({ data, onSubmit, onCancel, errors, saving }: ApplicationFormProps) {
   const [formData, setFormData] = useState(data || {
-    id: '',
     amount_requested: 15000,
     term_in_days: 14,
     purpose: '',
@@ -22,7 +21,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel }: Applicatio
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
           {data ? 'Update Loan Application' : 'New Loan Application'}
@@ -76,19 +75,25 @@ export default function ApplicationForm({ data, onSubmit, onCancel }: Applicatio
           value={formData.purpose || ''}
           onChange={handleChange}
           rows={3}
-          // required
+          required
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           placeholder="Describe the purpose of this loan..."
         />
       </div>
-
+      <div className="">
+        {errors.map((e, i) => <p key={i}>* {e}</p>)}
+      </div>
       <div className="flex space-x-3 pt-4">
         <button
-          type="submit"
-          className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200"
+          type="button"
+          disabled={saving}
+          className={`flex-1 py-2 px-4 rounded-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+    ${saving ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+          onClick={handleSubmit}
         >
           {data ? 'Update Application' : 'Submit Application'}
         </button>
+
         <button
           type="button"
           onClick={onCancel}

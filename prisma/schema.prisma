@@ -94,6 +94,7 @@ model applications {
   purpose          String?
   status           String?   @default("submitted")
   decision_reason  String?
+  details          Json?
   submitted_at     DateTime? @default(now()) @db.Timestamp(6)
   decided_at       DateTime? @db.Timestamp(6)
   is_deleted       Boolean?  @default(false)

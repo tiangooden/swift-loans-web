@@ -28,8 +28,25 @@ npx prisma db seed                   # run seed script
 npx prisma format
 npx prisma studio                    # open visual DB explorer
 
-KEYCLOAK_CLIENT_ID=swift-loans-web
+DATABASE_URL=
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+KEYCLOAK_CLIENT_ID=
 KEYCLOAK_CLIENT_SECRET=
-KEYCLOAK_ISSUER=http://localhost:8080/realms/swift-loans
-NEXTAUTH_SECRET=your-random-secret
-NEXTAUTH_URL=http://localhost:3000
+KEYCLOAK_ISSUER=
+
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=
+
+NEXT_PUBLIC_SWIFT_LOANS_API=
+
+OBJECT_HOST=
+AWS_REGION=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_S3_BUCKET_NAME=
+
+REDIS_URL=
+REDIS_CACHE_TIME=

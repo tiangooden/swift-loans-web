@@ -10,12 +10,15 @@ import { useFetchApplications } from './useFetchApplications';
 import { LoanApplication } from './types';
 import { getStatusColor, getStatusIcon } from '../shared/status';
 import { useDeleteApplication } from './[id]/useDeleteApplication';
-import { useSaveApplication } from './[id]/useSaveApplication';
+import { useSaveApplication } from './useSaveApplication';
+import { notifications } from '../shared/notifications';
+import { HttpError } from '../shared/http-errors';
 
 export default function LoanApplicationsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
   const [editingApplication, setEditingApplication] = useState<LoanApplication | null>(null);
   const { data: applications, isFetching: loading, error: fetchError, refetch: fetchApplications } = useFetchApplications();
   const { mutateAsync: saveApplication, isPending: saving, error: saveError } = useSaveApplication();
@@ -34,25 +37,21 @@ export default function LoanApplicationsPage() {
   };
 
   const handleFormSubmit = async (data: any) => {
-    saveApplication({ data, id: editingApplication?.id });
-    setShowForm(false);
-    setEditingApplication(null);
+    setErrors([]);
+    try {
+      await saveApplication({ data, id: editingApplication?.id });
+      setShowForm(false);
+      setEditingApplication(null);
+      notifications.success('Application saved successfully!');
+    } catch (e: unknown) {
+      const { errors, statusMessage } = (e as HttpError);
+      setErrors(errors);
+      notifications.error(`An error occurred: ${statusMessage}`);
+    }
   };
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading applications...</div>;
-  }
-
-  if (saving) {
-    return <div className="flex justify-center items-center h-screen">Saving application...</div>;
-  }
-
-  if (deleting) {
-    return <div className="flex justify-center items-center h-screen">Deleting application...</div>;
-  }
-
-  if (fetchError || saveError || deleteError) {
-    return <div className="flex justify-center items-center h-screen text-red-600">Error: {fetchError || saveError || deleteError}</div>;
   }
 
   return (
@@ -155,21 +154,13 @@ export default function LoanApplicationsPage() {
               <ApplicationForm
                 data={editingApplication}
                 onSubmit={handleFormSubmit}
+                saving={saving}
+                errors={errors}
                 onCancel={() => {
                   setShowForm(false);
                   setEditingApplication(null);
                 }}
               />
-            </div>
-          </div>
-        )}
-
-        {(saving || loading || deleting) && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center z-50">
-            <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full relative text-center">
-              <p className="text-lg font-semibold">
-                {saving ? 'Saving application...' : deleting ? 'Deleting application...' : 'Loading applications...'}
-              </p>
             </div>
           </div>
         )}

@@ -20,6 +20,14 @@ export const LOAN_STATUS = {
 }
 
 export const INTEREST_RATE: Record<string, number> = {
-  '14': 25,
-  '28': 30,
+    '14': 25,
+    '28': 30,
 };
+
+export const CACHE_KEY = {
+    users: 'users:',
+    userById: 'userById:',
+    userByIdentity: 'userByIdentity:',
+    applications: 'applications:',
+    applicationById: 'applicationById:'
+}

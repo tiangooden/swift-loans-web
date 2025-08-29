@@ -52,6 +52,8 @@ export interface ApplicationFormProps {
     term_in_days: number;
     purpose: string;
   } | null;
+  errors: string[];
+  saving: boolean;
   onSubmit: (data: any) => void;
   onCancel: () => void;
 }
