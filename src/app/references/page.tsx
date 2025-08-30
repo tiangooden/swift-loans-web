@@ -8,13 +8,17 @@ import { useFetchReferences } from './useFetchReferences';
 import { useUpdateReference } from './useUpdateReference';
 import { notifications } from '../shared/notifications';
 import ReferencesForm from './ReferencesForm';
+import { processValidationErrors } from '../shared/utils/createMessageMap';
+import { referencesSchema } from '../api/references/schema';
+import { validateSchema } from '../shared/validation';
 
 const ReferencesPage: React.FC = () => {
   const { data: session } = useSession();
-
+  const [errors, setErrors] = useState<Map<string, string>>(new Map());
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentReference, setCurrentReference] = useState<Reference | null>(null);
   const [form, setForm] = useState({
+    id: '',
     name: '',
     email: '',
     phone: '',
@@ -29,29 +33,55 @@ const ReferencesPage: React.FC = () => {
   useEffect(() => {
     if (currentReference) {
       setForm({
+        id: currentReference.id,
         name: currentReference.name,
         email: currentReference.email,
         phone: currentReference.phone,
         relationship: currentReference.relationship
       });
     } else {
-      setForm({ name: '', email: '', phone: '', relationship: '' });
+      setForm({ id: '', name: '', email: '', phone: '', relationship: '' });
     }
   }, [currentReference]);
 
   const handleAddEdit = async () => {
     if (!session) return;
-    try {
-      if (currentReference) {
-        await updateReference({ id: currentReference.id, ...form });
-      } else {
-        await addReference(form);
+    if (form.id) {
+      try {
+        validateSchema(currentReference, referencesSchema);
+        try {
+          await updateReference(form);
+          notifications.success('Reference saved successfully!');
+          setIsModalOpen(false);
+          setCurrentReference(null);
+        } catch (e: any) {
+          const { errors, statusMessage } = e;
+          setErrors(processValidationErrors(errors));
+          notifications.error(`An error occurred: ${statusMessage}`);
+        }
+      } catch (e: any) {
+        const { errors: er, statusMessage } = e;
+        setErrors(processValidationErrors(er));
+        notifications.error(`An error occurred: ${statusMessage}`);
       }
-      notifications.success('Reference saved successfully!');
-      setIsModalOpen(false);
-      setCurrentReference(null);
-    } catch (err) {
-      notifications.error(`Failed to ${currentReference ? 'update' : 'save'} reference: ${err}`);
+    } else {
+      try {
+        validateSchema(form, referencesSchema);
+        try {
+          await addReference(form);
+          notifications.success('Reference saved successfully!');
+          setIsModalOpen(false);
+          setForm({ id: '', name: '', email: '', phone: '', relationship: '' });
+        } catch (e: any) {
+          const { errors: er, statusMessage } = e;
+          setErrors(processValidationErrors(er));
+          notifications.error(`An error occurred: ${statusMessage}`);
+        }
+      } catch (e: any) {
+        const { errors, statusMessage } = e;
+        setErrors(processValidationErrors(errors));
+        notifications.error(`An error occurred: ${statusMessage}`);
+      }
     }
   };
 
@@ -92,6 +122,7 @@ const ReferencesPage: React.FC = () => {
       handleDelete={handleDelete}
       openAddModal={openAddModal}
       openEditModal={openEditModal}
+      errors={errors}
     />
   );
 };

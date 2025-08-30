@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Edit, Trash2, XCircle } from 'lucide-react';
 import FormButton from '../shared/component/FormButton';
 import FormInput from '../shared/component/FormInput';
@@ -17,12 +17,14 @@ interface ReferencesFormProps {
   currentReference: Reference | null;
   setCurrentReference: React.Dispatch<React.SetStateAction<Reference | null>>;
   form: {
+    id: string;
     name: string;
     email: string;
     phone: string;
     relationship: string;
   };
   setForm: React.Dispatch<React.SetStateAction<{
+    id: string;
     name: string;
     email: string;
     phone: string;
@@ -32,6 +34,7 @@ interface ReferencesFormProps {
   handleDelete: (id: string) => Promise<void>;
   openAddModal: () => void;
   openEditModal: (ref: Reference) => void;
+  errors: any
 }
 
 const ReferencesForm: React.FC<ReferencesFormProps> = ({
@@ -48,8 +51,15 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
   handleAddEdit,
   handleDelete,
   openAddModal,
-  openEditModal
+  openEditModal,
+  errors:es
 }) => {
+  const [errors, setErrors] = useState<Map<string, string>>(es || new Map());
+
+  useEffect(() => {
+    setErrors(es || new Map());
+  }, [es]);
+  
   return (
     <LoadingOverlayWrapper active={isFetching} spinner text='Loading your references...'>
       <LoadingOverlayWrapper active={isAdding} spinner text='Adding your reference...'>
@@ -121,7 +131,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                           name="name"
                           value={form.name}
                           onChange={(e) => setForm({ ...form, name: e.target.value })}
-                          required
+                          error={errors.get('name')}
                         />
                         <FormInput
                           label="Email"
@@ -130,6 +140,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                           type="email"
                           value={form.email}
                           onChange={(e) => setForm({ ...form, email: e.target.value })}
+                          error={errors.get('email')}
                         />
                         <FormInput
                           label="Phone"
@@ -138,7 +149,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                           type="tel"
                           value={form.phone}
                           onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                          required
+                          error={errors.get('phone')}
                         />
                         <FormInput
                           label="Relationship"
@@ -146,7 +157,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                           name="relationship"
                           value={form.relationship}
                           onChange={(e) => setForm({ ...form, relationship: e.target.value })}
-                          required
+                          error={errors.get('relationship')}
                         />
                         <div className="flex justify-end space-x-2">
                           <FormButton type="button" onClick={() => setIsModalOpen(false)} color="red">

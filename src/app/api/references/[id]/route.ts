@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import getCurrentUser from '@/app/shared/get-user';
 import { ReferencesRepository } from '../references.repository';
+import { referencesSchema } from '../schema';
+import { withValidateBody } from '@/app/shared/withValidateBody';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   const { id } = await params;
@@ -18,33 +20,34 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
-  const { id } = await params;
-  try {
-    const user = await getCurrentUser();
-    if (!user) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-
-    const data = await request.json();
-
-    if (!id) {
-      return NextResponse.json({ message: 'Reference ID is required' }, { status: 400 });
-    }
-
-    const updatedReference = await ReferencesRepository.update({
-      where: {
-        id,
-        user_id: user.id, // Ensure user can only update their own references
-      },
-      data: { ...data, updated_at: new Date() }
-    });
-
-    return NextResponse.json(updatedReference);
-  } catch (error) {
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
-  }
-}
+export const PUT =
+  withValidateBody(referencesSchema)
+    (
+      async (request: Request, { data }: { data: any}) => {
+        try {
+          const user = await getCurrentUser();
+          if (!user) {
+            return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+          }
+          const { id } = data;
+          let updatedReference;
+          try {
+            updatedReference = await ReferencesRepository.update({
+              where: {
+                id,
+                user_id: user.id,
+              },
+              data: { ...data, updated_at: new Date() }
+            });
+          } catch (e: any) {
+            console.log(e);
+          }
+          return NextResponse.json(updatedReference);
+        } catch (error) {
+          return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+        }
+      }
+    );
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   const { id } = await params;

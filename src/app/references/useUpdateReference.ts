@@ -15,9 +15,9 @@ export const useUpdateReference = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending, error } = useMutation({
     mutationFn: async (payload: UpdateReferencePayload) => {
-      const { id, ...data } = payload;
+      const { id } = payload;
       try {
-        const res = await axios.put(`/api/references/${id}`, data);
+        const res = await axios.put(`/api/references/${id}`, payload);
         queryClient.invalidateQueries({ queryKey: ['references'] });
         return res.data;
       } catch (e: any) {

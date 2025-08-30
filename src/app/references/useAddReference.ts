@@ -4,8 +4,8 @@ import { HttpError } from '../shared/http-errors';
 
 export const useAddReference = () => {
   const queryClient = useQueryClient();
-  const { mutateAsync, isPending, error } = useMutation<any, Error, ReferenceForm>({
-    mutationFn: async (formData: ReferenceForm) => {
+  const { mutateAsync, isPending, error } = useMutation<any, Error, Reference>({
+    mutationFn: async (formData: Reference) => {
       try {
         const res = await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/references`, formData);
         queryClient.invalidateQueries({ queryKey: ['references'] });
