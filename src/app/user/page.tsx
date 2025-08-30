@@ -11,15 +11,14 @@ import { useState } from 'react';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
 
 export default function UserProfilePage() {
-    const [errors, setErrors] = useState<Map<string, string>>(new Map());
     const { data, isFetching } = useFetchUser();
+    const [errors, setErrors] = useState<Map<string, string>>(new Map());
     const { mutateAsync, isPending } = useUpdateUser();
 
     async function handleSave(user: UserType): Promise<void> {
         try {
-            const res = await mutateAsync(user);
+            await mutateAsync(user);
             notifications.success('Profile updated successfully!');
-            return res;
         } catch (e: any) {
             const { errors: er, statusMessage } = e;
             setErrors(processValidationErrors(er));

@@ -12,6 +12,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       where: { id: id },
       data: {
         approval_file_key: key,
+        updated_at: new Date(),
       },
     });
     return NextResponse.json({ message: 'Offer updated successfully' }, { status: 200 });

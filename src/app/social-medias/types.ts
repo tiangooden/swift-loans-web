@@ -3,5 +3,4 @@ export interface SocialMedia {
   user_id?: string | null;
   platform: string | null;
   username: string | null;
-  profile_url: string | null;
 }

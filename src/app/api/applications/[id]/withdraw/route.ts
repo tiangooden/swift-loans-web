@@ -11,6 +11,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
             },
             data: {
                 status: APPLICATION_STATUS.WITHDRAWN,
+                updated_at: new Date(),
             },
         });
         return NextResponse.json(application);

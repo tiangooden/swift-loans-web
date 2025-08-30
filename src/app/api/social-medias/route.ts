@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { socialMediasSchema } from './schema';
 import getCurrentUser from '@/app/shared/get-user';
 import { SocialMediasRepository } from './social_medias.repository';
+import { withValidateBody } from '@/app/shared/withValidateBody';
 
 export async function GET(request: NextRequest) {
     const user = await getCurrentUser();
@@ -10,12 +12,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(socialMedias[0] || {});
 }
 
-export async function POST(request: NextRequest) {
-    const user = await getCurrentUser();
-    const body = await request.json();
-    const newSocialMedia = await SocialMediasRepository.create({
-        ...body,
-        user_id: user.id,
-    });
-    return NextResponse.json(newSocialMedia, { status: 201 });
-}
+export const POST =
+    withValidateBody(socialMediasSchema)
+        (
+            async (request: NextRequest, { data }: { data: any }) => {
+                const user = await getCurrentUser();
+                const newSocialMedia = await SocialMediasRepository.create({
+                    ...data,
+                    user_id: user.id,
+                });
+                return NextResponse.json(newSocialMedia, { status: 201 });
+            }
+        );

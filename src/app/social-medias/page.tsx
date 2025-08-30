@@ -6,19 +6,23 @@ import SocialMediaForm from './SocialMediaForm';
 import { SocialMedia } from './types';
 import { useFetchSocialMedias } from './useFetchSocialMedias';
 import { useSaveSocialMedia } from './useSaveSocialMedia';
-import { Share2 } from 'lucide-react'; // Using Share2 icon for social media
+import { Share2 } from 'lucide-react';
+import { useState } from 'react';
+import { processValidationErrors } from '../shared/utils/createMessageMap';
 
 const SocialMediasPage = () => {
   const { data, isFetching } = useFetchSocialMedias();
+  const [errors, setErrors] = useState<Map<string, string>>(new Map());
   const { mutateAsync, isPending } = useSaveSocialMedia();
 
   async function handleSave(socialMedia: SocialMedia): Promise<void> {
     try {
-      const res = mutateAsync(socialMedia);
+      await mutateAsync(socialMedia);
       notifications.success(`Social media account ${socialMedia.id ? 'updated' : 'added'} successfully!`);
-      return res;
     } catch (e: any) {
-      notifications.error('Profile failed to update');
+      const { errors: er, statusMessage } = e;
+      setErrors(processValidationErrors(er));
+      notifications.error(`An error occurred: ${statusMessage}`);
     }
   }
 
@@ -31,7 +35,7 @@ const SocialMediasPage = () => {
               <Share2 className="w-8 h-8 text-blue-600 mr-3" />
               <h1 className="text-3xl font-bold text-gray-800">Social Media</h1>
             </div>
-            <SocialMediaForm socialMedia={data} onSave={handleSave} />
+            <SocialMediaForm data={data} onSave={handleSave} errors={errors} />
           </div>
         </div>
       </LoadingOverlayWrapper>

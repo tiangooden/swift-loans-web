@@ -37,7 +37,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         id,
         user_id: user.id, // Ensure user can only update their own references
       },
-      data
+      data: { ...data, updated_at: new Date() }
     });
 
     return NextResponse.json(updatedReference);

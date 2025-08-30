@@ -22,21 +22,19 @@ export async function GET(request: NextRequest) {
 export const PUT =
     withValidateBody(updateUserSchema)
         (
-            put
+            async (request: NextRequest, { data }: { data: any }) => {
+                const session = await getServerSession(authOptions);
+                if (!session) {
+                    return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
+                }
+                const { id, provider } = session.user as any;
+                const updatedUser = await UsersRepository.update({
+                    where: { identity: `${provider}|${id}` },
+                    data: { ...data, updated_at: new Date() }
+                });
+                if (!updatedUser) {
+                    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+                }
+                return NextResponse.json(updatedUser);
+            }
         );
-
-async function put(request: NextRequest, { data }: { data: any }) {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
-    }
-    const { id, provider } = session.user as any;
-    const updatedUser = await UsersRepository.update({
-        where: { identity: `${provider}|${id}` },
-        data
-    });
-    if (!updatedUser) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-    return NextResponse.json(updatedUser);
-}

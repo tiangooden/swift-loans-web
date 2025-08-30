@@ -57,7 +57,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
     const updatedApplication = await ApplicationsRepository.update({
         where: { id },
-        data,
+        data: { ...data, updated_at: new Date() },
     });
     return NextResponse.json(updatedApplication);
 }

@@ -7,7 +7,6 @@ import FormButton from '../shared/component/FormButton';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
 import { updateUserSchema } from '../api/users/schema';
 import { validateSchema } from '../shared/validation';
-import { notifications } from '../shared/notifications';
 
 interface UserFormProps {
   data: User | null | undefined;
@@ -18,7 +17,7 @@ interface UserFormProps {
 export default function UserForm({ data, onSave, errors: es }: UserFormProps) {
   const [errors, setErrors] = useState<Map<string, string>>(es || new Map());
   const [formData, setFormData] = useState<User>({
-    id: undefined,
+    id: '',
     identity: '',
     alias: '',
     email: '',
@@ -40,9 +39,9 @@ export default function UserForm({ data, onSave, errors: es }: UserFormProps) {
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   setErrors(es || new Map());
-  // }, [es]);
+  useEffect(() => {
+    setErrors(es || new Map());
+  }, [es]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;

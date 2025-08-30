@@ -8,7 +8,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     const { decision_reason } = await request.json();
     await ApplicationsRepository.update({
       where: { id: id },
-      data: { status: APPLICATION_STATUS.REJECTED, decision_reason: decision_reason, decided_at: new Date() },
+      data: { status: APPLICATION_STATUS.REJECTED, decision_reason: decision_reason, decided_at: new Date(), updated_at: new Date() },
     });
     return NextResponse.json({ message: 'Loan application rejected successfully' });
   } catch (error) {

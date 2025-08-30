@@ -7,15 +7,16 @@ import FormButton from '../shared/component/FormButton';
 import FormInput from '../shared/component/FormInput';
 
 interface SocialMediaFormProps {
-  socialMedia: SocialMedia | null | undefined;
+  data: SocialMedia | null | undefined;
   onSave: (socialMedia: SocialMedia) => Promise<void>;
+  errors: any;
 }
 
-const SocialMediaForm: React.FC<SocialMediaFormProps> = ({ socialMedia: data, onSave }) => {
+const SocialMediaForm: React.FC<SocialMediaFormProps> = ({ data, onSave, errors: es }) => {
+  const [errors, setErrors] = useState<Map<string, string>>(es || new Map());
   const [formData, setFormData] = useState<SocialMedia>({
     platform: '',
     username: '',
-    profile_url: '',
   });
 
   useEffect(() => {
@@ -23,6 +24,10 @@ const SocialMediaForm: React.FC<SocialMediaFormProps> = ({ socialMedia: data, on
       setFormData(data);
     }
   }, [data]);
+
+  useEffect(() => {
+    setErrors(es || new Map());
+  }, [es]);
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value, type } = e.target;
@@ -47,8 +52,8 @@ const SocialMediaForm: React.FC<SocialMediaFormProps> = ({ socialMedia: data, on
             name="platform"
             value={formData.platform || ''}
             onChange={handleChange}
+            error={errors.get('platform')}
             options={[
-              { value: '', label: 'Select Platform' },
               { value: 'facebook', label: 'Facebook' },
               { value: 'x', label: 'Twitter/X' },
               { value: 'instagram', label: 'Instagram' },
@@ -66,6 +71,7 @@ const SocialMediaForm: React.FC<SocialMediaFormProps> = ({ socialMedia: data, on
             name="username"
             value={formData.username || ''}
             onChange={handleChange}
+            error={errors.get('username')}
             required
           />
         </div>

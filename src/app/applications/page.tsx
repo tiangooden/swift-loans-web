@@ -25,13 +25,6 @@ export default function LoanApplicationsPage() {
   const { mutateAsync: saveApplication, isPending: saving } = useSaveApplication();
   const { mutateAsync: deleteApplication, isPending: deleting } = useDeleteApplication();
 
-  useEffect(() => {
-    if (status === 'loading') return;
-    if (!session) {
-      router.push(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/auth/signin`);
-    }
-  }, [session, status, router]);
-
   const handleDelete = async (key: string) => {
     if (!confirm('Are you sure you want to delete this application?')) return;
     try {
@@ -40,7 +33,7 @@ export default function LoanApplicationsPage() {
     } catch (e: any) {
       const { errors: er, statusMessage } = e;
       setErrors(processValidationErrors(er));
-      notifications.error(`Failed to delete loan application: ${e}`);
+      notifications.error(`Failed to delete loan application: ${statusMessage}`);
     }
   };
 

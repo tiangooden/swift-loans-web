@@ -14,6 +14,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             account_number: data.account_number,
             account_name: data.account_name,
             account_type: data.account_type,
+            updated_at: new Date(),
         },
     });
     return NextResponse.json(updatedAccount);

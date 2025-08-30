@@ -35,6 +35,7 @@ export async function PUT(request: Request) {
                 payday_day: body.payday_day,
                 pay_cycle: body.pay_cycle,
                 total_expenses_per_cycle: body.total_expenses_per_cycle,
+                updated_at: new Date(),
             },
         });
     } else {

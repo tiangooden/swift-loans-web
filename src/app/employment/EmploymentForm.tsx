@@ -117,7 +117,6 @@ export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
             value={formData.pay_cycle || ''}
             onChange={handleChange}
             options={[
-              { value: '', label: 'Select Pay Cycle' },
               { value: 'weekly', label: 'Weekly' },
               { value: 'fortnightly', label: 'Fortnightly' },
               { value: 'monthly', label: 'Monthly' },

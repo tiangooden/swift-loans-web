@@ -8,7 +8,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   try {
     const application = await ApplicationsRepository.update({
       where: { id: id },
-      data: { status: APPLICATION_STATUS.APPROVED },
+      data: { status: APPLICATION_STATUS.APPROVED, updated_at: new Date() },
     });
     await OffersRepository.create({
       principal: application.amount_requested,

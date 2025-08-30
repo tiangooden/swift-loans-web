@@ -90,7 +90,6 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave
             value={formData.account_type || ''}
             onChange={handleChange}
             options={[
-              { value: '', label: 'Select Account Type' },
               { value: 'Savings', label: 'Savings' },
               { value: 'Checking', label: 'Checking' }
             ]}
