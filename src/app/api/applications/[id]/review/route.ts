@@ -5,6 +5,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   try {
     const { id } = await params;
     const application = await ApplicationsRepository.findById(id, {
+      id:true,
       status: true,
       amount_requested: true,
       term_in_days: true,

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Edit, Trash2, XCircle } from 'lucide-react';
 import FormButton from '../shared/component/FormButton';
 import FormInput from '../shared/component/FormInput';
@@ -33,6 +33,7 @@ interface ReferencesFormProps {
   handleAddEdit: () => Promise<void>;
   handleDelete: (id: string) => Promise<void>;
   openAddModal: () => void;
+  clearErrors: () => void;
   openEditModal: (ref: Reference) => void;
   errors: Map<string, string>;
 }
@@ -52,6 +53,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
   handleDelete,
   openAddModal,
   openEditModal,
+  clearErrors,
   errors
 }) => {
 
@@ -64,6 +66,10 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
       [name]: type === 'checkbox' ? checked : typedValue,
     }));
   };
+
+  // useEffect(() => {
+  //   setErrors
+  // }, [errors])
 
   return (
     <LoadingOverlayWrapper active={isFetching} spinner text='Loading your references...'>
@@ -118,7 +124,10 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                         <h3 className="text-xl font-semibold text-gray-800">
                           {currentReference ? 'Edit Reference' : 'Add New Reference'}
                         </h3>
-                        <button onClick={() => setIsModalOpen(false)}>
+                        <button onClick={() => {
+                          setIsModalOpen(false);
+                          clearErrors();
+                        }}>
                           <XCircle className="h-6 w-6 text-gray-500 hover:text-gray-700" />
                         </button>
                       </div>
@@ -164,7 +173,10 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                           error={errors.get('relationship')}
                         />
                         <div className="flex justify-end space-x-2">
-                          <FormButton type="button" onClick={() => setIsModalOpen(false)} color="red">
+                          <FormButton type="button" onClick={() => {
+                            setIsModalOpen(false);
+                            clearErrors();
+                          }} color="red">
                             Cancel
                           </FormButton>
                           <FormButton type="submit" disabled={isAdding || isUpdating}>

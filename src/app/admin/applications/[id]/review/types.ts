@@ -36,6 +36,10 @@ export interface LoanApplication {
 }
 
 export interface AdminLoanOffersProps {
-  applicationId: string,
+  applicationId: string;
   offers: any[];
+  deleteOffer: (offerId: string) => Promise<void>;
+  isDeleting: boolean;
+  downloadSignedApproval: (id: any) => Promise<void>;
+  isDownloading: boolean;
 }

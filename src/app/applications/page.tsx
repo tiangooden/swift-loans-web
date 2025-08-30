@@ -13,6 +13,8 @@ import { useDeleteApplication } from './[id]/useDeleteApplication';
 import { useSaveApplication } from './useSaveApplication';
 import { notifications } from '../shared/notifications';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
+import { validateSchema } from '../shared/validation';
+import { loanApplicationSchema } from './schema';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 
 export default function LoanApplicationsPage() {
@@ -66,10 +68,16 @@ export default function LoanApplicationsPage() {
 
   const handleFormSubmit = async (data: any) => {
     try {
+      validateSchema(data, loanApplicationSchema);
+    } catch (error: any) {
+      return setErrors(processValidationErrors(error.errors));
+    }
+    try {
       await saveApplication({ data, id: editingApplication?.id });
       setShowForm(false);
       setEditingApplication(null);
       notifications.success('Application saved successfully!');
+      setErrors(new Map());
     } catch (e: any) {
       const { errors: er, statusMessage } = e;
       setErrors(processValidationErrors(er));

@@ -6,7 +6,7 @@ interface FormButtonProps {
   type?: 'button' | 'submit' | 'reset';
   className?: string;
   disabled?: boolean;
-  color?: 'blue' | 'red';
+  color?: 'blue' | 'red' | 'gray' | 'orange' | 'green' | 'yellow' | 'purple' | 'pink' | 'indigo';
 }
 
 const FormButton: React.FC<FormButtonProps> = ({
@@ -17,7 +17,17 @@ const FormButton: React.FC<FormButtonProps> = ({
   disabled = false,
   color = 'blue',
 }) => {
-  const colorClasses = color === 'red' ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700';
+  const colorClasses = {
+    blue: 'bg-blue-500 hover:bg-blue-700',
+    red: 'bg-red-500 hover:bg-red-700',
+    gray: 'bg-gray-500 hover:bg-gray-700',
+    orange: 'bg-orange-500 hover:bg-orange-700',
+    green: 'bg-green-500 hover:bg-green-700',
+    yellow: 'bg-yellow-500 hover:bg-yellow-700',
+    purple: 'bg-purple-500 hover:bg-purple-700',
+    pink: 'bg-pink-500 hover:bg-pink-700',
+    indigo: 'bg-indigo-500 hover:bg-indigo-700',
+  }[color];
   return (
     <button
       type={type}

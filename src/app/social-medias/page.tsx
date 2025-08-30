@@ -8,6 +8,8 @@ import { useFetchSocialMedias } from './useFetchSocialMedias';
 import { useSaveSocialMedia } from './useSaveSocialMedia';
 import { Share2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { validateSchema } from '../shared/validation';
+import { socialMediaSchema } from './schema';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
 
 const SocialMediasPage = () => {
@@ -37,8 +39,14 @@ const SocialMediasPage = () => {
 
   async function handleSave(socialMedia: SocialMedia): Promise<void> {
     try {
+      validateSchema(socialMedia, socialMediaSchema);
+    } catch (error: any) {
+      return setErrors(processValidationErrors(error.errors));
+    }
+    try {
       await mutateAsync(socialMedia);
       notifications.success(`Social media account ${socialMedia.id ? 'updated' : 'added'} successfully!`);
+      setErrors(new Map());
     } catch (e: any) {
       const { errors: er, statusMessage } = e;
       setErrors(processValidationErrors(er));

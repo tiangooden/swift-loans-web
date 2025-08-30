@@ -29,6 +29,7 @@ export default function UserForm({ data, onSave, errors, setErrors, formData, ha
       }
       try {
         await onSave(formData);
+        setErrors(new Map());
       } catch (error: any) {
         setErrors(processValidationErrors(error));
       }

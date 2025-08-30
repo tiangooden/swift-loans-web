@@ -4,14 +4,22 @@ import { Download, Trash2 } from 'lucide-react';
 import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import formatDateString from '@/app/shared/date';
 import { AdminLoanOffersProps } from '../types';
-import { useDeleteOffer } from '../useDeleteOffer';
 import formatCurrency from '@/app/shared/currency';
-import { useDownloadSignedApproval } from '../useDownloadSignedApproval';
 import { notifications } from '@/app/shared/notifications';
 
-export default function AdminLoanOffers({ applicationId, offers }: AdminLoanOffersProps) {
-    const { mutateAsync: downloadSignedApproval, isPending: isDownloading } = useDownloadSignedApproval();
-    const { mutateAsync: deleteOffer, isPending: isDeleting } = useDeleteOffer();
+export default function AdminLoanOffers({
+    applicationId,
+    offers = [],
+    deleteOffer,
+    isDeleting,
+    downloadSignedApproval,
+    isDownloading,
+}: AdminLoanOffersProps & {
+    deleteOffer: (offerId: string) => Promise<void>;
+    isDeleting: boolean;
+    downloadSignedApproval: (id: any) => Promise<void>;
+    isDownloading: boolean;
+}) {
 
     const handleDeleteOffer = async (offerId: string) => {
         if (window.confirm('Are you sure you want to delete this offer?')) {

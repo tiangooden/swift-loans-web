@@ -6,7 +6,7 @@ import { DocumentsRepository } from '@/app/api/files/documents.repository';
 
 export async function GET(req: NextRequest, { params }: { params: { key: string } }) {
   try {
-    const { key } = params;
+    const { key } = await params;
     const command = new GetObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET_NAME,
       Key: key,

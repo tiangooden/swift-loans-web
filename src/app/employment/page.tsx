@@ -8,10 +8,14 @@ import { Employment } from './types';
 import { notifications } from '../shared/notifications';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import { useState, useEffect } from 'react';
+import { processValidationErrors } from '../shared/utils/createMessageMap';
+import { validateSchema } from '../shared/validation';
+import { employmentsSchema } from '../api/employment/schema';
 
 export default function EmploymentPage() {
     const { data, isFetching } = useFetchEmployment();
     const { mutateAsync, isPending } = useSaveEmployment();
+    const [errors, setErrors] = useState<Map<string, string>>(new Map());
     const [formData, setFormData] = useState<Employment>({
         employer_name: '',
         employer_phone_number: '',
@@ -41,10 +45,17 @@ export default function EmploymentPage() {
 
     async function handleSave(employment: Employment): Promise<void> {
         try {
+            validateSchema(employment, employmentsSchema);
+        } catch (error: any) {
+            return setErrors(processValidationErrors(error.errors));
+        }
+        try {
             await mutateAsync(employment);
             notifications.success('Employment updated successfully!');
-        } catch (err) {
+            setErrors(new Map());
+        } catch (err: any) {
             notifications.error(`Failed to ${employment.id ? 'update' : 'save'} employment: ${err}`);
+            setErrors(processValidationErrors(err));
         }
     }
 
@@ -62,6 +73,7 @@ export default function EmploymentPage() {
                             onSave={handleSave}
                             formData={formData}
                             handleChange={handleChange}
+                            errors={errors}
                         />
                     </div>
                 </div>

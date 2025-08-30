@@ -7,13 +7,14 @@ import FormSelect from '../shared/component/FormSelect';
 import FormButton from '../shared/component/FormButton';
 
 interface BankAccountFormProps {
+  errors: Map<string, string>;
   account: BankAccount | null | undefined;
   onSave: (bankAccount?: BankAccount | null) => Promise<void>;
   formData: BankAccount;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
-const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave, formData, handleChange }) => {
+const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave, formData, handleChange, errors }) => {
 
   return (
     <form className="space-y-6">
@@ -25,6 +26,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave
             name="bank_name"
             value={formData.bank_name || ''}
             onChange={handleChange}
+            error={errors.get('bank_name')}
             required
           />
         </div>
@@ -35,6 +37,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave
             name="branch_name"
             value={formData.branch_name || ''}
             onChange={handleChange}
+            error={errors.get('branch_name')}
             required
           />
         </div>
@@ -45,6 +48,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave
             name="account_name"
             value={formData.account_name || ''}
             onChange={handleChange}
+            error={errors.get('account_name')}
             required
           />
         </div>
@@ -55,6 +59,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave
             name="account_number"
             value={formData.account_number || ''}
             onChange={handleChange}
+            error={errors.get('account_number')}
             required
           />
         </div>
@@ -69,6 +74,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave
               { value: 'Savings', label: 'Savings' },
               { value: 'Checking', label: 'Checking' }
             ]}
+            error={errors.get('account_type')}
             required
           />
         </div>

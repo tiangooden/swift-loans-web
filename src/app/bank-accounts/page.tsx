@@ -8,10 +8,14 @@ import { useFetchBankAccounts } from './useFetchBankAccounts';
 import { useSaveBankAccount } from './useSaveBankAccount';
 import { CreditCard } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { processValidationErrors } from '../shared/utils/createMessageMap';
+import { validateSchema } from '../shared/validation';
+import { bankAccountSchema } from './schema';
 
 const BankAccountsPage = () => {
   const { data: account, isFetching } = useFetchBankAccounts();
   const { mutateAsync, isPending } = useSaveBankAccount();
+  const [errors, setErrors] = useState<Map<string, string>>(new Map());
   const [formData, setFormData] = useState<BankAccount>({
     bank_name: '',
     branch_name: '',
@@ -37,11 +41,18 @@ const BankAccountsPage = () => {
 
   async function handleSave(): Promise<void> {
     try {
+      validateSchema(formData, bankAccountSchema);
+    } catch (error: any) {
+      return setErrors(processValidationErrors(error.errors));
+    }
+    try {
       const res = await mutateAsync(formData);
       notifications.success(`Bank account ${formData.id ? 'updated' : 'added'} successfully!`);
+      setErrors(new Map());
       return res;
-    } catch (err) {
+    } catch (err: any) {
       notifications.error(`Failed to ${formData.id ? 'update' : 'save'} bank account: ${err}`);
+      setErrors(processValidationErrors(err));
     }
   }
 
@@ -54,11 +65,12 @@ const BankAccountsPage = () => {
               <CreditCard className="w-8 h-8 text-blue-600 mr-3" />
               <h1 className="text-3xl font-bold text-gray-800">Bank Account</h1>
             </div>
-            <BankAccountForm 
-              account={account} 
-              onSave={handleSave} 
-              formData={formData} 
-              handleChange={handleChange} 
+            <BankAccountForm
+              account={account}
+              onSave={handleSave}
+              formData={formData}
+              handleChange={handleChange}
+              errors={errors}
             />
           </div>
         </div>

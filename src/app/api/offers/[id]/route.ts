@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getCurrentUser from '@/app/shared/get-user';
 import { OffersRepository } from '../offers.repository';
+import { withValidateBody } from '@/app/shared/withValidateBody';
 import { ApplicationsRepository } from '../../applications/applications.repository';
+import { createOfferSchema } from '../schema';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   const { id } = params;
@@ -35,37 +37,39 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   }
 }
 
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
-  const user = await getCurrentUser();
-  const { id } = await params;
-  const { amount, interest_rate, term, status } = await request.json();
-  if (!amount || !interest_rate || !term) {
-    return NextResponse.json({ error: 'Missing required offer fields' }, { status: 400 });
-  }
-  const existingApplication = await ApplicationsRepository.findById(id);
-  if (!existingApplication || existingApplication.user_id !== user.id) {
-    return NextResponse.json({ error: 'Application not found or unauthorized' }, { status: 404 });
-  }
-  try {
-    await ApplicationsRepository.update({
-      where: { id: id },
-      data: {
-        status: status,
-      },
-    });
-    const newOffer = await OffersRepository.create({
-      application: {
-        connect: {
-          id: id,
+export const POST =
+  withValidateBody(createOfferSchema)
+    (
+      async (request: NextRequest, { data, params }: { data: any, params: any }) => {
+        const user = await getCurrentUser();
+        const { id } = params;
+        const { amount, interest_rate, term, status } = data;
+        const existingApplication = await ApplicationsRepository.findById(id);
+        if (!existingApplication || existingApplication.user_id !== user.id) {
+          return NextResponse.json({ error: 'Application not found or unauthorized' }, { status: 404 });
         }
-      },
-      principal: parseFloat(amount),
-      interest_rate: parseFloat(interest_rate),
-      term_in_days: parseInt(term),
-      status: status,
-    });
-    return NextResponse.json(newOffer, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to process counter offer' }, { status: 500 });
-  }
-}
+        try {
+          await ApplicationsRepository.update({
+            where: { id: id },
+            data: {
+              status: status,
+            },
+          });
+          const newOffer = await OffersRepository.create({
+            application: {
+              connect: {
+                id: id,
+              }
+            },
+            principal: amount,
+            interest_rate: interest_rate,
+            term_in_days: term,
+            status: status,
+          });
+          return NextResponse.json(newOffer, { status: 201 });
+        }
+        catch (error) {
+          return NextResponse.json({ error: 'Failed to process counter offer' }, { status: 500 });
+        }
+      }
+    );

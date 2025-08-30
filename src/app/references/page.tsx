@@ -15,6 +15,10 @@ import { validateSchema } from '../shared/validation';
 const ReferencesPage: React.FC = () => {
   const { data: session } = useSession();
   const [errors, setErrors] = useState<Map<string, string>>(new Map());
+
+  const clearErrors = () => {
+    setErrors(new Map());
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentReference, setCurrentReference] = useState<Reference | null>(null);
   const [form, setForm] = useState({
@@ -52,6 +56,7 @@ const ReferencesPage: React.FC = () => {
         try {
           await updateReference(form);
           notifications.success('Reference saved successfully!');
+          setErrors(new Map());
           setIsModalOpen(false);
           setCurrentReference(null);
         } catch (e: any) {
@@ -96,11 +101,13 @@ const ReferencesPage: React.FC = () => {
   };
 
   const openAddModal = () => {
+    clearErrors();
     setCurrentReference(null);
     setIsModalOpen(true);
   };
 
   const openEditModal = (ref: Reference) => {
+    clearErrors();
     setCurrentReference(ref);
     setIsModalOpen(true);
   };
@@ -123,6 +130,7 @@ const ReferencesPage: React.FC = () => {
       openAddModal={openAddModal}
       openEditModal={openEditModal}
       errors={errors}
+      clearErrors={clearErrors}
     />
   );
 };

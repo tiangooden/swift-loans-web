@@ -8,7 +8,8 @@ import { getStatusColor, getStatusIcon } from '@/app/shared/status';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 
 export default function AdminLoans() {
-  const { searchTerm, setSearchTerm, filterStatus, setFilterStatus, data: loanApplications, isPending } = useFetchAdminApplications();
+  const { searchTerm, setSearchTerm, filterStatus, setFilterStatus, data: loanApplications,
+    isPending } = useFetchAdminApplications();
 
   const filteredLoans = loanApplications;
 
@@ -16,7 +17,6 @@ export default function AdminLoans() {
     <AdminNav>
       <LoadingOverlayWrapper active={isPending} spinner text='Loading applications...'>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Page Header */}
           <div className="mb-8">
             <div className="sm:flex sm:items-center sm:justify-between">
               <div>

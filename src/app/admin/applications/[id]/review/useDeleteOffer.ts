@@ -5,7 +5,7 @@ import { HttpError } from '@/app/shared/http-errors';
 
 export const useDeleteOffer = () => {
     const queryClient = useQueryClient();
-    const { mutateAsync, isPending, error } = useMutation<boolean, Error, string>({
+    const { mutateAsync, isPending, error } = useMutation<void, Error, string>({
         mutationFn: async (offerId) => {
             try {
                 const res = await axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}`);
