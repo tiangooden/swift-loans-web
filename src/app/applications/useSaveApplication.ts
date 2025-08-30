@@ -6,7 +6,7 @@ import { HttpError } from '../shared/http-errors';
 export function useSaveApplication() {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending, error } = useMutation({
-    mutationFn: async ({ data, id }: { data: any; id?: string }) => {
+    mutationFn: async ({ data, id }: { data: {}, id?: string }) => {
       const url = id ?
         `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}` :
         `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications`;
@@ -15,7 +15,7 @@ export function useSaveApplication() {
         queryClient.invalidateQueries({ queryKey: [useFetchApplicationsKey] });
         return res.data;
       } catch (e: any) {
-        throw new HttpError(e.response?.status || 500, e.response?.data);
+        throw new HttpError(e.response?.status || 500, e.message, e.response?.data);
       }
     },
   });

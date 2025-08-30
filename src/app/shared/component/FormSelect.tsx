@@ -42,7 +42,7 @@ const FormSelect: React.FC<FormSelectProps> = ({
           </option>
         ))}
       </select>
-      {error && <p className="text-red-500 text-xs italic">{error}</p>}
+      {error && <p className="text-red-500 text-md italic">{error}</p>}
     </div>
   );
 };

@@ -52,7 +52,7 @@ const FormInput: React.FC<FormInputProps> = ({
         step={step}
         className={`shadow rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${error ? 'border-red-500' : ''}`}
       />
-      {error && <p className="text-red-500 text-xs italic">{error}</p>}
+      {error && <p className="text-red-500 text-md italic">{error}</p>}
     </div>
   );
 };

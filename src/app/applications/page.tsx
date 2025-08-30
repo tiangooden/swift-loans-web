@@ -13,16 +13,17 @@ import { useDeleteApplication } from './[id]/useDeleteApplication';
 import { useSaveApplication } from './useSaveApplication';
 import { notifications } from '../shared/notifications';
 import { HttpError } from '../shared/http-errors';
+import { createMessageMap } from '../shared/utils/createMessageMap';
 
 export default function LoanApplicationsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<Map<string, string>>(new Map());
   const [editingApplication, setEditingApplication] = useState<LoanApplication | null>(null);
-  const { data: applications, isFetching: loading, error: fetchError, refetch: fetchApplications } = useFetchApplications();
-  const { mutateAsync: saveApplication, isPending: saving, error: saveError } = useSaveApplication();
-  const { mutateAsync: deleteApplication, isPending: deleting, error: deleteError } = useDeleteApplication();
+  const { data: applications, isFetching: loading } = useFetchApplications();
+  const { mutateAsync: saveApplication, isPending: saving } = useSaveApplication();
+  const { mutateAsync: deleteApplication, isPending: deleting } = useDeleteApplication();
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -42,15 +43,14 @@ export default function LoanApplicationsPage() {
   };
 
   const handleFormSubmit = async (data: any) => {
-    setErrors([]);
     try {
       await saveApplication({ data, id: editingApplication?.id });
       setShowForm(false);
       setEditingApplication(null);
       notifications.success('Application saved successfully!');
-    } catch (e: unknown) {
-      const { errors, statusMessage } = (e as HttpError);
-      setErrors(errors);
+    } catch (e: any) {
+      const { errors: er, statusMessage } = e; 
+      setErrors(createMessageMap(er));
       notifications.error(`An error occurred: ${statusMessage}`);
     }
   };

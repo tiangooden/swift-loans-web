@@ -16,7 +16,7 @@ export const useFileUpload = () => {
         queryClient.invalidateQueries({ queryKey: [useFetchFileKey] });
         return res.data;
       } catch (e: any) {
-        throw new HttpError(e.response?.status || 500, e.response?.data);
+        throw new HttpError(e.response?.status || 500, e.message, e.response?.data);
       }
     },
   });

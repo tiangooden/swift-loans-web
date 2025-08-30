@@ -10,7 +10,7 @@ export function useDownloadSignedApproval() {
                 const res = await axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/files/${key}`);
                 openLinkInNewWindow(res.data.signed_url);
             } catch (e: any) {
-                throw new HttpError(e.response?.status || 500, e.response?.data);
+                throw new HttpError(e.response?.status || 500, e.message, e.response?.data);
             }
         },
     });

@@ -18,7 +18,7 @@ export const useSaveBankAccount = () => {
         queryClient.invalidateQueries({ queryKey: [useFetchBankAccountsKey] });
         return res.data;
       } catch (e: any) {
-        throw new HttpError(e.response?.status || 500, e.response?.data);
+        throw new HttpError(e.response?.status || 500, e.message, e.response?.data);
       }
     },
   });

@@ -30,7 +30,7 @@ const FormCheckbox: React.FC<FormCheckboxProps> = ({
       <label htmlFor={id} className="text-gray-700 text-sm font-bold">
         {label}
       </label>
-      {error && <p className="text-red-500 text-xs italic ml-2">{error}</p>}
+      {error && <p className="text-red-500 text-md italic ml-2">{error}</p>}
     </div>
   );
 };

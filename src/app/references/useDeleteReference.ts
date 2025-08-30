@@ -11,7 +11,7 @@ export const useDeleteReference = () => {
         queryClient.invalidateQueries({ queryKey: ['references'] });
         return res.data;
       } catch (e: any) {
-        throw new HttpError(e.response?.status || 500, e.response?.data);
+        throw new HttpError(e.response?.status || 500, e.message, e.response?.data);
       }
     },
   });
