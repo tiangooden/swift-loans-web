@@ -4,13 +4,19 @@ import React, { useEffect, useState } from 'react';
 import { User } from './types';
 import FormInput from '../shared/component/FormInput';
 import FormButton from '../shared/component/FormButton';
+import { processValidationErrors } from '../shared/utils/createMessageMap';
+import { updateUserSchema } from '../api/users/schema';
+import { validateSchema } from '../shared/validation';
+import { notifications } from '../shared/notifications';
 
 interface UserFormProps {
   data: User | null | undefined;
+  errors: any,
   onSave: (user: User) => Promise<void>;
 }
 
-export default function UserForm({ data, onSave }: UserFormProps) {
+export default function UserForm({ data, onSave, errors: es }: UserFormProps) {
+  const [errors, setErrors] = useState<Map<string, string>>(es || new Map());
   const [formData, setFormData] = useState<User>({
     id: undefined,
     identity: '',
@@ -34,9 +40,9 @@ export default function UserForm({ data, onSave }: UserFormProps) {
     }
   }, [data]);
 
-  const [isEditing, setIsEditing] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    setErrors(es || new Map());
+  }, [es]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -49,15 +55,17 @@ export default function UserForm({ data, onSave }: UserFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
+    try {
+      validateSchema(formData, updateUserSchema);
+    } catch (error: any) {
+      return setErrors(processValidationErrors(error.errors));
+    }
     try {
       await onSave(formData);
-      setIsEditing(false);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      notifications.success('Profile updated successfully');
+    } catch (error: any) {
+      setErrors(processValidationErrors(error));
+      notifications.error('Failed to update profile');
     }
   };
 
@@ -70,8 +78,9 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             id={'first_name'}
             name={'first_name'}
             value={formData.first_name || ''}
+            error={errors.get('first_name')}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
         <div>
           <FormInput
@@ -79,8 +88,9 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             id={'middle_name'}
             name={'middle_name'}
             value={formData.middle_name || ''}
+            error={errors.get('middle_name')}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
         <div>
           <FormInput
@@ -88,8 +98,9 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             id={'last_name'}
             name={'last_name'}
             value={formData.last_name || ''}
+            error={errors.get('last_name')}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
         <div>
           <FormInput
@@ -97,8 +108,9 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             id={'alias'}
             name={'alias'}
             value={formData.alias || ''}
+            error={errors.get('alias')}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
         <div>
           <FormInput
@@ -107,8 +119,9 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             name={'email'}
             type={'email'}
             value={formData.email || ''}
+            error={errors.get('email')}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
         <div>
           <FormInput
@@ -116,9 +129,10 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             id={'dob'}
             name={'dob'}
             type={'date'}
+            error={errors.get('dob')}
             value={formData.dob instanceof Date ? formData.dob.toISOString().split('T')[0] : formData.dob ? new Date(formData.dob).toISOString().split('T')[0] : ''}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
         <div>
           <FormInput
@@ -126,8 +140,9 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             id={'phone_number'}
             name={'phone_number'}
             value={formData.phone_number || ''}
+            error={errors.get('phone_number')}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
         <div>
           <FormInput
@@ -135,8 +150,9 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             id={'trn'}
             name={'trn'}
             value={formData.trn || ''}
+            error={errors.get('trn')}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
         <div>
           <FormInput
@@ -144,8 +160,9 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             id={'street_address'}
             name={'street_address'}
             value={formData.street_address || ''}
+            error={errors.get('street_address')}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
         <div>
           <FormInput
@@ -153,8 +170,9 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             id={'city'}
             name={'city'}
             value={formData.city || ''}
+            error={errors.get('city')}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
         <div>
           <FormInput
@@ -162,16 +180,16 @@ export default function UserForm({ data, onSave }: UserFormProps) {
             id={'country'}
             name={'country'}
             value={formData.country || ''}
+            error={errors.get('country')}
             onChange={handleChange}
-            readOnly={!isEditing} />
+          />
         </div>
       </div>
       <div className="flex justify-end space-x-3">
         <FormButton
           type="submit"
-          disabled={loading}
         >
-          {loading ? 'Saving...' : 'Save'}
+          Save
         </FormButton>
       </div>
     </form>

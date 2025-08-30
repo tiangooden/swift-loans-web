@@ -7,8 +7,11 @@ import { notifications } from '../shared/notifications';
 import { User } from 'lucide-react';
 import { User as UserType } from './types';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
+import { useState } from 'react';
+import { processValidationErrors } from '../shared/utils/createMessageMap';
 
 export default function UserProfilePage() {
+    const [errors, setErrors] = useState<Map<string, string>>(new Map());
     const { data, isFetching } = useFetchUser();
     const { mutateAsync, isPending } = useUpdateUser();
 
@@ -18,7 +21,9 @@ export default function UserProfilePage() {
             notifications.success('Profile updated successfully!');
             return res;
         } catch (e: any) {
-            notifications.error('Profile failed to update');
+            const { errors: er, statusMessage } = e;
+            setErrors(processValidationErrors(er));
+            notifications.error(`An error occurred: ${statusMessage}`);
         }
     }
 
@@ -31,7 +36,7 @@ export default function UserProfilePage() {
                             <User className="w-8 h-8 text-blue-600 mr-3" />
                             <h1 className="text-3xl font-bold text-gray-800">User Profile</h1>
                         </div>
-                        <UserForm data={data} onSave={handleSave} />
+                        <UserForm data={data} onSave={handleSave} errors={errors} />
                     </div>
                 </div>
             </LoadingOverlayWrapper>

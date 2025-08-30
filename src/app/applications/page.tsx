@@ -12,7 +12,7 @@ import { getStatusColor, getStatusIcon } from '../shared/status';
 import { useDeleteApplication } from './[id]/useDeleteApplication';
 import { useSaveApplication } from './useSaveApplication';
 import { notifications } from '../shared/notifications';
-import { createMessageMap } from '../shared/utils/createMessageMap';
+import { processValidationErrors } from '../shared/utils/createMessageMap';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 
 export default function LoanApplicationsPage() {
@@ -37,8 +37,10 @@ export default function LoanApplicationsPage() {
     try {
       await deleteApplication(key);
       notifications.success('Loan application deleted successfully!');
-    } catch (err) {
-      notifications.error(`Failed to delete loan application: ${err}`);
+    } catch (e: any) {
+      const { errors: er, statusMessage } = e;
+      setErrors(processValidationErrors(er));
+      notifications.error(`Failed to delete loan application: ${e}`);
     }
   };
 
@@ -50,7 +52,7 @@ export default function LoanApplicationsPage() {
       notifications.success('Application saved successfully!');
     } catch (e: any) {
       const { errors: er, statusMessage } = e;
-      setErrors(createMessageMap(er));
+      setErrors(processValidationErrors(er));
       notifications.error(`An error occurred: ${statusMessage}`);
     }
   };

@@ -50,12 +50,13 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
     const user = await getCurrentUser();
     const data = await request.json();
-    const existingApplication = await ApplicationsRepository.findById(params.id);
+    const { id } = await params;
+    const existingApplication = await ApplicationsRepository.findById(id);
     if (!existingApplication || existingApplication.user_id !== user.id) {
         return NextResponse.json({ error: 'Application not found' }, { status: 404 });
     }
     const updatedApplication = await ApplicationsRepository.update({
-        where: { id: params.id },
+        where: { id },
         data,
     });
     return NextResponse.json(updatedApplication);

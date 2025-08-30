@@ -1,4 +1,4 @@
-export function createMessageMap(errors: { message: string; path: string[] }[]): Map<string, string> {
+export function processValidationErrors(errors: { message: string; path: string[] }[]): Map<string, string> {
   const messageMap = new Map<string, string>();
   errors.forEach(e => {
     const key = e.path.join(':');
