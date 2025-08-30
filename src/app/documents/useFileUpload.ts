@@ -5,7 +5,7 @@ import { HttpError } from '../shared/http-errors';
 
 export const useFileUpload = () => {
   const queryClient = useQueryClient();
-  const { mutateAsync, isPending, error, isSuccess } = useMutation<any, Error, FileList>({
+  const { mutateAsync, isPending, error } = useMutation<any, Error, FileList>({
     mutationFn: async (files: FileList) => {
       const formData = new FormData();
       for (let i = 0; i < files.length; i++) {
@@ -21,5 +21,5 @@ export const useFileUpload = () => {
     },
   });
 
-  return { mutateAsync, isPending, error, isSuccess };
+  return { mutateAsync, isPending, error };
 };

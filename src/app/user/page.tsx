@@ -24,7 +24,7 @@ export default function UserProfilePage() {
 
     return (
         <LoadingOverlayWrapper active={isFetching} spinner text='Loading your profile...'>
-            <LoadingOverlayWrapper active={isPending} spinner text='Updaing your profile...'>
+            <LoadingOverlayWrapper active={isPending} spinner text='Updating your profile...'>
                 <div className="min-h-screen bg-gray-100 p-4">
                     <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
                         <div className="flex items-center mb-6">
