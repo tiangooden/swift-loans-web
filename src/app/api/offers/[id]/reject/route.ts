@@ -18,7 +18,6 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     });
     return NextResponse.json({ message: 'Offer rejected successfully' }, { status: 200 });
   } catch (error) {
-    console.error('Error rejecting offer:', error);
     return NextResponse.json({ error: 'Failed to reject offer' }, { status: 500 });
   }
 }

@@ -14,14 +14,11 @@ import { notifications } from '@/app/shared/notifications';
 import downloadFileInBrowser from '@/app/shared/download';
 
 export default function LoanOffers({ offers }: any) {
-    const { mutateAsync: acceptOffer, isPending: accepting, error: acceptError } = useAcceptOffer();
-    const { mutateAsync: rejectOffer, isPending: rejecting, error: rejectError } = useRejectOffer();
-    const { mutateAsync: generateApprovalLetter, isPending: isGeneratingApprovalLetter,
-        error: errorGeneratingApprovalLetter } = useGenerateApprovalLetter();
-    const { mutateAsync: uploadApprovalLetter, isPending: isUploadingApprovalLetter,
-        error: errorUploadingApprovalLetter } = useUploadApprovalLetter();
-    const { mutateAsync: uploadFiles, isPending: isUploadingFiles, isSuccess: isSuccessUploadingFiles,
-        error: errorUploading } = useFileUpload();
+    const { mutateAsync: acceptOffer, isPending: accepting } = useAcceptOffer();
+    const { mutateAsync: rejectOffer, isPending: rejecting } = useRejectOffer();
+    const { mutateAsync: generateApprovalLetter, isPending: isGeneratingApprovalLetter } = useGenerateApprovalLetter();
+    const { mutateAsync: uploadApprovalLetter, isPending: isUploadingApprovalLetterr } = useUploadApprovalLetter();
+    const { mutateAsync: uploadFiles, isPending: isUploadingFiles, isSuccess: isSuccessUploadingFiles } = useFileUpload();
 
     const handleAcceptOffer = async (offerId: string) => {
         await acceptOffer(offerId);

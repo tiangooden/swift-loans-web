@@ -10,9 +10,9 @@ import { notifications } from '../shared/notifications';
 
 export default function DocumentsPage() {
     const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
-    const { data, isPending: isFetchingFiles, error: errorLoadingFiles } = useFetchFile();
-    const { mutateAsync: uploadFiles, isPending: isUploadingFiles, isSuccess: isSuccessUploadingFiles, error: errorUploading } = useFileUpload();
-    const { mutateAsync: deleteFile, isPending: isDeletingFile, error: errorDeleting } = useDeleteFile();
+    const { data, isPending: isFetchingFiles } = useFetchFile();
+    const { mutateAsync: uploadFiles, isPending: isUploadingFiles, isSuccess: isSuccessUploadingFiles } = useFileUpload();
+    const { mutateAsync: deleteFile, isPending: isDeletingFile } = useDeleteFile();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedFiles(event.target.files);

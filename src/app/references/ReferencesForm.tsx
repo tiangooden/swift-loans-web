@@ -29,10 +29,10 @@ const ReferencesForm: React.FC = () => {
     phone: '',
     relationship: '',
   });
-  const { data: references, isFetching, error: fetchError } = useFetchReferences();
-  const { mutateAsync: addReference, isPending: isAdding, error: addError } = useAddReference();
-  const { mutateAsync: updateReference, isPending: isUpdating, error: updateError } = useUpdateReference();
-  const { mutateAsync: deleteReference, isPending: isDeleting, error: deleteError } = useDeleteReference();
+  const { data: references, isFetching} = useFetchReferences();
+  const { mutateAsync: addReference, isPending: isAdding } = useAddReference();
+  const { mutateAsync: updateReference, isPending: isUpdating } = useUpdateReference();
+  const { mutateAsync: deleteReference, isPending: isDeleting } = useDeleteReference();
 
   useEffect(() => {
     if (currentReference) {

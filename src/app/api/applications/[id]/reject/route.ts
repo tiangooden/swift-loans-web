@@ -12,7 +12,6 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     });
     return NextResponse.json({ message: 'Loan application rejected successfully' });
   } catch (error) {
-    console.error('Error rejecting loan application:', error);
     return NextResponse.json({ message: 'Failed to reject loan application' }, { status: 500 });
   }
 }

@@ -18,7 +18,6 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     });
     return NextResponse.json({ message: 'Offer accepted successfully' }, { status: 200 });
   } catch (error) {
-    console.error('Error accepting offer:', error);
     return NextResponse.json({ error: 'Failed to accept offer' }, { status: 500 });
   }
 }

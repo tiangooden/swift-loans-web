@@ -8,8 +8,8 @@ import { useSaveSocialMedia } from './useSaveSocialMedia';
 import { Share2 } from 'lucide-react'; // Using Share2 icon for social media
 
 const SocialMediasPage = () => {
-  const { data: socialMedia, isFetching: fetchLoading, error: fetchError } = useFetchSocialMedias();
-  const { mutateAsync, isPending: saveLoading, error: saveError } = useSaveSocialMedia();
+  const { data: socialMedia, isFetching: fetchLoading } = useFetchSocialMedias();
+  const { mutateAsync, isPending: saveLoading } = useSaveSocialMedia();
 
   if (fetchLoading) {
     return <div className="flex justify-center items-center h-screen">Loading social media accounts...</div>;

@@ -8,8 +8,8 @@ import { Employment } from './types';
 import { notifications } from '../shared/notifications';
 
 export default function EmploymentPage() {
-    const { data, isFetching, error: fetchError } = useFetchEmployment();
-    const { mutateAsync, isPending, error: saveError } = useSaveEmployment();
+    const { data, isFetching } = useFetchEmployment();
+    const { mutateAsync, isPending } = useSaveEmployment();
 
     if (isFetching) {
         return <div className="flex justify-center items-center h-screen">Loading employment details...</div>;

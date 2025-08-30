@@ -15,7 +15,6 @@ export async function GET(req: NextRequest) {
     const documents = await DocumentsRepository.findMany({ where: { user_id: user.id } });
     return NextResponse.json(documents);
   } catch (error) {
-    console.error('Error fetching documents:', error);
     return NextResponse.json({ error: 'Failed to fetch documents' }, { status: 500 });
   }
 }
@@ -58,7 +57,6 @@ export async function POST(req: NextRequest) {
     }));
     return NextResponse.json({ key: id, });
   } catch (error) {
-    console.error('Error uploading file:', error);
     return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
   }
 }

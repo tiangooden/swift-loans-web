@@ -24,7 +24,6 @@ export default function AdminAnalytics() {
 
         setAnalytics(res.data);
       } catch (error) {
-        console.error('Error fetching analytics:', error);
         // Fallback to mock data if API fails
         setAnalytics({
           totalUsers: 12547,

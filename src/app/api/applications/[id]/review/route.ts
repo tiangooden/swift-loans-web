@@ -53,7 +53,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
     return NextResponse.json(application);
   } catch (error) {
-    console.error('Error fetching loan application:', error);
     return NextResponse.json(
       { error: 'Failed to fetch loan application' },
       { status: 500 }

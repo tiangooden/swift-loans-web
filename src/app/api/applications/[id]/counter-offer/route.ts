@@ -20,7 +20,6 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     });
     return NextResponse.json({ message: 'Loan application approved and offer created successfully' });
   } catch (error) {
-    console.error('Error approving loan application:', error);
     return NextResponse.json({ message: 'Failed to approve loan application' }, { status: 500 });
   }
 }

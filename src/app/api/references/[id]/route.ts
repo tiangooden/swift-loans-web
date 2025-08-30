@@ -14,7 +14,6 @@ export async function GET(request: Request, { params }: { params: { id: string }
     });
     return NextResponse.json(references[0] || {});
   } catch (error) {
-    console.error('Error fetching references:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
@@ -43,7 +42,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     return NextResponse.json(updatedReference);
   } catch (error) {
-    console.error('Error updating reference:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
@@ -73,7 +71,6 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 
     return NextResponse.json({ message: 'Reference deleted successfully' });
   } catch (error) {
-    console.error('Error deleting reference:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }

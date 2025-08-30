@@ -19,4 +19,3 @@ export function useApproveApplicationReview() {
 
     return { mutateAsync, isPending, error };
 }
-        throw new HttpError(e.response?.status || 500, e.message, e.response?.data);

@@ -31,7 +31,6 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     await OffersRepository.delete({ id: id });
     return NextResponse.json({ message: 'Offer deleted successfully' }, { status: 200 });
   } catch (error) {
-    console.error('Error deleting offer:', error);
     return NextResponse.json({ error: 'Failed to delete offer' }, { status: 500 });
   }
 }
@@ -67,7 +66,6 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     });
     return NextResponse.json(newOffer, { status: 201 });
   } catch (error) {
-    console.error('Error processing counter offer:', error);
     return NextResponse.json({ error: 'Failed to process counter offer' }, { status: 500 });
   }
 }

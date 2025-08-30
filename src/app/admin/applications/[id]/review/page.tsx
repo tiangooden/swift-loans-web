@@ -19,7 +19,7 @@ import FormTextArea from '@/app/shared/component/FormTextArea';
 export default function LoanReviewPage() {
   const router = useRouter();
   const id = (useParams()).id?.toString();
-  const { data: application, isPending: loading, error } = useFetchApplicationReview(id);
+  const { data: application, isPending: loading } = useFetchApplicationReview(id);
   const { mutateAsync: approveApplicationReview, isPending: approveLoading } = useApproveApplicationReview();
   const { mutateAsync: rejectApplicationReview, isPending: rejectLoading } = useRejectApplicationReview();
   const { mutateAsync: counterOfferApplicationReview, isPending: counterLoading } = useCounterOfferApplicationReview();

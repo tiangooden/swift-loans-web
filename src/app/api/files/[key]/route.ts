@@ -14,7 +14,6 @@ export async function GET(req: NextRequest, { params }: { params: { key: string 
     const signed_url = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL expires in 1 hour
     return NextResponse.json({ signed_url });
   } catch (error) {
-    console.error('Error generating signed URL for download:', error);
     return NextResponse.json({ error: 'Failed to generate signed URL' }, { status: 500 });
   }
 }
@@ -31,7 +30,6 @@ export async function DELETE(req: NextRequest, { params }: { params: { key: stri
     await s3Client.send(command);
     return NextResponse.json({ message: 'File deleted successfully' });
   } catch (error) {
-    console.error('Error deleting file:', error);
     return NextResponse.json({ error: 'Failed to delete file' }, { status: 500 });
   }
 }

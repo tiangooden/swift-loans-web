@@ -18,7 +18,6 @@ export async function GET(request: Request) {
 
     return NextResponse.json(references);
   } catch (error) {
-    console.error('Error fetching references:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }
@@ -46,7 +45,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newReference, { status: 201 });
   } catch (error) {
-    console.error('Error creating reference:', error);
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 }

@@ -24,7 +24,6 @@ export default function AdminDashboard() {
       setStats(statsResponse.data);
       setRecentLoans(loansResponse.data.slice(0, 5));
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
     }
   };
 
