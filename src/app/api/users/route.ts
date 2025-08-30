@@ -30,7 +30,7 @@ export const PUT =
                 const { id, provider } = session.user as any;
                 const updatedUser = await UsersRepository.update({
                     where: { identity: `${provider}|${id}` },
-                    data: { ...data, updated_at: new Date() }
+                    data: { ...data, dob: new Date(data.dob), updated_at: new Date() }
                 });
                 if (!updatedUser) {
                     return NextResponse.json({ error: 'User not found' }, { status: 404 });
