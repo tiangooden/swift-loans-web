@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Edit, Trash2, XCircle } from 'lucide-react';
 import FormButton from '../shared/component/FormButton';
 import FormInput from '../shared/component/FormInput';
@@ -34,7 +34,7 @@ interface ReferencesFormProps {
   handleDelete: (id: string) => Promise<void>;
   openAddModal: () => void;
   openEditModal: (ref: Reference) => void;
-  errors: any
+  errors: Map<string, string>;
 }
 
 const ReferencesForm: React.FC<ReferencesFormProps> = ({
@@ -52,13 +52,8 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
   handleDelete,
   openAddModal,
   openEditModal,
-  errors:es
+  errors
 }) => {
-  const [errors, setErrors] = useState<Map<string, string>>(es || new Map());
-
-  useEffect(() => {
-    setErrors(es || new Map());
-  }, [es]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -69,7 +64,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
       [name]: type === 'checkbox' ? checked : typedValue,
     }));
   };
-  
+
   return (
     <LoadingOverlayWrapper active={isFetching} spinner text='Loading your references...'>
       <LoadingOverlayWrapper active={isAdding} spinner text='Adding your reference...'>
@@ -116,7 +111,6 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                   </table>
                 </div>
 
-                {/* Add/Edit Modal */}
                 {isModalOpen && (
                   <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
                     <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full">

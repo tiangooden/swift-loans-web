@@ -7,13 +7,33 @@ import { SocialMedia } from './types';
 import { useFetchSocialMedias } from './useFetchSocialMedias';
 import { useSaveSocialMedia } from './useSaveSocialMedia';
 import { Share2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
 
 const SocialMediasPage = () => {
   const { data, isFetching } = useFetchSocialMedias();
   const [errors, setErrors] = useState<Map<string, string>>(new Map());
   const { mutateAsync, isPending } = useSaveSocialMedia();
+
+  const [formData, setFormData] = useState<SocialMedia>({
+    platform: '',
+    username: '',
+  });
+
+  useEffect(() => {
+    if (data) {
+      setFormData(data);
+    }
+  }, [data]);
+
+  const handleChange = (e: React.ChangeEvent<any>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    setFormData((prevData: any) => ({
+      ...prevData,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
 
   async function handleSave(socialMedia: SocialMedia): Promise<void> {
     try {
@@ -35,7 +55,12 @@ const SocialMediasPage = () => {
               <Share2 className="w-8 h-8 text-blue-600 mr-3" />
               <h1 className="text-3xl font-bold text-gray-800">Social Media</h1>
             </div>
-            <SocialMediaForm data={data} onSave={handleSave} errors={errors} />
+            <SocialMediaForm
+              formData={formData}
+              handleChange={handleChange}
+              onSave={handleSave}
+              errors={errors}
+            />
           </div>
         </div>
       </LoadingOverlayWrapper>

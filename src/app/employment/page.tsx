@@ -7,17 +7,44 @@ import { useSaveEmployment } from './useSaveEmployment';
 import { Employment } from './types';
 import { notifications } from '../shared/notifications';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
+import { useState, useEffect } from 'react';
 
 export default function EmploymentPage() {
     const { data, isFetching } = useFetchEmployment();
     const { mutateAsync, isPending } = useSaveEmployment();
+    const [formData, setFormData] = useState<Employment>({
+        employer_name: '',
+        employer_phone_number: '',
+        job_title: '',
+        date_of_employment: undefined,
+        gross_salary: 0,
+        payday_day: 0,
+        pay_cycle: '',
+        total_expenses_per_cycle: 0,
+    });
+
+    useEffect(() => {
+        if (data) {
+            setFormData(data);
+        }
+    }, [data]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value, type } = e.target;
+        const typedValue = type === "number" ? Number(value) : value;
+        const checked = (e.target as HTMLInputElement).checked;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? checked : typedValue,
+        }));
+    }
 
     async function handleSave(employment: Employment): Promise<void> {
         try {
             await mutateAsync(employment);
             notifications.success('Employment updated successfully!');
         } catch (err) {
-            notifications.error(`Failed to ${employment.id ? 'update' : 'save'} reference: ${err}`);
+            notifications.error(`Failed to ${employment.id ? 'update' : 'save'} employment: ${err}`);
         }
     }
 
@@ -30,7 +57,12 @@ export default function EmploymentPage() {
                             <Briefcase className="w-8 h-8 text-blue-600 mr-3" />
                             <h1 className="text-3xl font-bold text-gray-800">Employment Details</h1>
                         </div>
-                        <EmploymentForm data={data} onSave={handleSave} />
+                        <EmploymentForm
+                            data={data}
+                            onSave={handleSave}
+                            formData={formData}
+                            handleChange={handleChange}
+                        />
                     </div>
                 </div>
             </LoadingOverlayWrapper>

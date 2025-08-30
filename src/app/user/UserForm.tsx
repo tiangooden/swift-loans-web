@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { User } from './types';
 import FormInput from '../shared/component/FormInput';
 import FormButton from '../shared/component/FormButton';
@@ -10,64 +10,29 @@ import { validateSchema } from '../shared/validation';
 
 interface UserFormProps {
   data: User | null | undefined;
-  errors: any,
+  errors: Map<string, string>;
   onSave: (user: User) => Promise<void>;
+  formData: User;
+  setErrors: any;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
-export default function UserForm({ data, onSave, errors: es }: UserFormProps) {
-  const [errors, setErrors] = useState<Map<string, string>>(es || new Map());
-  const [formData, setFormData] = useState<User>({
-    id: '',
-    identity: '',
-    alias: '',
-    email: '',
-    first_name: '',
-    middle_name: '',
-    last_name: '',
-    dob: null,
-    phone_number: '',
-    trn: '',
-    street_address: '',
-    city: '',
-    country: '',
-    status: '',
-  });
-
-  useEffect(() => {
-    if (data) {
-      setFormData(data);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    setErrors(es || new Map());
-  }, [es]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      validateSchema(formData, updateUserSchema);
-    } catch (error: any) {
-      return setErrors(processValidationErrors(error.errors));
-    }
-    try {
-      await onSave(formData);
-    } catch (error: any) {
-      setErrors(processValidationErrors(error));
-    }
-  };
+export default function UserForm({ data, onSave, errors, setErrors, formData, handleChange }: UserFormProps) {
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={async (e) => {
+      e.preventDefault();
+      try {
+        validateSchema(formData, updateUserSchema);
+      } catch (error: any) {
+        return setErrors(processValidationErrors(error.errors));
+      }
+      try {
+        await onSave(formData);
+      } catch (error: any) {
+        setErrors(processValidationErrors(error));
+      }
+    }} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <FormInput

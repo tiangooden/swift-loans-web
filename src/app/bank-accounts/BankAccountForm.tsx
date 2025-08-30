@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BankAccount } from './types';
 import FormInput from '../shared/component/FormInput';
 import FormSelect from '../shared/component/FormSelect';
@@ -8,36 +8,12 @@ import FormButton from '../shared/component/FormButton';
 
 interface BankAccountFormProps {
   account: BankAccount | null | undefined;
-  onSave: (bankAccount: BankAccount) => Promise<void>;
+  onSave: (bankAccount?: BankAccount | null) => Promise<void>;
+  formData: BankAccount;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
-const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave }) => {
-  const [formData, setFormData] = useState<BankAccount>({
-    bank_name: '',
-    branch_name: '',
-    account_name: '',
-    account_number: '',
-    account_type: '',
-  });
-
-  useEffect(() => {
-    if (data) {
-      setFormData(data);
-    }
-  }, [data]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
-
-  const handleSubmit = () => {
-    onSave(formData);
-  };
+const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave, formData, handleChange }) => {
 
   return (
     <form className="space-y-6">
@@ -100,7 +76,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ account: data, onSave
       <div className="flex justify-end">
         <FormButton
           type="button"
-          onClick={handleSubmit}
+          onClick={() => onSave(data)}
         >
           Save Bank Account Details
         </FormButton>

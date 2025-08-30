@@ -1,47 +1,19 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { SocialMedia } from './types';
 import FormSelect from '../shared/component/FormSelect';
 import FormButton from '../shared/component/FormButton';
 import FormInput from '../shared/component/FormInput';
 
 interface SocialMediaFormProps {
-  data: SocialMedia | null | undefined;
+  formData: SocialMedia;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   onSave: (socialMedia: SocialMedia) => Promise<void>;
-  errors: any;
+  errors: Map<string, string>;
 }
 
-const SocialMediaForm: React.FC<SocialMediaFormProps> = ({ data, onSave, errors: es }) => {
-  const [errors, setErrors] = useState<Map<string, string>>(es || new Map());
-  const [formData, setFormData] = useState<SocialMedia>({
-    platform: '',
-    username: '',
-  });
-
-  useEffect(() => {
-    if (data) {
-      setFormData(data);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    setErrors(es || new Map());
-  }, [es]);
-
-  const handleChange = (e: React.ChangeEvent<any>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    setFormData((prevData: any) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
-
-  const handleSubmit = () => {
-    onSave(formData);
-  };
-
+const SocialMediaForm: React.FC<SocialMediaFormProps> = ({ formData, handleChange, onSave, errors }) => {
   return (
     <form className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -79,7 +51,7 @@ const SocialMediaForm: React.FC<SocialMediaFormProps> = ({ data, onSave, errors:
       <div className="flex justify-end">
         <FormButton
           type="button"
-          onClick={handleSubmit}
+          onClick={() => onSave(formData)}
         >
           Save Social Media Details
         </FormButton>

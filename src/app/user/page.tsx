@@ -6,18 +6,57 @@ import UserForm from './UserForm';
 import { notifications } from '../shared/notifications';
 import { User } from 'lucide-react';
 import { User as UserType } from './types';
+import { useEffect } from 'react';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import { useState } from 'react';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
+import { updateUserSchema } from '../api/users/schema';
+import { validateSchema } from '../shared/validation';
 
 export default function UserProfilePage() {
     const { data, isFetching } = useFetchUser();
     const [errors, setErrors] = useState<Map<string, string>>(new Map());
     const { mutateAsync, isPending } = useUpdateUser();
+    const [formData, setFormData] = useState<UserType>({
+        id: '',
+        identity: '',
+        alias: '',
+        email: '',
+        first_name: '',
+        middle_name: '',
+        last_name: '',
+        dob: null,
+        phone_number: '',
+        trn: '',
+        street_address: '',
+        city: '',
+        country: '',
+        status: '',
+    });
 
-    async function handleSave(user: UserType): Promise<void> {
+    useEffect(() => {
+        if (data) {
+            setFormData(data);
+        }
+    }, [data]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target;
+        const checked = (e.target as HTMLInputElement).checked;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? checked : value,
+        }));
+    };
+
+    async function handleSave(): Promise<void> {
         try {
-            await mutateAsync(user);
+            validateSchema(formData, updateUserSchema);
+        } catch (error: any) {
+            return setErrors(processValidationErrors(error.errors));
+        }
+        try {
+            await mutateAsync(formData);
             notifications.success('Profile updated successfully!');
         } catch (e: any) {
             const { errors: er, statusMessage } = e;
@@ -35,7 +74,14 @@ export default function UserProfilePage() {
                             <User className="w-8 h-8 text-blue-600 mr-3" />
                             <h1 className="text-3xl font-bold text-gray-800">User Profile</h1>
                         </div>
-                        <UserForm data={data} onSave={handleSave} errors={errors} />
+                        <UserForm 
+                            data={data} 
+                            onSave={handleSave} 
+                            setErrors={setErrors}
+                            errors={errors} 
+                            formData={formData} 
+                            handleChange={handleChange} 
+                        />
                     </div>
                 </div>
             </LoadingOverlayWrapper>

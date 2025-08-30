@@ -1,51 +1,25 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Employment } from './types';
 import FormInput from '../shared/component/FormInput';
 import FormButton from '../shared/component/FormButton';
 import FormSelect from '../shared/component/FormSelect';
 
+
 interface EmploymentFormProps {
   data: Employment | null | undefined;
   onSave: (employment: Employment) => void;
+  formData: Employment;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
 }
 
-export default function EmploymentForm({ data, onSave }: EmploymentFormProps) {
-  const [formData, setFormData] = useState<Employment>({
-    employer_name: '',
-    employer_phone_number: '',
-    job_title: '',
-    date_of_employment: undefined,
-    gross_salary: 0,
-    payday_day: 0,
-    pay_cycle: '',
-    total_expenses_per_cycle: 0,
-  });
-
-  useEffect(() => {
-    if (data) {
-      setFormData(data);
-    }
-  }, [data]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    const typedValue = type === "number" ? Number(value) : value;
-    const checked = (e.target as HTMLInputElement).checked;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : typedValue,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(formData);
-  };
+export default function EmploymentForm({ data, onSave, formData, handleChange }: EmploymentFormProps) {
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      onSave(formData);
+    }} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <FormInput

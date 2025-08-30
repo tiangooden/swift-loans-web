@@ -7,18 +7,41 @@ import { BankAccount } from './types';
 import { useFetchBankAccounts } from './useFetchBankAccounts';
 import { useSaveBankAccount } from './useSaveBankAccount';
 import { CreditCard } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 const BankAccountsPage = () => {
   const { data: account, isFetching } = useFetchBankAccounts();
   const { mutateAsync, isPending } = useSaveBankAccount();
+  const [formData, setFormData] = useState<BankAccount>({
+    bank_name: '',
+    branch_name: '',
+    account_name: '',
+    account_number: '',
+    account_type: '',
+  });
 
-  async function handleSave(bankAccount: BankAccount): Promise<void> {
+  useEffect(() => {
+    if (account) {
+      setFormData(account);
+    }
+  }, [account]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  async function handleSave(): Promise<void> {
     try {
-      const res = mutateAsync(bankAccount);
-      notifications.success(`Bank account ${bankAccount.id ? 'updated' : 'added'} successfully!`);
+      const res = await mutateAsync(formData);
+      notifications.success(`Bank account ${formData.id ? 'updated' : 'added'} successfully!`);
       return res;
     } catch (err) {
-      notifications.error(`Failed to ${bankAccount.id ? 'update' : 'save'} bank account: ${err}`);
+      notifications.error(`Failed to ${formData.id ? 'update' : 'save'} bank account: ${err}`);
     }
   }
 
@@ -31,7 +54,12 @@ const BankAccountsPage = () => {
               <CreditCard className="w-8 h-8 text-blue-600 mr-3" />
               <h1 className="text-3xl font-bold text-gray-800">Bank Account</h1>
             </div>
-            <BankAccountForm account={account} onSave={handleSave} />
+            <BankAccountForm 
+              account={account} 
+              onSave={handleSave} 
+              formData={formData} 
+              handleChange={handleChange} 
+            />
           </div>
         </div>
       </LoadingOverlayWrapper>

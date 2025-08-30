@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import FormInput from '../shared/component/FormInput';
 import FormSelect from '../shared/component/FormSelect';
 import FormButton from '../shared/component/FormButton';
@@ -17,20 +16,12 @@ export interface ApplicationFormProps {
   saving: boolean;
   onSubmit: (data: any) => void;
   onCancel: () => void;
+  formData: any;
+  setFormData: (data: any) => void;
 }
 
-export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, saving }: ApplicationFormProps) {
-  const [errors, setErrors] = useState<Map<string, string>>(es || new Map());
-
-  useEffect(() => {
-    setErrors(es || new Map());
-  }, [es]);
-
-  const [formData, setFormData] = useState(data || {
-    amount_requested: 15000,
-    term_in_days: 14,
-    purpose: '',
-  });
+export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, saving, formData, setFormData }: ApplicationFormProps) {
+  const errors = es || new Map();
 
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
@@ -39,7 +30,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev: any) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -96,7 +87,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, 
       </div>
       <div className="flex space-x-3 pt-4">
         <FormButton
-          type="submit"
+          type="button"
           disabled={saving}
           onClick={handleSubmit}
         >
