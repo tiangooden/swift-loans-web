@@ -59,6 +59,16 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
   useEffect(() => {
     setErrors(es || new Map());
   }, [es]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    const typedValue = type === "number" ? Number(value) : value;
+    const checked = (e.target as HTMLInputElement).checked;
+    setForm((prevData) => ({
+      ...prevData,
+      [name]: type === 'checkbox' ? checked : typedValue,
+    }));
+  };
   
   return (
     <LoadingOverlayWrapper active={isFetching} spinner text='Loading your references...'>
@@ -130,7 +140,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                           id="name"
                           name="name"
                           value={form.name}
-                          onChange={(e) => setForm({ ...form, name: e.target.value })}
+                          onChange={handleChange}
                           error={errors.get('name')}
                         />
                         <FormInput
@@ -139,7 +149,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                           name="email"
                           type="email"
                           value={form.email}
-                          onChange={(e) => setForm({ ...form, email: e.target.value })}
+                          onChange={handleChange}
                           error={errors.get('email')}
                         />
                         <FormInput
@@ -148,7 +158,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                           name="phone"
                           type="tel"
                           value={form.phone}
-                          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                          onChange={handleChange}
                           error={errors.get('phone')}
                         />
                         <FormInput
@@ -156,7 +166,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
                           id="relationship"
                           name="relationship"
                           value={form.relationship}
-                          onChange={(e) => setForm({ ...form, relationship: e.target.value })}
+                          onChange={handleChange}
                           error={errors.get('relationship')}
                         />
                         <div className="flex justify-end space-x-2">
