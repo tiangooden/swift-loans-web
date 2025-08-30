@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { validateSchema } from '../shared/validation';
 import { socialMediaSchema } from './schema';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
+import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
 
 const SocialMediasPage = () => {
   const { data, isFetching } = useFetchSocialMedias();
@@ -21,21 +22,13 @@ const SocialMediasPage = () => {
     platform: '',
     username: '',
   });
+  const handleChange = handleChangeUtil(setFormData)
 
   useEffect(() => {
     if (data) {
       setFormData(data);
     }
   }, [data]);
-
-  const handleChange = (e: React.ChangeEvent<any>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    setFormData((prevData: any) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
 
   async function handleSave(socialMedia: SocialMedia): Promise<void> {
     try {

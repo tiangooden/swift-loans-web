@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
 import { updateUserSchema } from '../api/users/schema';
 import { validateSchema } from '../shared/validation';
+import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
 
 export default function UserProfilePage() {
     const { data, isFetching } = useFetchUser();
@@ -33,21 +34,13 @@ export default function UserProfilePage() {
         country: '',
         status: '',
     });
+    const handleChange = handleChangeUtil(setFormData)
 
     useEffect(() => {
         if (data) {
             setFormData(data);
         }
     }, [data]);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value, type } = e.target;
-        const checked = (e.target as HTMLInputElement).checked;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: type === 'checkbox' ? checked : value,
-        }));
-    };
 
     async function handleSave(): Promise<void> {
         try {
@@ -74,13 +67,13 @@ export default function UserProfilePage() {
                             <User className="w-8 h-8 text-blue-600 mr-3" />
                             <h1 className="text-3xl font-bold text-gray-800">User Profile</h1>
                         </div>
-                        <UserForm 
-                            data={data} 
-                            onSave={handleSave} 
+                        <UserForm
+                            data={data}
+                            onSave={handleSave}
                             setErrors={setErrors}
-                            errors={errors} 
-                            formData={formData} 
-                            handleChange={handleChange} 
+                            errors={errors}
+                            formData={formData}
+                            handleChange={handleChange}
                         />
                     </div>
                 </div>

@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
 import { validateSchema } from '../shared/validation';
 import { bankAccountSchema } from './schema';
+import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
 
 const BankAccountsPage = () => {
   const { data: account, isFetching } = useFetchBankAccounts();
@@ -23,21 +24,13 @@ const BankAccountsPage = () => {
     account_number: '',
     account_type: '',
   });
+  const handleChange = handleChangeUtil(setFormData)
 
   useEffect(() => {
     if (account) {
       setFormData(account);
     }
   }, [account]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-  };
 
   async function handleSave(): Promise<void> {
     try {

@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
 import { validateSchema } from '../shared/validation';
 import { employmentsSchema } from '../api/employment/schema';
+import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
 
 export default function EmploymentPage() {
     const { data, isFetching } = useFetchEmployment();
@@ -26,23 +27,14 @@ export default function EmploymentPage() {
         pay_cycle: '',
         total_expenses_per_cycle: 0,
     });
-
+    const handleChange = handleChangeUtil(setFormData)
+    
     useEffect(() => {
         if (data) {
             setFormData(data);
         }
     }, [data]);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target;
-        const typedValue = type === "number" ? Number(value) : value;
-        const checked = (e.target as HTMLInputElement).checked;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: type === 'checkbox' ? checked : typedValue,
-        }));
-    }
-
+    
     async function handleSave(employment: Employment): Promise<void> {
         try {
             validateSchema(employment, employmentsSchema);

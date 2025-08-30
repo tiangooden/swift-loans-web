@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Edit, Trash2, XCircle } from 'lucide-react';
 import FormButton from '../shared/component/FormButton';
 import FormInput from '../shared/component/FormInput';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
+import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
 
 interface ReferencesFormProps {
   references: Reference[];
@@ -57,15 +58,7 @@ const ReferencesForm: React.FC<ReferencesFormProps> = ({
   errors
 }) => {
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    const typedValue = type === "number" ? Number(value) : value;
-    const checked = (e.target as HTMLInputElement).checked;
-    setForm((prevData) => ({
-      ...prevData,
-      [name]: type === 'checkbox' ? checked : typedValue,
-    }));
-  };
+  const handleChange = handleChangeUtil(setForm);
 
   // useEffect(() => {
   //   setErrors

@@ -4,6 +4,7 @@ import FormInput from '../shared/component/FormInput';
 import FormSelect from '../shared/component/FormSelect';
 import FormButton from '../shared/component/FormButton';
 import FormTextArea from '../shared/component/FormTextArea';
+import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
 
 export interface ApplicationFormProps {
   data: {
@@ -27,11 +28,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, 
     e.preventDefault();
     onSubmit(formData);
   };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev: any) => ({ ...prev, [name]: value }));
-  };
+  const handleChange = handleChangeUtil(setFormData)
 
   return (
     <form className="space-y-6">
