@@ -46,9 +46,13 @@ export default function LoanApplicationDetailsPage() {
     };
 
     const handleDownloanApprovalLetter = async (id: string) => {
-        const res = await generateApprovalLetter(id);
-        downloadFileInBrowser('approval.pdf', res);
-        notifications.success('Approval letter generated successfully!');
+        try {
+            const res = await generateApprovalLetter(id);
+            const filename = res.headers["Content-Disposition"].split('=')[1];
+            console.log(filename);
+            downloadFileInBrowser(filename, res.data);
+            notifications.success('Approval letter generated successfully!');
+        } catch (e: any) { }
     }
 
     const handleUploadApprovalLetter = async (offerId: string, file: File) => {

@@ -53,7 +53,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
         return new NextResponse(pdfBuf, {
             headers: {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename=Swift Loans Approval for ${first_name} ${last_name}.pdf`,
+                'Content-Disposition': `attachment; filename=SwiftLoans_Approval_${first_name}_${last_name}.pdf`,
             },
         });
     } catch (error) {
