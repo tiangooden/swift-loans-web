@@ -25,9 +25,8 @@ export const PUT =
             put
         );
 
-async function put(request: NextRequest) {
+async function put(request: NextRequest, { data }: { data: any }) {
     const session = await getServerSession(authOptions);
-    const data = await request.json();
     if (!session) {
         return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
     }

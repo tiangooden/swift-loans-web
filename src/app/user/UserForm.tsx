@@ -40,9 +40,9 @@ export default function UserForm({ data, onSave, errors: es }: UserFormProps) {
     }
   }, [data]);
 
-  useEffect(() => {
-    setErrors(es || new Map());
-  }, [es]);
+  // useEffect(() => {
+  //   setErrors(es || new Map());
+  // }, [es]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -62,10 +62,8 @@ export default function UserForm({ data, onSave, errors: es }: UserFormProps) {
     }
     try {
       await onSave(formData);
-      notifications.success('Profile updated successfully');
     } catch (error: any) {
       setErrors(processValidationErrors(error));
-      notifications.error('Failed to update profile');
     }
   };
 
