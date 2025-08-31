@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getCurrentUser from '@/app/shared/get-user';
 import { ApplicationsRepository } from '../applications.repository';
+import { withValidateBody } from '@/app/shared/withValidateBody';
+import { createApplicationRequestSchema } from '../schema';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     const { id } = await params;
@@ -23,58 +25,26 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     return NextResponse.json(loanApplication);
 }
 
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export const PUT =
+    withValidateBody(createApplicationRequestSchema)
+        (
+            async (request: NextRequest, { data, params }: { data: any, params: any }) => {
+                const user = await getCurrentUser();
+                const { id } = params;
+                const updatedApplication = await ApplicationsRepository.update({
+                    where: { id },
+                    data: { ...data, updated_at: new Date() },
+                });
+                return NextResponse.json(updatedApplication);
+            }
+        );
+
+export async function DELETE(request: NextRequest, { params }: { params: any }) {
     const user = await getCurrentUser();
     const { id } = await params;
-    const body = await request.json();
-    const { status } = body;
-
-    if (!status) {
-        return NextResponse.json({ error: 'Missing status field' }, { status: 400 });
-    }
-
-    const existingApplication = await ApplicationsRepository.findById(id);
-    if (!existingApplication || existingApplication.user_id !== user.id) {
-        return NextResponse.json({ error: 'Application not found' }, { status: 404 });
-    }
-
-    const updatedApplication = await ApplicationsRepository.update({
-        where: { id: id },
-        data: {
-            status: status
-        },
-    });
-    return NextResponse.json(updatedApplication);
-}
-
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-    const user = await getCurrentUser();
-    const data = await request.json();
-    const { id } = await params;
-    const existingApplication = await ApplicationsRepository.findById(id);
-    if (!existingApplication || existingApplication.user_id !== user.id) {
-        return NextResponse.json({ error: 'Application not found' }, { status: 404 });
-    }
-    const updatedApplication = await ApplicationsRepository.update({
-        where: { id },
-        data: { ...data, updated_at: new Date() },
-    });
-    return NextResponse.json(updatedApplication);
-}
-
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-    const user = await getCurrentUser();
-    const { id } = await params;
-    const existingApplication = await ApplicationsRepository.findById(id);
-    if (!existingApplication || existingApplication.user_id !== user.id) {
-        return NextResponse.json({ error: 'Application not found' }, { status: 404 });
-    }
     await ApplicationsRepository.update({
-        where: { id: id },
-        data: {
-            is_deleted: true,
-            deleted_at: new Date(),
-        },
+        where: { id },
+        data: { is_deleted: true, deleted_at: new Date(), },
     });
     return NextResponse.json({ message: 'Application deleted successfully' });
 }

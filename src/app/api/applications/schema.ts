@@ -6,9 +6,16 @@ import { referencesSchema } from "../references/schema";
 import { socialMediasSchema } from "../social-medias/schema";
 
 export const createApplicationRequestSchema = z.object({
-    amount_requested: z.float64().min(5000).max(30000),
-    term_in_days: z.int().min(1).max(31),
-    purpose: z.string().min(2).max(160)
+    amount_requested: z.number()
+        .min(5000, { message: "Amount requested must be at least 5,000." })
+        .max(30000, { message: "Amount requested cannot exceed 30,000." }),
+    term_in_days: z.number()
+        .int({ message: "Term must be a whole number of days." })
+        .min(1, { message: "Term must be at least 1 day." })
+        .max(31, { message: "Term cannot exceed 31 days." }),
+    purpose: z.string()
+        .min(2, { message: "Purpose must be at least 2 characters long." })
+        .max(160, { message: "Purpose cannot be longer than 160 characters." }),
 });
 
 export const createApplicationSchema = z.object({

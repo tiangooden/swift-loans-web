@@ -43,11 +43,10 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, 
           type="number"
           id="amount_requested"
           name="amount_requested"
-          value={formData.amount_requested || ''}
+          value={formData.amount_requested || 0}
           onChange={handleChange}
           min={0}
           step={5000}
-          // required
           placeholder="1000.00"
           error={errors.get('amount_requested')}
         />
@@ -57,13 +56,13 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, 
           label="Term (days)"
           id="term_in_days"
           name="term_in_days"
-          value={formData.term_in_days || ''}
+          value={formData.term_in_days || 0}
           onChange={handleChange}
-          required
           options={[
-            { value: '14', label: '14 days' },
-            { value: '28', label: '28 days' },
+            { value: 14, label: '14 days' },
+            { value: 28, label: '28 days' },
           ]}
+          error={errors.get('term_in_days')}
         />
       </div>
       <div>
@@ -77,7 +76,6 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, 
           value={formData.purpose || ''}
           onChange={handleChange}
           rows={3}
-          // required
           placeholder="Describe the purpose of this loan..."
           error={errors.get('purpose')}
         />
@@ -90,7 +88,6 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, 
         >
           {data ? 'Update Application' : 'Submit Application'}
         </FormButton>
-
         <FormButton
           type="button"
           onClick={onCancel}

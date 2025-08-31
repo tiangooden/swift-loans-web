@@ -28,43 +28,49 @@ async function get() {
     return NextResponse.json(applications);
 }
 
-export const POST = withValidateBody(createApplicationRequestSchema)(withRedisCacheDel(`${CACHE_KEY.applications}`)(post));
+export const POST =
+    withValidateBody(createApplicationRequestSchema)
+        (
+            withRedisCacheDel(`${CACHE_KEY.applications}`)
+                (
 
-async function post(request: NextRequest) {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        return NextResponse.json({ error: 'No session found' }, { status: 401 });
-    }
-    const { id, provider } = session.user as any;
-    const user = await UsersRepository.findByProviderId(`${provider}|${id}`, {
-        alias: true,
-        first_name: true,
-        middle_name: true,
-        last_name: true,
-        email: true,
-        dob: true,
-        phone_number: true,
-        trn: true,
-        street_address: true,
-        city: true,
-        country: true,
-        status: true,
-        social_medias: true,
-        employment: true,
-        references: true,
-        bank_account: true,
-        documents: true,
-    });
-    try {
-        validateSchema(user, createApplicationSchema);
-    } catch (e: any) {
-        return NextResponse.json(e.errors, { status: 400 });
-    }
-    const data = await request.json();;
-    const application = await ApplicationsRepository.create({
-        ...data,
-        user: { connect: { id: user?.id } },
-        details: JSON.stringify(user)
-    });
-    return NextResponse.json(application, { status: 201 });
-}
+                    async function post(request: NextRequest) {
+                        const session = await getServerSession(authOptions);
+                        if (!session) {
+                            return NextResponse.json({ error: 'No session found' }, { status: 401 });
+                        }
+                        const { id, provider } = session.user as any;
+                        const user = await UsersRepository.findByProviderId(`${provider}|${id}`, {
+                            alias: true,
+                            first_name: true,
+                            middle_name: true,
+                            last_name: true,
+                            email: true,
+                            dob: true,
+                            phone_number: true,
+                            trn: true,
+                            street_address: true,
+                            city: true,
+                            country: true,
+                            status: true,
+                            social_medias: true,
+                            employment: true,
+                            references: true,
+                            bank_account: true,
+                            documents: true,
+                        });
+                        try {
+                            validateSchema(user, createApplicationSchema);
+                        } catch (e: any) {
+                            return NextResponse.json(e.errors, { status: 400 });
+                        }
+                        const data = await request.json();;
+                        const application = await ApplicationsRepository.create({
+                            ...data,
+                            user: { connect: { id: user?.id } },
+                            details: JSON.stringify(user)
+                        });
+                        return NextResponse.json(application, { status: 201 });
+                    }
+                )
+        );

@@ -14,8 +14,8 @@ import { useSaveApplication } from './useSaveApplication';
 import { notifications } from '../shared/notifications';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
 import { validateSchema } from '../shared/validation';
-import { loanApplicationSchema } from './schema';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
+import { createApplicationRequestSchema } from '../api/applications/schema';
 
 export default function LoanApplicationsPage() {
   const { data: session, status } = useSession();
@@ -68,7 +68,8 @@ export default function LoanApplicationsPage() {
 
   const handleFormSubmit = async (data: any) => {
     try {
-      validateSchema(data, loanApplicationSchema);
+      console.log(data);
+      validateSchema(data, createApplicationRequestSchema);
     } catch (error: any) {
       return setErrors(processValidationErrors(error.errors));
     }
