@@ -38,3 +38,7 @@ export const PAY_CYCLE = {
     MONTHLY: "monthly",
 } as const;
 
+export const BANK_ACCOUNT_TYPE = {
+    SAVINGS: "savings",
+    CHECKING: "checking",
+} as const;
