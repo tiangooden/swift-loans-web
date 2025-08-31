@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Admin"
+  title: {
+    template: "%s | Swift Loans",
+    default: "Swift Loans",
+  },
+  description: "",
 };
 
 export default function AdminLayout({
