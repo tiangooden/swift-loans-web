@@ -68,16 +68,13 @@ export default function LoanReviewPage() {
 
   async function handleCounterOffer(e: FormEvent<Element>): Promise<void> {
     try {
-      validateSchema(counterOfferData, counterOfferSchema);
+      // validateSchema(counterOfferData, counterOfferSchema);
     } catch (err: any) {
       notifications.error(`Failed to send counter offer: ${err.statusMessage}`);
       return setErrors(processValidationErrors(err.errors));
     }
     try {
-      await counterOfferApplicationReview({
-        id,
-        data: counterOfferData
-      });
+      await counterOfferApplicationReview({ id, data: counterOfferData });
       setShowCounterOffer(false);
       setCounterOfferData({
         principal: 0,

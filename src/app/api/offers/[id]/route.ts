@@ -3,6 +3,7 @@ import getCurrentUser from '@/app/shared/get-user';
 import { OffersRepository } from '../offers.repository';
 import { withValidateBody } from '@/app/shared/withValidateBody';
 import { ApplicationsRepository } from '../../applications/applications.repository';
+import { APPLICATION_STATUS, OFFER_STATUS } from '@/app/shared/constants';
 import { createOfferSchema } from '../schema';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
@@ -24,6 +25,40 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
+export const POST =
+  withValidateBody(createOfferSchema)
+    (
+      async (request: NextRequest, { data, params }: { data: any, params: any }) => {
+        const user = await getCurrentUser();
+        const { id } = params;
+        const existingApplication = await ApplicationsRepository.findById(id);
+        if (!existingApplication || existingApplication.user_id !== user.id) {
+          return NextResponse.json({ error: 'Application not found or unauthorized' }, { status: 404 });
+        }
+        try {
+          await ApplicationsRepository.update({
+            where: { id: id },
+            data: {
+              status: APPLICATION_STATUS.COUNTERED,
+            },
+          });
+          const newOffer = await OffersRepository.create({
+            application: {
+              connect: {
+                id: id,
+              }
+            },
+            ...data,
+            status: OFFER_STATUS.SUBMITTED,
+          });
+          return NextResponse.json(newOffer, { status: 201 });
+        }
+        catch (error) {
+          return NextResponse.json({ error: 'Failed to process counter offer' }, { status: 500 });
+        }
+      }
+    );
+
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   const { id } = await params;
   if (!id) {
@@ -36,40 +71,3 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     return NextResponse.json({ error: 'Failed to delete offer' }, { status: 500 });
   }
 }
-
-export const POST =
-  withValidateBody(createOfferSchema)
-    (
-      async (request: NextRequest, { data, params }: { data: any, params: any }) => {
-        const user = await getCurrentUser();
-        const { id } = params;
-        const { amount, interest_rate, term, status } = data;
-        const existingApplication = await ApplicationsRepository.findById(id);
-        if (!existingApplication || existingApplication.user_id !== user.id) {
-          return NextResponse.json({ error: 'Application not found or unauthorized' }, { status: 404 });
-        }
-        try {
-          await ApplicationsRepository.update({
-            where: { id: id },
-            data: {
-              status: status,
-            },
-          });
-          const newOffer = await OffersRepository.create({
-            application: {
-              connect: {
-                id: id,
-              }
-            },
-            principal: amount,
-            interest_rate: interest_rate,
-            term_in_days: term,
-            status: status,
-          });
-          return NextResponse.json(newOffer, { status: 201 });
-        }
-        catch (error) {
-          return NextResponse.json({ error: 'Failed to process counter offer' }, { status: 500 });
-        }
-      }
-    );

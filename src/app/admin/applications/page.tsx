@@ -28,8 +28,6 @@ export default function AdminLoans() {
                 </div>
               </div>
             </div>
-
-            {/* Loans Table */}
             <div className="bg-white shadow overflow-hidden sm:rounded-md">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
