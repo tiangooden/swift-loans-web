@@ -10,7 +10,7 @@ import { CreditCard } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { processValidationErrors } from '../shared/utils/createMessageMap';
 import { validateSchema } from '../shared/validation';
-import { bankAccountSchema } from './schema';
+import { bankAccountSchema } from '../api/bank-accounts/schema';
 import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
 
 const BankAccountsPage = () => {
@@ -45,7 +45,7 @@ const BankAccountsPage = () => {
       return res;
     } catch (err: any) {
       notifications.error(`Failed to ${formData.id ? 'update' : 'save'} bank account: ${err}`);
-      setErrors(processValidationErrors(err));
+      setErrors(processValidationErrors(err.errors));
     }
   }
 
