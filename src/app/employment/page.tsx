@@ -46,7 +46,7 @@ export default function EmploymentPage() {
             notifications.success('Employment updated successfully!');
             setErrors(new Map());
         } catch (error: any) {
-            notifications.error(`Failed to ${employment.id ? 'update' : 'save'} employment: ${error}`);
+            notifications.error(`Failed to ${employment.id ? 'update' : 'save'} employment: ${error.statusMessage}`);
             return setErrors(processValidationErrors(error.errors));
         }
     }
