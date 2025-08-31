@@ -1,5 +1,5 @@
 import z from "zod";
-import { bankAccountsSchema } from "../bank-accounts/schema";
+import { bankAccountSchema as bankAccountsSchema } from "../bank-accounts/schema";
 import { employmentsSchema } from "../employment/schema";
 import { documentsSchema } from "../files/schema";
 import { referencesSchema } from "../references/schema";

@@ -28,13 +28,13 @@ export default function EmploymentPage() {
         total_expenses_per_cycle: 0,
     });
     const handleChange = handleChangeUtil(setFormData)
-    
+
     useEffect(() => {
         if (data) {
             setFormData(data);
         }
     }, [data]);
-    
+
     async function handleSave(employment: Employment): Promise<void> {
         try {
             validateSchema(employment, employmentsSchema);
@@ -45,9 +45,9 @@ export default function EmploymentPage() {
             await mutateAsync(employment);
             notifications.success('Employment updated successfully!');
             setErrors(new Map());
-        } catch (err: any) {
-            notifications.error(`Failed to ${employment.id ? 'update' : 'save'} employment: ${err}`);
-            setErrors(processValidationErrors(err));
+        } catch (error: any) {
+            notifications.error(`Failed to ${employment.id ? 'update' : 'save'} employment: ${error}`);
+            return setErrors(processValidationErrors(error.errors));
         }
     }
 
