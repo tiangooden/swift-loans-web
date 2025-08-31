@@ -21,10 +21,11 @@ import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import AdminLoanOffers from './components/AdminLoanOffers';
 import FormInput from '@/app/shared/component/FormInput';
 import { counterOfferSchema } from '@/app/api/applications/[id]/counter-offer/schema';
+import { rejectApplicationSchema } from '@/app/api/applications/[id]/reject/schema';
 
 export default function LoanReviewPage() {
   const router = useRouter();
-  const id = (useParams()).id?.toString();
+  const id = (useParams()).id?.toString() || '';
   const { data: application, isPending: loading } = useFetchApplicationReview(id);
   const { mutateAsync: approveApplicationReview, isPending: approveLoading } = useApproveApplicationReview();
   const { mutateAsync: rejectApplicationReview, isPending: rejectLoading } = useRejectApplicationReview();
@@ -42,20 +43,26 @@ export default function LoanReviewPage() {
   const [errors, setErrors] = useState(new Map<string, string>);
 
   const handleRejectClick = () => {
+    setErrors(new Map());
     setShowRejectModal(true);
   };
 
   const confirmReject = async () => {
-    if (decisionReason.trim() === '') {
-      notifications.info('Please provide a reason for rejection.')
+    try {
+      validateSchema({ decision_reason: decisionReason }, rejectApplicationSchema);
+    } catch (err: any) {
+      notifications.error(`Failed to reject application: ${err.statusMessage}`);
+      setErrors(processValidationErrors(err.errors));
       return;
     }
     try {
-      await rejectApplicationReview({ id: id as string, decision_reason: decisionReason });
+      await rejectApplicationReview({ id, decision_reason: decisionReason });
       setDecisionReason('');
       notifications.success('Application rejected successfully!');
-    } catch (err) {
-      notifications.error(`Failed to reject application: ${err}`);
+    } catch (err: any) {
+      notifications.error(`Failed to reject application: ${err.statusMessage}`);
+      setErrors(processValidationErrors(err.errors));
+      return;
     }
   }
 
@@ -63,7 +70,7 @@ export default function LoanReviewPage() {
     try {
       validateSchema(counterOfferData, counterOfferSchema);
     } catch (err: any) {
-      notifications.error(`Failed to send counter offer: ${err}`);
+      notifications.error(`Failed to send counter offer: ${err.statusMessage}`);
       return setErrors(processValidationErrors(err.errors));
     }
     try {
@@ -77,7 +84,7 @@ export default function LoanReviewPage() {
         interest_rate: 0,
         term_in_days: 0,
       });
-      notifications.success('Application counter-offered successfully!');
+      notifications.success('Application countered successfully!');
     } catch (err: any) {
       notifications.error(`Failed to send counter offer: ${err.statusMessage}`);
       return setErrors(processValidationErrors(err.errors));
@@ -304,7 +311,12 @@ export default function LoanReviewPage() {
                 value={decisionReason}
                 onChange={(e) => setDecisionReason(e.target.value)}
                 rows={4}
-                placeholder="Reason for rejection..." label={''} id={''} name={''} />
+                placeholder="Reason for rejection..."
+                label={''}
+                id={'decision_reason'}
+                name={'decision_reason'}
+                error={errors.get('decision_reason')}
+              />
               <div className="flex justify-end space-x-4">
                 <FormButton
                   onClick={() => setShowRejectModal(false)}
