@@ -31,3 +31,10 @@ export const CACHE_KEY = {
     applications: 'applications:',
     applicationById: 'applicationById:'
 }
+
+export const PAY_CYCLE = {
+    WEEKLY: "weekly",
+    FORTNIGHTLY: "fortnightly",
+    MONTHLY: "monthly",
+} as const;
+

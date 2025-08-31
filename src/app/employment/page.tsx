@@ -61,11 +61,10 @@ export default function EmploymentPage() {
                             <h1 className="text-3xl font-bold text-gray-800">Employment Details</h1>
                         </div>
                         <EmploymentForm
-                            data={data}
-                            onSave={handleSave}
                             formData={formData}
-                            handleChange={handleChange}
+                            onSave={handleSave}
                             errors={errors}
+                            handleChange={handleChange}
                         />
                     </div>
                 </div>

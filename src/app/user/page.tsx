@@ -68,11 +68,9 @@ export default function UserProfilePage() {
                             <h1 className="text-3xl font-bold text-gray-800">User Profile</h1>
                         </div>
                         <UserForm
-                            data={data}
-                            onSave={handleSave}
-                            setErrors={setErrors}
-                            errors={errors}
                             formData={formData}
+                            onSave={handleSave}
+                            errors={errors}
                             handleChange={handleChange}
                         />
                     </div>

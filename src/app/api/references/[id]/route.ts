@@ -40,7 +40,6 @@ export const PUT =
               data: { ...data, updated_at: new Date() }
             });
           } catch (e: any) {
-            console.log(e);
           }
           return NextResponse.json(updatedReference);
         } catch (error) {

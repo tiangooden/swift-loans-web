@@ -64,7 +64,6 @@ export default function LoanApplicationsPage() {
 
   const handleFormSubmit = async (data: any) => {
     try {
-      console.log(data);
       validateSchema(data, createApplicationRequestSchema);
     } catch (error: any) {
       return setErrors(processValidationErrors(error.errors));

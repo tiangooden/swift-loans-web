@@ -4,36 +4,23 @@ import React from 'react';
 import { User } from './types';
 import FormInput from '../shared/component/FormInput';
 import FormButton from '../shared/component/FormButton';
-import { processValidationErrors } from '../shared/utils/createMessageMap';
-import { updateUserSchema } from '../api/users/schema';
-import { validateSchema } from '../shared/validation';
 
 interface UserFormProps {
-  data: User | null | undefined;
   errors: Map<string, string>;
   onSave: (user: User) => Promise<void>;
   formData: User;
-  setErrors: any;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
-export default function UserForm({ data, onSave, errors, setErrors, formData, handleChange }: UserFormProps) {
+export default function UserForm({ onSave, errors, formData, handleChange }: UserFormProps) {
+
+  async function handleSubmit(e: any) {
+    e.preventDefault();
+    await onSave(formData);
+  }
 
   return (
-    <form onSubmit={async (e) => {
-      e.preventDefault();
-      try {
-        validateSchema(formData, updateUserSchema);
-      } catch (error: any) {
-        return setErrors(processValidationErrors(error.errors));
-      }
-      try {
-        await onSave(formData);
-        setErrors(new Map());
-      } catch (error: any) {
-        setErrors(processValidationErrors(error));
-      }
-    }} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <FormInput

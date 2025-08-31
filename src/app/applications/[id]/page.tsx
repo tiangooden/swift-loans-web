@@ -49,7 +49,6 @@ export default function LoanApplicationDetailsPage() {
         try {
             const res = await generateApprovalLetter(id);
             const filename = res.headers["Content-Disposition"].split('=')[1];
-            console.log(filename);
             downloadFileInBrowser(filename, res.data);
             notifications.success('Approval letter generated successfully!');
         } catch (e: any) { }

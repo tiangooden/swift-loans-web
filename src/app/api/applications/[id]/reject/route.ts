@@ -22,7 +22,6 @@ export const PATCH =
           });
           return NextResponse.json({ message: 'Loan application rejected successfully' });
         } catch (error) {
-          console.log(error);
           return NextResponse.json({ message: 'Failed to reject loan application' }, { status: 500 });
         }
       }
