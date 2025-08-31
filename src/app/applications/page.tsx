@@ -28,14 +28,13 @@ export default function LoanApplicationsPage() {
     term_in_days: 14,
     purpose: '',
   });
+  const { data: applications, isFetching } = useFetchApplications();
+  const { mutateAsync: saveApplication, isPending: saving } = useSaveApplication();
+  const { mutateAsync: deleteApplication, isPending: deleting } = useDeleteApplication();
 
   useEffect(() => {
     if (editingApplication) {
-      setFormData({
-        amount_requested: editingApplication.amount_requested,
-        term_in_days: editingApplication.term_in_days,
-        purpose: editingApplication.purpose,
-      });
+      setFormData(editingApplication);
     } else {
       setFormData({
         amount_requested: 15000,
@@ -45,14 +44,11 @@ export default function LoanApplicationsPage() {
     }
   }, [editingApplication]);
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = () => {
     setShowForm(false);
     setEditingApplication(null);
     setErrors(new Map());
-  }, []);
-  const { data: applications, isFetching } = useFetchApplications();
-  const { mutateAsync: saveApplication, isPending: saving } = useSaveApplication();
-  const { mutateAsync: deleteApplication, isPending: deleting } = useDeleteApplication();
+  };
 
   const handleDelete = async (key: string) => {
     if (!confirm('Are you sure you want to delete this application?')) return;

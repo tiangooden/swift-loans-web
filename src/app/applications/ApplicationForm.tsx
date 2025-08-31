@@ -21,7 +21,8 @@ export interface ApplicationFormProps {
   setFormData: (data: any) => void;
 }
 
-export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, saving, formData, setFormData }: ApplicationFormProps) {
+export default function ApplicationForm({ data, onSubmit, onCancel,
+  errors: es, saving, formData, setFormData }: ApplicationFormProps) {
   const errors = es || new Map();
 
   const handleSubmit = (e: React.FormEvent): void => {
@@ -57,7 +58,14 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, 
           id="term_in_days"
           name="term_in_days"
           value={formData.term_in_days || 0}
-          onChange={handleChange}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            const { name, value } = e.target;
+            const newValue = Number(value);
+            setFormData((prevData: any) => ({
+              ...prevData,
+              [name]: newValue,
+            }));
+          }}
           options={[
             { value: 14, label: '14 days' },
             { value: 28, label: '28 days' },
@@ -70,7 +78,7 @@ export default function ApplicationForm({ data, onSubmit, onCancel, errors: es, 
           Purpose
         </label>
         <FormTextArea
-          label="Purpose"
+          label=""
           id="purpose"
           name="purpose"
           value={formData.purpose || ''}
