@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { notifications } from '@/app/shared/notifications';
 import { useFetchApplicationReview } from './useFetchApplicationReview';
 import { useApproveApplicationReview } from './useApproveApplicationReview';
@@ -10,7 +10,6 @@ import { useCounterOfferApplicationReview } from './useCounterOfferApplicationRe
 import AdminNav from '@/app/admin/components/AdminNav';
 import { useDeleteOffer } from './useDeleteOffer';
 import { useDownloadSignedApproval } from './useDownloadSignedApproval';
-import { counterOfferSchema } from '@/app/api/offers/schema';
 import FormButton from '@/app/shared/component/FormButton';
 import FormTextArea from '@/app/shared/component/FormTextArea';
 import formatDateString from '@/app/shared/date';
@@ -21,6 +20,7 @@ import { X, DollarSign, User, Briefcase } from 'lucide-react';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import AdminLoanOffers from './components/AdminLoanOffers';
 import FormInput from '@/app/shared/component/FormInput';
+import { counterOfferSchema } from '@/app/api/applications/[id]/counter-offer/schema';
 
 export default function LoanReviewPage() {
   const router = useRouter();
@@ -31,12 +31,15 @@ export default function LoanReviewPage() {
   const { mutateAsync: counterOfferApplicationReview, isPending: counterLoading } = useCounterOfferApplicationReview();
   const { mutateAsync: deleteOffer, isPending: isDeleting } = useDeleteOffer();
   const { mutateAsync: downloadSignedApproval, isPending: isDownloading } = useDownloadSignedApproval();
-  const [counterOfferAmount, setCounterOfferAmount] = useState(0);
-  const [counterOfferRate, setCounterOfferRate] = useState(0);
-  const [counterOfferTerm, setCounterOfferTerm] = useState(0);
+  const [counterOfferData, setCounterOfferData] = useState({
+    principal: 0,
+    interest_rate: 0,
+    term_in_days: 0,
+  });
   const [showCounterOffer, setShowCounterOffer] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [decisionReason, setDecisionReason] = useState('');
+  const [errors, setErrors] = useState(new Map<string, string>);
 
   const handleRejectClick = () => {
     setShowRejectModal(true);
@@ -56,6 +59,31 @@ export default function LoanReviewPage() {
     }
   }
 
+  async function handleCounterOffer(e: FormEvent<Element>): Promise<void> {
+    try {
+      validateSchema(counterOfferData, counterOfferSchema);
+    } catch (err: any) {
+      notifications.error(`Failed to send counter offer: ${err}`);
+      return setErrors(processValidationErrors(err.errors));
+    }
+    try {
+      await counterOfferApplicationReview({
+        id,
+        data: counterOfferData
+      });
+      setShowCounterOffer(false);
+      setCounterOfferData({
+        principal: 0,
+        interest_rate: 0,
+        term_in_days: 0,
+      });
+      notifications.success('Application counter-offered successfully!');
+    } catch (err: any) {
+      notifications.error(`Failed to send counter offer: ${err.statusMessage}`);
+      return setErrors(processValidationErrors(err.errors));
+    }
+  }
+
   return (
     <>
       <AdminNav>
@@ -68,7 +96,6 @@ export default function LoanReviewPage() {
                     <div className="min-h-screen bg-gray-50 py-8">
                       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="bg-white shadow rounded-lg">
-                          {/* Header */}
                           <div className="px-6 py-4 border-b border-gray-200">
                             <div className="flex items-center justify-between">
                               <div>
@@ -82,8 +109,6 @@ export default function LoanReviewPage() {
                               </FormButton>
                             </div>
                           </div>
-
-                          {/* Status Banner */}
                           <div className="px-6 py-4 bg-gray-50">
                             <div className="flex items-center justify-between">
                               <div>
@@ -96,12 +121,9 @@ export default function LoanReviewPage() {
                               </div>
                             </div>
                           </div>
-
                           <div className="px-6 py-6">
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                              {/* Left Column - Application Details */}
                               <div className="lg:col-span-2 space-y-6">
-                                {/* Loan Request */}
                                 <div className="bg-gray-50 rounded-lg p-6">
                                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                                     <DollarSign className="h-5 w-5 mr-2" />
@@ -122,8 +144,6 @@ export default function LoanReviewPage() {
                                     </div>
                                   </div>
                                 </div>
-
-                                {/* Personal Information */}
                                 <div className="bg-gray-50 rounded-lg p-6">
                                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                                     <User className="h-5 w-5 mr-2" />
@@ -173,10 +193,7 @@ export default function LoanReviewPage() {
                                   </div>
                                 </div>
                               </div>
-
-                              {/* Right Column - Actions & Summary */}
                               <div className="space-y-6">
-                                {/* Actions */}
                                 <div className="bg-white border border-gray-200 rounded-lg p-6">
                                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
                                   <div className="flex flex-col space-y-3">
@@ -201,7 +218,7 @@ export default function LoanReviewPage() {
                                       Reject Application
                                     </FormButton>
                                     <FormButton
-                                      onClick={() => setShowCounterOffer(true)}
+                                      onClick={() => setShowCounterOffer(!showCounterOffer)}
                                       color='gray'
                                     >
                                       Counter Offer
@@ -211,54 +228,41 @@ export default function LoanReviewPage() {
                                         <div>
                                           <FormInput
                                             type="number"
-                                            value={counterOfferAmount}
-                                            onChange={(e) => setCounterOfferAmount(parseFloat(e.target.value))}
-                                            placeholder="Amount" label={''} id={'counterOfferAmount'}
-                                            name={'counterOfferAmount'} />
+                                            value={counterOfferData.principal}
+                                            onChange={(e) => setCounterOfferData({ ...counterOfferData, principal: parseFloat(e.target.value) })}
+                                            placeholder="Principal"
+                                            label={'Principal'}
+                                            id={'principal'}
+                                            name={'principal'}
+                                            error={errors.get('principal')}
+                                          />
                                         </div>
                                         <div>
                                           <FormInput
                                             type="number"
-                                            value={counterOfferRate}
-                                            onChange={(e) => setCounterOfferRate(parseFloat(e.target.value))}
-                                            placeholder="Rate (%)" label={''} id={'counterOfferRate'}
-                                            name={'counterOfferRate'} />
+                                            value={counterOfferData.interest_rate}
+                                            onChange={(e) => setCounterOfferData({ ...counterOfferData, interest_rate: parseFloat(e.target.value) })}
+                                            placeholder="Rate (%)"
+                                            label={'Interest Rate'}
+                                            id={'interest_rate'}
+                                            name={'interest_rate'}
+                                            error={errors.get('interest_rate')}
+                                          />
                                         </div>
                                         <div>
                                           <FormInput
                                             type="number"
-                                            value={counterOfferTerm}
-                                            onChange={(e) => setCounterOfferTerm(parseFloat(e.target.value))}
-                                            placeholder="Term (days)" label={''} id={'counterOfferTerm'}
-                                            name={'counterOfferTerm'} />
+                                            value={counterOfferData.term_in_days}
+                                            onChange={(e) => setCounterOfferData({ ...counterOfferData, term_in_days: parseFloat(e.target.value) })}
+                                            placeholder="Term (days)"
+                                            label={'Term (days)'}
+                                            id={'term_in_days'}
+                                            name={'term_in_days'}
+                                            error={errors.get('term_in_days')}
+                                          />
                                         </div>
                                         <FormButton
-                                          onClick={async () => {
-                                            try {
-                                              validateSchema({
-                                                amount: counterOfferAmount,
-                                                interest_rate: counterOfferRate,
-                                                term: counterOfferTerm
-                                              }, counterOfferSchema);
-                                              await counterOfferApplicationReview({
-                                                id,
-                                                data: {
-                                                  amount: counterOfferAmount,
-                                                  interest_rate: counterOfferRate,
-                                                  term_in_days: counterOfferTerm,
-                                                }
-                                              });
-                                              notifications.success('Application counter-offered successfully!');
-                                            } catch (err: any) {
-                                              //   notifications.error(`Failed to send counter offer: ${err}`);
-                                            } finally {
-                                              // Always clear state and close modal regardless of success or failure
-                                              setShowCounterOffer(false);
-                                              setCounterOfferAmount(0);
-                                              setCounterOfferRate(0);
-                                              setCounterOfferTerm(0);
-                                            }
-                                          }}
+                                          onClick={handleCounterOffer}
                                           disabled={counterLoading}
                                         >
                                           {counterLoading ? 'Sending...' : 'Send Counter Offer'}
