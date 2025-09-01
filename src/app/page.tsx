@@ -21,7 +21,7 @@ export default function Home() {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Link
-                      href="/apply"
+                      href="/user"
                       className="bg-orange-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-600 transition-colors inline-flex items-center justify-center space-x-2"
                     >
                       Apply Now
