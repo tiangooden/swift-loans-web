@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { SocialMedia } from './types';
-import FormSelect from '../shared/component/FormSelect';
-import FormButton from '../shared/component/FormButton';
-import FormInput from '../shared/component/FormInput';
+import FormSelect from '../lib/component/FormSelect';
+import FormButton from '../lib/component/FormButton';
+import FormInput from '../lib/component/FormInput';
 
 interface SocialMediaFormProps {
   formData: SocialMedia;

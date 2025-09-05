@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import getCurrentUser from '@/app/shared/get-user';
+import { NextResponse } from 'next/server';
+import getCurrentUser from '@/app/lib/get-user';
 import { EmploymentsRepository } from './employments.repository';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 import { employmentsSchema } from './schema';
 
-export async function GET(request: Request) {
+export async function GET() {
     const user = await getCurrentUser();
     const employmentDetails = await EmploymentsRepository.find({
         where: {
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
 export const PUT =
     withValidateBody(employmentsSchema)
         (
-            async (request: NextRequest, { data }: { data: any }) => {
+            async ({ data }: { data: any }) => {
                 const user = await getCurrentUser();
                 const existingEmployment = await EmploymentsRepository.find({
                     where: {

@@ -1,14 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import getCurrentUser from '@/app/shared/get-user';
+import { NextResponse } from 'next/server';
 import { SocialMediasRepository } from '../social_medias.repository';
 import { socialMediasSchema } from '../schema';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 
 export const PUT =
     withValidateBody(socialMediasSchema)
         (
-            async (request: NextRequest, { data }: { data: any }) => {
-                const user = await getCurrentUser();
+            async ({ data }: { data: any }) => {
                 const { id } = data;
                 const updatedSocialMedia = await SocialMediasRepository.update({
                     where: { id },
@@ -18,8 +16,7 @@ export const PUT =
             }
         )
 
-export async function DELETE(request: NextRequest, { data }: { data: any }) {
-    // const user = await getCurrentUser();
+export async function DELETE({ data }: { data: any }) {
     const { id } = data;
     await SocialMediasRepository.delete({ id });
     return NextResponse.json({ message: 'Social media account deleted successfully' }, { status: 200 });

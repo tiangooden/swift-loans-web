@@ -1,5 +1,5 @@
 import { Prisma, social_medias } from '@/generated/prisma';
-import { prisma } from '../../shared/prisma';
+import { prisma } from '../../lib/prisma';
 
 export const SocialMediasRepository = {
 

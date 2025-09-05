@@ -1,17 +1,17 @@
 'use client';
 
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
-import { notifications } from '../shared/notifications';
+import { notifications } from '../lib/notifications';
 import BankAccountForm from './BankAccountForm';
 import { BankAccount } from './types';
 import { useFetchBankAccounts } from './useFetchBankAccounts';
 import { useSaveBankAccount } from './useSaveBankAccount';
 import { CreditCard } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { processValidationErrors } from '../shared/utils/createMessageMap';
-import { validateSchema } from '../shared/validation';
+import { processValidationErrors } from '../lib/createMessageMap';
+import { validateSchema } from '../lib/validation';
 import { bankAccountSchema } from '../api/bank-accounts/schema';
-import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
+import { handleChange as handleChangeUtil } from '../lib/handleChange';
 
 const BankAccountsPage = () => {
   const { data: account, isFetching } = useFetchBankAccounts();

@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import getCurrentUser from '@/app/shared/get-user';
+import getCurrentUser from '@/app/lib/get-user';
 import { ReferencesRepository } from './references.repository';
 import { referencesSchema } from './schema';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const user = await getCurrentUser();
     if (!user) {
@@ -25,7 +25,7 @@ export async function GET(request: Request) {
 export const POST =
   withValidateBody(referencesSchema)
     (
-      async (request: Request, { data }: { data: any }) => {
+      async ({ data }: { data: any }) => {
         try {
           const user = await getCurrentUser();
           if (!user) {

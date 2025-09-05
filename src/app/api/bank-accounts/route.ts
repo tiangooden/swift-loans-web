@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import getCurrentUser from '@/app/shared/get-user';
+import getCurrentUser from '@/app/lib/get-user';
 import { BankAccountsRepository } from './bank_accounts.repository';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 import { bankAccountSchema } from './schema';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     const user = await getCurrentUser();
     const bankAccounts = await BankAccountsRepository.find({
         where: { user_id: user.id, is_deleted: false },
@@ -15,11 +15,10 @@ export async function GET(request: NextRequest) {
 export const POST =
     withValidateBody(bankAccountSchema)
         (
-            async (request: NextRequest) => {
+            async ({ data }: { data: any }) => {
                 const user = await getCurrentUser();
-                const body = await request.json();
                 const newAccount = await BankAccountsRepository.create({
-                    ...body,
+                    ...data,
                     user_id: user.id,
                 });
                 return NextResponse.json(newAccount, { status: 201 });

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetchApplicationReviewsKey } from './useFetchApplicationReview';
-import { HttpError } from '@/app/shared/http-errors';
+import { HttpError } from '@/app/lib/http-errors';
 
 export const useCounterOfferApplicationReview = () => {
   const queryClient = useQueryClient();

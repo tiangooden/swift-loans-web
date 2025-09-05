@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { Search, Eye, Edit, Trash2, Mail, Phone } from "lucide-react";
 import AdminNav from '../components/AdminNav';
-import formatDateString from '@/app/shared/date';
+import formatDateString from '@/app/lib/date';
 import axios from 'axios';
-import { getStatusColor } from '@/app/shared/status';
+import { getStatusColor } from '@/app/lib/status';
 
 export default function AdminUsers() {
   const [searchTerm, setSearchTerm] = useState('');

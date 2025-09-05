@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Settings, Save, Bell, Shield, CreditCard, Mail, Globe, Lock } from "lucide-react";
 import AdminNav from '../components/AdminNav';
-import { notifications } from '@/app/shared/notifications';
+import { notifications } from '@/app/lib/notifications';
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState({

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { User } from './types';
 import axios from 'axios';
 import { useFetchUserKey } from './useFetchUser';
-import { HttpError } from '../shared/http-errors';
+import { HttpError } from '../lib/http-errors';
 
 export function useUpdateUser() {
   const queryClient = useQueryClient();

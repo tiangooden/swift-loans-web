@@ -1,5 +1,5 @@
 import { users, Prisma } from '@/generated/prisma';
-import { prisma } from '@/app/shared/prisma';
+import { prisma } from '@/app/lib/prisma';
 
 export const UsersRepository = {
 

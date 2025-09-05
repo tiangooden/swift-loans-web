@@ -3,16 +3,16 @@
 import { useFetchUser } from './useFetchUser';
 import { useUpdateUser } from './useUpdateUser';
 import UserForm from './UserForm';
-import { notifications } from '../shared/notifications';
+import { notifications } from '../lib/notifications';
 import { User } from 'lucide-react';
 import { User as UserType } from './types';
 import { useEffect } from 'react';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import { useState } from 'react';
-import { processValidationErrors } from '../shared/utils/createMessageMap';
+import { processValidationErrors } from '../lib/createMessageMap';
 import { updateUserSchema } from '../api/users/schema';
-import { validateSchema } from '../shared/validation';
-import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
+import { validateSchema } from '../lib/validation';
+import { handleChange as handleChangeUtil } from '../lib/handleChange';
 
 export default function UserProfilePage() {
     const { data, isFetching } = useFetchUser();

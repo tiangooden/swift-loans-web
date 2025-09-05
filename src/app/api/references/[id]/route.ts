@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import getCurrentUser from '@/app/shared/get-user';
+import getCurrentUser from '@/app/lib/get-user';
 import { ReferencesRepository } from '../references.repository';
 import { referencesSchema } from '../schema';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET({ params }: { params: { id: string } }) {
   const { id } = await params;
   try {
     const user = await getCurrentUser();
@@ -23,7 +23,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 export const PUT =
   withValidateBody(referencesSchema)
     (
-      async (request: Request, { data }: { data: any}) => {
+      async ({ data }: { data: any }) => {
         try {
           const user = await getCurrentUser();
           if (!user) {
@@ -48,7 +48,7 @@ export const PUT =
       }
     );
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE({ params }: { params: { id: string } }) {
   const { id } = await params;
   try {
     const user = await getCurrentUser();

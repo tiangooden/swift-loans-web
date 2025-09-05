@@ -1,8 +1,8 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { OffersRepository } from '../../offers.repository';
-import { OFFER_STATUS } from '@/app/shared/constants';
+import { OFFER_STATUS } from '@/app/lib/constants';
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH({ params }: { params: { id: string } }) {
   const { id } = await params;
 
   if (!id) {

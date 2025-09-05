@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
-import { openLinkInNewWindow } from '@/app/shared/utils';
-import { HttpError } from '@/app/shared/http-errors';
+import { openLinkInNewWindow } from '@/app/lib/utils';
+import { HttpError } from '@/app/lib/http-errors';
 
 export function useDownloadSignedApproval() {
     const { mutateAsync, isPending, error } = useMutation({

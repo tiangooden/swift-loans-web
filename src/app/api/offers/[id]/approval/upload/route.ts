@@ -1,9 +1,9 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { OffersRepository } from '../../../offers.repository';
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH({data, params }: { data: any, params: { id: string } }) {
   const { id } = await params;
-  const { key } = await request.json();
+  const { key } = data;
   if (!id) {
     return NextResponse.json({ error: 'Offer ID is required' }, { status: 400 });
   }

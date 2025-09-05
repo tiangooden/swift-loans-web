@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
-import { notifications } from '@/app/shared/notifications';
+import { notifications } from '@/app/lib/notifications';
 import { useFetchApplicationReview } from './useFetchApplicationReview';
 import { useApproveApplicationReview } from './useApproveApplicationReview';
 import { useRejectApplicationReview } from './useRejectApplicationReview';
@@ -10,16 +10,16 @@ import { useCounterOfferApplicationReview } from './useCounterOfferApplicationRe
 import AdminNav from '@/app/admin/components/AdminNav';
 import { useDeleteOffer } from './useDeleteOffer';
 import { useDownloadSignedApproval } from './useDownloadSignedApproval';
-import FormButton from '@/app/shared/component/FormButton';
-import FormTextArea from '@/app/shared/component/FormTextArea';
-import formatDateString from '@/app/shared/date';
-import { getStatusColor } from '@/app/shared/status';
-import { processValidationErrors } from '@/app/shared/utils/createMessageMap';
-import { validateSchema } from '@/app/shared/validation';
+import FormButton from '@/app/lib/component/FormButton';
+import FormTextArea from '@/app/lib/component/FormTextArea';
+import formatDateString from '@/app/lib/date';
+import { getStatusColor } from '@/app/lib/status';
+import { processValidationErrors } from '@/app/lib/createMessageMap';
+import { validateSchema } from '@/app/lib/validation';
 import { X, DollarSign, User, Briefcase } from 'lucide-react';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import AdminLoanOffers from './components/AdminLoanOffers';
-import FormInput from '@/app/shared/component/FormInput';
+import FormInput from '@/app/lib/component/FormInput';
 import { counterOfferSchema } from '@/app/api/applications/[id]/counter-offer/schema';
 import { rejectApplicationSchema } from '@/app/api/applications/[id]/reject/schema';
 

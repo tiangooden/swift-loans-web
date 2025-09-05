@@ -5,13 +5,13 @@ import { Briefcase } from 'lucide-react';
 import { useFetchEmployment } from './useFetchEmployment';
 import { useSaveEmployment } from './useSaveEmployment';
 import { Employment } from './types';
-import { notifications } from '../shared/notifications';
+import { notifications } from '../lib/notifications';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import { useState, useEffect } from 'react';
-import { processValidationErrors } from '../shared/utils/createMessageMap';
-import { validateSchema } from '../shared/validation';
+import { processValidationErrors } from '../lib/createMessageMap';
+import { validateSchema } from '../lib/validation';
 import { employmentsSchema } from '../api/employment/schema';
-import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
+import { handleChange as handleChangeUtil } from '../lib/handleChange';
 
 export default function EmploymentPage() {
     const { data, isFetching } = useFetchEmployment();

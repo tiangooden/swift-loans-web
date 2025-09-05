@@ -1,11 +1,11 @@
 'use client';
 
 import { Download, Trash2 } from 'lucide-react';
-import { getStatusColor, getStatusIcon } from '@/app/shared/status';
-import formatDateString from '@/app/shared/date';
+import { getStatusColor, getStatusIcon } from '@/app/lib/status';
+import formatDateString from '@/app/lib/date';
 import { AdminLoanOffersProps } from '../types';
-import formatCurrency from '@/app/shared/currency';
-import { notifications } from '@/app/shared/notifications';
+import formatCurrency from '@/app/lib/currency';
+import { notifications } from '@/app/lib/notifications';
 
 export default function AdminLoanOffers({
     applicationId,

@@ -1,17 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { UsersRepository } from '@/app/api/users/users.repository';
 import { updateUserSchema } from './schema';
-import { withValidateBody } from '@/app/shared/withValidateBody';
-import { withRedisCacheAdd } from '@/app/shared/withRedisCacheAdd';
-import { CACHE_KEY } from '@/app/shared/constants';
-import { withRedisCacheDel } from '@/app/shared/withRedisCacheDel';
+import { withValidateBody } from '@/app/lib/withValidateBody';
+import { withRedisCacheAdd } from '@/app/lib/withRedisCacheAdd';
+import { CACHE_KEY } from '@/app/lib/constants';
+import { withRedisCacheDel } from '@/app/lib/withRedisCacheDel';
 
 export const GET =
     withRedisCacheAdd(60, `${CACHE_KEY.user}`)
         (
-            async function GET(request: NextRequest) {
+            async function GET() {
                 const session = await getServerSession(authOptions);
                 if (!session) {
                     return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
@@ -31,7 +31,7 @@ export const PUT =
         (
             withRedisCacheDel(`${CACHE_KEY.user}`)
                 (
-                    async ( { data }: { data: any }) => {
+                    async ({ data }: { data: any }) => {
                         const session = await getServerSession(authOptions);
                         if (!session) {
                             return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });

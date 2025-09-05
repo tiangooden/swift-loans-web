@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { notifications } from '@/app/shared/notifications';
+import { notifications } from '@/app/lib/notifications';
 import { SocialMedia } from './types';
 import axios from 'axios';
 import { useFetchSocialMediasKey } from './useFetchSocialMedias';
-import { HttpError } from '../shared/http-errors';
+import { HttpError } from '../lib/http-errors';
 
 export const useSaveSocialMedia = () => {
   const queryClient = useQueryClient();

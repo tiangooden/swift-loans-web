@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import getCurrentUser from '@/app/shared/get-user';
+import { NextResponse } from 'next/server';
+import getCurrentUser from '@/app/lib/get-user';
 import { OffersRepository } from '../offers.repository';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 import { ApplicationsRepository } from '../../applications/applications.repository';
-import { APPLICATION_STATUS, OFFER_STATUS } from '@/app/shared/constants';
+import { APPLICATION_STATUS, OFFER_STATUS } from '@/app/lib/constants';
 import { createOfferSchema } from '../schema';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET({ params }: { params: { id: string } }) {
   const { id } = params;
   try {
     const loanOffers = await OffersRepository.findMany({
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 export const POST =
   withValidateBody(createOfferSchema)
     (
-      async (request: NextRequest, { data, params }: { data: any, params: any }) => {
+      async ({ data, params }: { data: any, params: any }) => {
         const user = await getCurrentUser();
         const { id } = params;
         const existingApplication = await ApplicationsRepository.findById(id);
@@ -59,7 +59,7 @@ export const POST =
       }
     );
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE({ params }: { params: { id: string } }) {
   const { id } = await params;
   if (!id) {
     return NextResponse.json({ error: 'Offer ID is required' }, { status: 400 });

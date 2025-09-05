@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useFetchApplicationsKey } from '../useFetchApplications';
-import { HttpError } from '@/app/shared/http-errors';
+import { HttpError } from '@/app/lib/http-errors';
 
 export function useWithdrawApplication() {
     const queryClient = useQueryClient();

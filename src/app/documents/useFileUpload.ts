@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetchFileKey } from './useFetchDocuments';
-import { HttpError } from '../shared/http-errors';
+import { HttpError } from '../lib/http-errors';
 
 export const useFileUpload = () => {
   const queryClient = useQueryClient();

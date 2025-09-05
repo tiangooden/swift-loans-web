@@ -1,9 +1,9 @@
 'use client';
 
 import { Employment } from './types';
-import FormInput from '../shared/component/FormInput';
-import FormSelect from '../shared/component/FormSelect';
-import FormButton from '../shared/component/FormButton';
+import FormInput from '../lib/component/FormInput';
+import FormSelect from '../lib/component/FormSelect';
+import FormButton from '../lib/component/FormButton';
 
 interface EmploymentFormProps {
   errors: Map<string, string>;

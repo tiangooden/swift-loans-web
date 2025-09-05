@@ -1,16 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import getCurrentUser from '@/app/shared/get-user';
+import { NextResponse } from 'next/server';
 import { BankAccountsRepository } from '../bank_accounts.repository';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 import { bankAccountSchema } from '../schema';
 
 export const PUT =
     withValidateBody(bankAccountSchema)
         (
-            async (request: NextRequest, { params }: { params: { id: string } }) => {
-                const user = await getCurrentUser();
+            async ({ data, params }: { params: { id: string }, data: any }) => {
                 const { id } = await params;
-                const data = await request.json();
                 const updatedAccount = await BankAccountsRepository.update({
                     where: { id: id },
                     data: {
@@ -26,8 +23,7 @@ export const PUT =
             }
         );
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-    const user = await getCurrentUser();
+export async function DELETE({ params }: { params: { id: string } }) {
     const { id } = await params;
     await BankAccountsRepository.update({
         where: { id: id },

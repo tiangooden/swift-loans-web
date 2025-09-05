@@ -1,13 +1,13 @@
-import { APPLICATION_STATUS } from '@/app/shared/constants';
-import { NextRequest, NextResponse } from 'next/server';
+import { APPLICATION_STATUS } from '@/app/lib/constants';
+import { NextResponse } from 'next/server';
 import { ApplicationsRepository } from '../../applications.repository';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 import { rejectApplicationSchema } from './schema';
 
 export const PATCH =
   withValidateBody(rejectApplicationSchema)
     (
-      async (request: NextRequest, { data, params }: { data: any, params: any }) => {
+      async ({ data, params }: { data: any, params: any }) => {
         try {
           const { id } = await params;
           const { decision_reason } = data;

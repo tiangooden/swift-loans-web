@@ -3,13 +3,13 @@ import { ApplicationsRepository } from './applications.repository';
 import { UsersRepository } from '../users/users.repository';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
-import { UnauthorizedError } from '@/app/shared/http-errors';
-import { validateSchema } from '@/app/shared/validation';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { UnauthorizedError } from '@/app/lib/http-errors';
+import { validateSchema } from '@/app/lib/validation';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 import { createApplicationRequestSchema, createApplicationSchema } from './schema';
-import { withRedisCacheAdd } from '@/app/shared/withRedisCacheAdd';
-import { withRedisCacheDel } from '@/app/shared/withRedisCacheDel';
-import { CACHE_KEY } from '@/app/shared/constants';
+import { withRedisCacheAdd } from '@/app/lib/withRedisCacheAdd';
+import { withRedisCacheDel } from '@/app/lib/withRedisCacheDel';
+import { CACHE_KEY } from '@/app/lib/constants';
 
 export const GET = (withRedisCacheAdd(60, `${CACHE_KEY.applications}`))(get);
 

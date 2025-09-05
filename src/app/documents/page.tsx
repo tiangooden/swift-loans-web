@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { useFileUpload } from './useFileUpload';
 import { useFetchFile } from './useFetchDocuments';
 import { useDeleteFile } from './useDeleteFile';
-import formatDateString from '../shared/date';
-import { notifications } from '../shared/notifications';
+import formatDateString from '../lib/date';
+import { notifications } from '../lib/notifications';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 
 export default function DocumentsPage() {

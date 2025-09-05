@@ -1,17 +1,17 @@
 'use client';
 
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
-import { notifications } from '../shared/notifications';
+import { notifications } from '../lib/notifications';
 import SocialMediaForm from './SocialMediaForm';
 import { SocialMedia } from './types';
 import { useFetchSocialMedias } from './useFetchSocialMedias';
 import { useSaveSocialMedia } from './useSaveSocialMedia';
 import { Share2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { validateSchema } from '../shared/validation';
+import { validateSchema } from '../lib/validation';
 import { socialMediaSchema } from './schema';
-import { processValidationErrors } from '../shared/utils/createMessageMap';
-import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
+import { processValidationErrors } from '../lib/createMessageMap';
+import { handleChange as handleChangeUtil } from '../lib/handleChange';
 
 const SocialMediasPage = () => {
   const { data, isFetching } = useFetchSocialMedias();

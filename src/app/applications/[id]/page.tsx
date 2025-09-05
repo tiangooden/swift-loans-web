@@ -3,18 +3,18 @@
 import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, Trash } from 'lucide-react';
 import LoanOffers from './components/LoanOffers';
-import { getStatusColor, getStatusIcon } from '@/app/shared/status';
-import formatDateString from '@/app/shared/date';
+import { getStatusColor, getStatusIcon } from '@/app/lib/status';
+import formatDateString from '@/app/lib/date';
 import { useFetchApplication } from './useFetchApplication';
-import formatCurrency from '@/app/shared/currency';
+import formatCurrency from '@/app/lib/currency';
 import { useWithdrawApplication } from './useWithdrawApplication';
-import { notifications } from '@/app/shared/notifications';
+import { notifications } from '@/app/lib/notifications';
 import { useAcceptOffer } from './useAcceptOffer';
 import { useGenerateApprovalLetter } from './useGenerateApprovalLetter';
 import { useRejectOffer } from './useRejectOffer';
 import { useUploadApprovalLetter } from './useUploadApprovalLetter';
 import { useFileUpload } from '@/app/documents/useFileUpload';
-import downloadFileInBrowser from '@/app/shared/download';
+import downloadFileInBrowser from '@/app/lib/download';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 
 export default function LoanApplicationDetailsPage() {

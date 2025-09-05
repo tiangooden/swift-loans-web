@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { Edit, Trash2, XCircle } from 'lucide-react';
-import FormButton from '../shared/component/FormButton';
-import FormInput from '../shared/component/FormInput';
+import FormButton from '../lib/component/FormButton';
+import FormInput from '../lib/component/FormInput';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
-import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
+import { handleChange as handleChangeUtil } from '../lib/handleChange';
 
 interface ReferencesFormProps {
   references: Reference[];

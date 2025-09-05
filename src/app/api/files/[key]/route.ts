@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DeleteObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import s3Client from '@/app/shared/s3client';
+import s3Client from '@/app/lib/s3client';
 import { DocumentsRepository } from '@/app/api/files/documents.repository';
 
 export async function GET(req: NextRequest, { params }: { params: { key: string } }) {

@@ -1,12 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
-import getCurrentUser from '@/app/shared/get-user';
+import { NextResponse } from 'next/server';
 import { ApplicationsRepository } from '../applications.repository';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 import { createApplicationRequestSchema } from '../schema';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET({ params }: { params: { id: string } }) {
     const { id } = await params;
-    // const user = await getCurrentUser();
     const loanApplication = await ApplicationsRepository.findById(id, {
         id: true,
         amount_requested: true,
@@ -28,8 +26,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 export const PUT =
     withValidateBody(createApplicationRequestSchema)
         (
-            async (request: NextRequest, { data, params }: { data: any, params: any }) => {
-                const user = await getCurrentUser();
+            async ({ data, params }: { data: any, params: any }) => {
                 const { id } = params;
                 const updatedApplication = await ApplicationsRepository.update({
                     where: { id },
@@ -39,8 +36,7 @@ export const PUT =
             }
         );
 
-export async function DELETE(request: NextRequest, { params }: { params: any }) {
-    const user = await getCurrentUser();
+export async function DELETE({ params }: { params: any }) {
     const { id } = await params;
     await ApplicationsRepository.update({
         where: { id },

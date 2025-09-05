@@ -6,11 +6,11 @@ import { useAddReference } from './useAddReference';
 import { useDeleteReference } from './useDeleteReference';
 import { useFetchReferences } from './useFetchReferences';
 import { useUpdateReference } from './useUpdateReference';
-import { notifications } from '../shared/notifications';
+import { notifications } from '../lib/notifications';
 import ReferencesForm from './ReferencesForm';
-import { processValidationErrors } from '../shared/utils/createMessageMap';
+import { processValidationErrors } from '../lib/createMessageMap';
 import { referencesSchema } from '../api/references/schema';
-import { validateSchema } from '../shared/validation';
+import { validateSchema } from '../lib/validation';
 
 const ReferencesPage: React.FC = () => {
   const { data: session } = useSession();

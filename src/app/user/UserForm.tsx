@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { User } from './types';
-import FormInput from '../shared/component/FormInput';
-import FormButton from '../shared/component/FormButton';
+import FormInput from '../lib/component/FormInput';
+import FormButton from '../lib/component/FormButton';
 
 interface UserFormProps {
   errors: Map<string, string>;

@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { socialMediasSchema } from './schema';
-import getCurrentUser from '@/app/shared/get-user';
+import getCurrentUser from '@/app/lib/get-user';
 import { SocialMediasRepository } from './social_medias.repository';
-import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withValidateBody } from '@/app/lib/withValidateBody';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     const user = await getCurrentUser();
     const socialMedias = await SocialMediasRepository.findMany({
         where: { user_id: user.id },
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
 export const POST =
     withValidateBody(socialMediasSchema)
         (
-            async (request: NextRequest, { data }: { data: any }) => {
+            async ({ data }: { data: any }) => {
                 const user = await getCurrentUser();
                 const newSocialMedia = await SocialMediasRepository.create({
                     ...data,

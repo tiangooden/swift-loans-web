@@ -1,10 +1,10 @@
 'use client';
 
-import FormInput from '../shared/component/FormInput';
-import FormSelect from '../shared/component/FormSelect';
-import FormButton from '../shared/component/FormButton';
-import FormTextArea from '../shared/component/FormTextArea';
-import { handleChange as handleChangeUtil } from '../shared/util/handleChange';
+import FormInput from '../lib/component/FormInput';
+import FormSelect from '../lib/component/FormSelect';
+import FormButton from '../lib/component/FormButton';
+import FormTextArea from '../lib/component/FormTextArea';
+import { handleChange as handleChangeUtil } from '../lib/handleChange';
 
 export interface ApplicationFormProps {
   data: {

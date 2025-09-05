@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { APPLICATION_STATUS } from '@/app/shared/constants';
+import { APPLICATION_STATUS } from '@/app/lib/constants';
 import { ApplicationsRepository } from '../../applications.repository';
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH({ params }: { params: { id: string } }) {
     try {
         const { id } = await params;
         const application = await ApplicationsRepository.update({

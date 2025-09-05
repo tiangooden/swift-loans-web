@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { HttpError } from '../shared/http-errors';
+import { HttpError } from '../lib/http-errors';
 
 export const useDeleteReference = () => {
   const queryClient = useQueryClient();

@@ -1,10 +1,10 @@
 'use client';
 
 import { Check, Download, X } from 'lucide-react';
-import FileUploadButton from '@/app/shared/component/FileUploadButton';
-import { getStatusColor, getStatusIcon } from '@/app/shared/status';
-import formatDateString from '@/app/shared/date';
-import formatCurrency from '@/app/shared/currency';
+import FileUploadButton from '@/app/lib/component/FileUploadButton';
+import { getStatusColor, getStatusIcon } from '@/app/lib/status';
+import formatDateString from '@/app/lib/date';
+import formatCurrency from '@/app/lib/currency';
 
 export default function LoanOffers({
     offers,

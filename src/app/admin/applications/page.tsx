@@ -2,9 +2,9 @@
 import React from 'react';
 import { Eye } from "lucide-react";
 import AdminNav from '../components/AdminNav';
-import formatDateString from '@/app/shared/date';
+import formatDateString from '@/app/lib/date';
 import { useFetchAdminApplications } from './useFetchAdminApplications';
-import { getStatusColor, getStatusIcon } from '@/app/shared/status';
+import { getStatusColor, getStatusIcon } from '@/app/lib/status';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 
 export default function AdminLoans() {

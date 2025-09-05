@@ -1,4 +1,4 @@
-import prisma from "@/app/shared/prisma";
+import prisma from "@/app/lib/prisma";
 import { employments, Prisma } from "@/generated/prisma";
 
 

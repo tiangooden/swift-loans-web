@@ -1,4 +1,4 @@
-import { HttpError } from '@/app/shared/http-errors';
+import { HttpError } from '@/app/lib/http-errors';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 

@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { ApplicationsRepository } from '../../applications.repository';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET({ params }: { params: { id: string } }) {
   try {
     const { id } = await params;
     const application = await ApplicationsRepository.findById(id, {
-      id:true,
+      id: true,
       status: true,
       amount_requested: true,
       term_in_days: true,

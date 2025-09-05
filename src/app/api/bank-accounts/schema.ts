@@ -1,4 +1,4 @@
-import { BANK_ACCOUNT_TYPE } from '@/app/shared/constants';
+import { BANK_ACCOUNT_TYPE } from '@/app/lib/constants';
 import { z } from 'zod';
 
 export const bankAccountSchema = z.object({

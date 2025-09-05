@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { wordTemplateToPdf } from '../../../../shared/pdf';
-import formatDateString from '@/app/shared/date';
+import { NextResponse } from 'next/server';
+import { wordTemplateToPdf } from '../../../../lib/pdf';
+import formatDateString from '@/app/lib/date';
 import { OffersRepository } from '../../offers.repository';
 
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST({ params }: { params: { id: string } }) {
     try {
         const { id } = await params;
         const offers = await OffersRepository.findMany({

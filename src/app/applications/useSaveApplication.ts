@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useFetchApplicationsKey } from './useFetchApplications';
-import { HttpError } from '../shared/http-errors';
+import { HttpError } from '../lib/http-errors';
 
 export function useSaveApplication() {
   const queryClient = useQueryClient();

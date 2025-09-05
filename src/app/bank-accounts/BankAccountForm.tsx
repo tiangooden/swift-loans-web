@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { BankAccount } from './types';
-import FormInput from '../shared/component/FormInput';
-import FormSelect from '../shared/component/FormSelect';
-import FormButton from '../shared/component/FormButton';
+import FormInput from '../lib/ponent/FormInput';
+import FormSelect from '../lib/component/FormSelect';
+import FormButton from '../lib/component/FormButton';
 
 interface BankAccountFormProps {
   errors: Map<string, string>;

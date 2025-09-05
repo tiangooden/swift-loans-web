@@ -1,4 +1,4 @@
-import prisma from "@/app/shared/prisma";
+import prisma from "@/app/lib/prisma";
 import { bank_accounts, Prisma } from "@/generated/prisma";
 
 export const BankAccountsRepository = {

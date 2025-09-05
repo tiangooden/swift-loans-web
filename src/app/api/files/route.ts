@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { Buffer } from 'buffer';
-import s3Client from '@/app/shared/s3client';
-import getCurrentUser from '@/app/shared/get-user';
+import s3Client from '@/app/lib/s3client';
+import getCurrentUser from '@/app/lib/get-user';
 import cuid from 'cuid';
 import { DocumentsRepository } from './documents.repository';
 

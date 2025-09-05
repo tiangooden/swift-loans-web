@@ -1,5 +1,5 @@
 import z from "zod";
-import { PAY_CYCLE } from "../../shared/constants";
+import { PAY_CYCLE } from "../../lib/constants";
 
 export const employmentsSchema = z.object({
     employer_name: z.string().min(2, "Employer name required"),
