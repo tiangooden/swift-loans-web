@@ -4,14 +4,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export function withRedisCacheDel(keys: string | string[]) {
-    return (handler: (req: NextRequest, ...args: any[]) => Promise<NextResponse>) =>
-        async (req: NextRequest, ...args: any[]) => {
+    return (handler: (...args: any[]) => Promise<NextResponse>) =>
+        async (...args: any[]) => {
             const session = await getServerSession(authOptions);
             if (!session) {
                 return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
             }
             const { id } = session.user as any;
-            const response = await handler(req, ...args);
+            const response = await handler(...args);
             try {
                 if (Array.isArray(keys)) {
                     for (const key of keys) {

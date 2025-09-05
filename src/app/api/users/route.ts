@@ -31,7 +31,7 @@ export const PUT =
         (
             withRedisCacheDel(`${CACHE_KEY.user}`)
                 (
-                    async (request: NextRequest, { data }: { data: any }) => {
+                    async ( { data }: { data: any }) => {
                         const session = await getServerSession(authOptions);
                         if (!session) {
                             return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
