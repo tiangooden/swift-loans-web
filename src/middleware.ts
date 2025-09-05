@@ -21,14 +21,20 @@ export default withAuth(
             return NextResponse.redirect(new URL("/unauthorized", req.url));
         }
         const token = req.nextauth.token as any;
-        // if (req.nextUrl.pathname.startsWith("/admin") && token?.role !== "admin") {
-        //     return NextResponse.redirect(new URL("/unauthorized", req.url));
-        // }
+        if (req.nextUrl.pathname.startsWith("/api/applications/") &&
+            (req.nextUrl.pathname.endsWith("/approve") || req.nextUrl.pathname.endsWith("/reject") ||
+                req.nextUrl.pathname.endsWith("/counter-offer") || req.nextUrl.pathname.endsWith("/review")) &&
+            !token.roles.includes("admin")) {
+            return NextResponse.redirect(new URL("/forbidden", req.url));
+        }
+        if (req.nextUrl.pathname.startsWith("/admin") && !token?.roles?.includes("admin")) {
+            return NextResponse.redirect(new URL("/forbidden", req.url));
+        }
         return NextResponse.next();
     },
     {
         callbacks: {
-            authorized: ({ token }) => !!token, // basic check for session
+            authorized: ({ token }) => !!token,
         },
     }
 );
@@ -44,5 +50,6 @@ export const config = {
         "/social-medias/:path*",
         "/user/:path*",
         "/admin/:path*",
+        "/api/:path*",
     ],
 };

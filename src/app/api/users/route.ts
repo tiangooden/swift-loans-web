@@ -4,20 +4,26 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { UsersRepository } from '@/app/api/users/users.repository';
 import { updateUserSchema } from './schema';
 import { withValidateBody } from '@/app/shared/withValidateBody';
+import { withRedisCacheAdd } from '@/app/shared/withRedisCacheAdd';
+import { CACHE_KEY } from '@/app/shared/constants';
 
-export async function GET(request: NextRequest) {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
-    }
-    const { id, provider } = session.user as any;
+export const GET =
+    withRedisCacheAdd(60, `${CACHE_KEY.users}`)
+        (
+            async function GET(request: NextRequest) {
+                const session = await getServerSession(authOptions);
+                if (!session) {
+                    return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
+                }
+                const { id, provider } = session.user as any;
 
-    const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
-    if (!user) {
-        return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-    return NextResponse.json(user);
-}
+                const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
+                if (!user) {
+                    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+                }
+                return NextResponse.json(user);
+            }
+        );
 
 export const PUT =
     withValidateBody(updateUserSchema)
