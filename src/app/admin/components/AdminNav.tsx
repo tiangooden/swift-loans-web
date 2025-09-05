@@ -12,7 +12,7 @@ export default function AdminNav({ children }: AdminNavProps) {
   const pathname = usePathname();
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: BarChart3, href: '/admin/dashboard' },
+    { id: 'dashboard', label: 'Dashboard', icon: BarChart3, href: '/admin' },
     { id: 'loans', label: 'Loans', icon: DollarSign, href: '/admin/applications' },
     { id: 'users', label: 'Users', icon: Users, href: '/admin/users' },
     { id: 'analytics', label: 'Analytics', icon: TrendingUp, href: '/admin/analytics' },
