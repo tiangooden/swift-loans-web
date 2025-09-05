@@ -6,9 +6,10 @@ import { updateUserSchema } from './schema';
 import { withValidateBody } from '@/app/shared/withValidateBody';
 import { withRedisCacheAdd } from '@/app/shared/withRedisCacheAdd';
 import { CACHE_KEY } from '@/app/shared/constants';
+import { withRedisCacheDel } from '@/app/shared/withRedisCacheDel';
 
 export const GET =
-    withRedisCacheAdd(60, `${CACHE_KEY.users}`)
+    withRedisCacheAdd(60, `${CACHE_KEY.user}`)
         (
             async function GET(request: NextRequest) {
                 const session = await getServerSession(authOptions);
@@ -28,19 +29,22 @@ export const GET =
 export const PUT =
     withValidateBody(updateUserSchema)
         (
-            async (request: NextRequest, { data }: { data: any }) => {
-                const session = await getServerSession(authOptions);
-                if (!session) {
-                    return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
-                }
-                const { id, provider } = session.user as any;
-                const updatedUser = await UsersRepository.update({
-                    where: { identity: `${provider}|${id}` },
-                    data: { ...data, dob: new Date(data.dob), updated_at: new Date() }
-                });
-                if (!updatedUser) {
-                    return NextResponse.json({ error: 'User not found' }, { status: 404 });
-                }
-                return NextResponse.json(updatedUser);
-            }
+            withRedisCacheDel(`${CACHE_KEY.user}`)
+                (
+                    async (request: NextRequest, { data }: { data: any }) => {
+                        const session = await getServerSession(authOptions);
+                        if (!session) {
+                            return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
+                        }
+                        const { id, provider } = session.user as any;
+                        const updatedUser = await UsersRepository.update({
+                            where: { identity: `${provider}|${id}` },
+                            data: { ...data, dob: new Date(data.dob), updated_at: new Date() }
+                        });
+                        if (!updatedUser) {
+                            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+                        }
+                        return NextResponse.json(updatedUser);
+                    }
+                )
         );

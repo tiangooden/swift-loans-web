@@ -25,11 +25,10 @@ export const INTEREST_RATE: Record<string, number> = {
 };
 
 export const CACHE_KEY = {
-    users: 'users:',
-    userById: 'userById:',
-    userByIdentity: 'userByIdentity:',
-    applications: 'applications:',
-    applicationById: 'applicationById:'
+    users: 'users',
+    user: 'user',
+    applications: 'applications',
+    application: 'application',
 }
 
 export const PAY_CYCLE = {

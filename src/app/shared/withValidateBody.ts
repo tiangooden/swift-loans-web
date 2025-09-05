@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import z, { ZodSchema } from 'zod';
 
 export function withValidateBody<T extends ZodSchema<any>>(schema: T) {
-    return (handler: (req: NextRequest, { data, params }: { data: any, params: any }) =>
-        Promise<NextResponse>) =>
+    return (handler: (req: NextRequest, { data, params }: { data: any, params: any }) => Promise<NextResponse>) =>
         async (req: NextRequest, { params }: { params: { id: string } }) => {
             try {
                 const data = await req.json();
