@@ -8,7 +8,7 @@ import { useFetchBankAccounts } from './useFetchBankAccounts';
 import { useSaveBankAccount } from './useSaveBankAccount';
 import { CreditCard } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { processValidationErrors } from '../lib/createMessageMap';
+import { processValidationErrors } from '../lib/processValidationErrors';
 import { validateSchema } from '../lib/validation';
 import { bankAccountSchema } from '../api/bank-accounts/schema';
 import { handleChange as handleChangeUtil } from '../lib/handleChange';

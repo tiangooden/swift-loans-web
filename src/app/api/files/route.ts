@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { Buffer } from 'buffer';
 import s3Client from '@/app/lib/s3client';
-import getCurrentUser from '@/app/lib/get-user';
+import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUser';
 import cuid from 'cuid';
 import { DocumentsRepository } from './documents.repository';
 
 export async function GET(req: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    const user = await persistSessionUserIfNotExists();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    const user = await persistSessionUserIfNotExists();
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

@@ -2,7 +2,7 @@ import { notifications } from '@/app/lib/notifications';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useFetchApplicationsKey } from '../useFetchApplications';
-import { HttpError } from '@/app/lib/http-errors';
+import { HttpError } from '@/app/lib/httpErrors';
 
 export function useDeleteApplication() {
   const queryClient = useQueryClient();

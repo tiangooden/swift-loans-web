@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
-import getCurrentUser from '@/app/lib/get-user';
+import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUser';
 import { EmploymentsRepository } from './employments.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { employmentsSchema } from './schema';
 
 export async function GET() {
-    const user = await getCurrentUser();
+    const user = await persistSessionUserIfNotExists();
     const employmentDetails = await EmploymentsRepository.find({
         where: {
             user_id: user.id,
@@ -18,7 +18,7 @@ export const PUT =
     withValidateBody(employmentsSchema)
         (
             async ({ data }: { data: any }) => {
-                const user = await getCurrentUser();
+                const user = await persistSessionUserIfNotExists();
                 const existingEmployment = await EmploymentsRepository.find({
                     where: {
                         user_id: user.id,

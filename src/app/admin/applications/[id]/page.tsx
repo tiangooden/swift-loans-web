@@ -14,7 +14,7 @@ import FormButton from '@/app/lib/component/FormButton';
 import FormTextArea from '@/app/lib/component/FormTextArea';
 import formatDateString from '@/app/lib/date';
 import { getStatusColor } from '@/app/lib/status';
-import { processValidationErrors } from '@/app/lib/createMessageMap';
+import { processValidationErrors } from '@/app/lib/processValidationErrors';
 import { validateSchema } from '@/app/lib/validation';
 import { X, DollarSign, User, Briefcase } from 'lucide-react';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';

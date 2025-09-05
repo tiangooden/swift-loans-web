@@ -3,7 +3,7 @@ import { ApplicationsRepository } from './applications.repository';
 import { UsersRepository } from '../users/users.repository';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
-import { UnauthorizedError } from '@/app/lib/http-errors';
+import { UnauthorizedError } from '@/app/lib/httpErrors';
 import { validateSchema } from '@/app/lib/validation';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { createApplicationRequestSchema, createApplicationSchema } from './schema';

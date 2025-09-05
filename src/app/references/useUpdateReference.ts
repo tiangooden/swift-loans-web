@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { notifications } from '../lib/notifications';
-import { HttpError } from '../lib/http-errors';
+import { HttpError } from '../lib/httpErrors';
 
 interface UpdateReferencePayload {
   id: string;

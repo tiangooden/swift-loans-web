@@ -12,7 +12,7 @@ import { getStatusColor, getStatusIcon } from '../lib/status';
 import { useDeleteApplication } from './[id]/useDeleteApplication';
 import { useSaveApplication } from './useSaveApplication';
 import { notifications } from '../lib/notifications';
-import { processValidationErrors } from '../lib/createMessageMap';
+import { processValidationErrors } from '../lib/processValidationErrors';
 import { validateSchema } from '../lib/validation';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import { createApplicationRequestSchema } from '../api/applications/schema';

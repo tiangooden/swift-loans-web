@@ -1,5 +1,5 @@
 import z, { ZodObject } from "zod";
-import { BadRequestError } from "./http-errors";
+import { BadRequestError } from "./httpErrors";
 
 export const validateSchema = (data: unknown, schema: ZodObject) => {
     try {

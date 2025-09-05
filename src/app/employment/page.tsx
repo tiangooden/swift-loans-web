@@ -8,7 +8,7 @@ import { Employment } from './types';
 import { notifications } from '../lib/notifications';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import { useState, useEffect } from 'react';
-import { processValidationErrors } from '../lib/createMessageMap';
+import { processValidationErrors } from '../lib/processValidationErrors';
 import { validateSchema } from '../lib/validation';
 import { employmentsSchema } from '../api/employment/schema';
 import { handleChange as handleChangeUtil } from '../lib/handleChange';

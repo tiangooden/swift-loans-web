@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import getCurrentUser from '@/app/lib/get-user';
+import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUser';
 import { ReferencesRepository } from './references.repository';
 import { referencesSchema } from './schema';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 
 export async function GET() {
   try {
-    const user = await getCurrentUser();
+    const user = await persistSessionUserIfNotExists();
     if (!user) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
@@ -27,7 +27,7 @@ export const POST =
     (
       async ({ data }: { data: any }) => {
         try {
-          const user = await getCurrentUser();
+          const user = await persistSessionUserIfNotExists();
           if (!user) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
           }

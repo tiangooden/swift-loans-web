@@ -2,7 +2,7 @@ import { Employment } from './types';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetchEmploymentKey } from './useFetchEmployment';
-import { HttpError } from '../lib/http-errors';
+import { HttpError } from '../lib/httpErrors';
 
 export function useSaveEmployment() {
     const queryClient = useQueryClient();

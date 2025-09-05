@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BankAccount } from './types';
 import axios from 'axios';
 import { useFetchBankAccountsKey } from './useFetchBankAccounts';
-import { HttpError } from '../lib/http-errors';
+import { HttpError } from '../lib/httpErrors';
 
 export const useSaveBankAccount = () => {
   const queryClient = useQueryClient();

@@ -8,7 +8,7 @@ import { useFetchReferences } from './useFetchReferences';
 import { useUpdateReference } from './useUpdateReference';
 import { notifications } from '../lib/notifications';
 import ReferencesForm from './ReferencesForm';
-import { processValidationErrors } from '../lib/createMessageMap';
+import { processValidationErrors } from '../lib/processValidationErrors';
 import { referencesSchema } from '../api/references/schema';
 import { validateSchema } from '../lib/validation';
 

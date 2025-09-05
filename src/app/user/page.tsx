@@ -9,7 +9,7 @@ import { User as UserType } from './types';
 import { useEffect } from 'react';
 import LoadingOverlayWrapper from 'react-loading-overlay-ts';
 import { useState } from 'react';
-import { processValidationErrors } from '../lib/createMessageMap';
+import { processValidationErrors } from '../lib/processValidationErrors';
 import { updateUserSchema } from '../api/users/schema';
 import { validateSchema } from '../lib/validation';
 import { handleChange as handleChangeUtil } from '../lib/handleChange';

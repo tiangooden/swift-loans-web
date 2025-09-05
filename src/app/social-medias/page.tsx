@@ -10,7 +10,7 @@ import { Share2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { validateSchema } from '../lib/validation';
 import { socialMediaSchema } from './schema';
-import { processValidationErrors } from '../lib/createMessageMap';
+import { processValidationErrors } from '../lib/processValidationErrors';
 import { handleChange as handleChangeUtil } from '../lib/handleChange';
 
 const SocialMediasPage = () => {

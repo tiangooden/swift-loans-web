@@ -3,7 +3,7 @@ import { notifications } from '@/app/lib/notifications';
 import { SocialMedia } from './types';
 import axios from 'axios';
 import { useFetchSocialMediasKey } from './useFetchSocialMedias';
-import { HttpError } from '../lib/http-errors';
+import { HttpError } from '../lib/httpErrors';
 
 export const useSaveSocialMedia = () => {
   const queryClient = useQueryClient();
