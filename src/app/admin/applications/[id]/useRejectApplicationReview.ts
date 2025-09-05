@@ -8,7 +8,7 @@ export function useRejectApplicationReview() {
     const { mutateAsync, isPending, error } = useMutation<boolean, Error, { id: string; decision_reason: string }>({
         mutationFn: async ({ id, decision_reason }) => {
             try {
-                const res = await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/reject`, { decision_reason });
+                const res = await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/applications/${id}/reject`, { decision_reason });
                 queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey] });
                 return res.data;
             } catch (e: any) {

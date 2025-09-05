@@ -1,6 +1,6 @@
 import { APPLICATION_STATUS } from '@/app/lib/constants';
 import { NextResponse } from 'next/server';
-import { ApplicationsRepository } from '../../applications.repository';
+import { ApplicationsRepository } from '@/app/api/applications/applications.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { rejectApplicationSchema } from './schema';
 

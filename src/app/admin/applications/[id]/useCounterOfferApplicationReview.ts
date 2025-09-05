@@ -8,7 +8,7 @@ export const useCounterOfferApplicationReview = () => {
   const { mutateAsync, isPending, error } = useMutation<boolean, Error, { id: string | undefined; data: any }>({
     mutationFn: async ({ id, data }) => {
       try {
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/${id}/counter-offer`, data);
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/applications/${id}/counter-offer`, data);
         queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey] });
         return res.data;
       } catch (e: any) {

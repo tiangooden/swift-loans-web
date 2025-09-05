@@ -1,7 +1,7 @@
 import { APPLICATION_STATUS, INTEREST_RATE } from '@/app/lib/constants';
 import { NextResponse } from 'next/server';
-import { ApplicationsRepository } from '../../applications.repository';
 import { OffersRepository } from '@/app/api/offers/offers.repository';
+import { ApplicationsRepository } from '@/app/api/applications/applications.repository';
 
 export async function PATCH({ params }: { params: { id: string } }) {
   const { id } = await params;

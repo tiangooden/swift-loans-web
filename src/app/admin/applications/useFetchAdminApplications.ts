@@ -9,7 +9,7 @@ export function useFetchAdminApplications() {
   const { data = [], isPending, error } = useQuery<any[], Error>({
     queryKey: [useFetchAdminApplicationsKey],
     queryFn: async () => {
-      return axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/all`).then(res => res.data);
+      return axios.get(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/applications`).then(res => res.data);
     },
   });
 

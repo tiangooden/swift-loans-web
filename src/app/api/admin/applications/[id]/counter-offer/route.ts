@@ -1,7 +1,7 @@
 import { OffersRepository } from '@/app/api/offers/offers.repository';
 import { APPLICATION_STATUS } from '@/app/lib/constants';
 import { NextResponse } from 'next/server';
-import { ApplicationsRepository } from '../../applications.repository';
+import { ApplicationsRepository } from '@/app/api/applications/applications.repository';
 import { counterOfferSchema } from './schema';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 

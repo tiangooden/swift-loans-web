@@ -19,7 +19,7 @@ export default function AdminDashboard() {
     try {
       const [statsResponse, loansResponse] = await Promise.all([
         axios(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/dashboard-stats`),
-        axios(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/applications/all?limit=5`)
+        axios(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/admin/applications?limit=5`)
       ]);
       setStats(statsResponse.data);
       setRecentLoans(loansResponse.data.slice(0, 5));

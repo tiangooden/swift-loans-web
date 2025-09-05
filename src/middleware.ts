@@ -21,13 +21,7 @@ export default withAuth(
             return NextResponse.redirect(new URL("/unauthorized", req.url));
         }
         const token = req.nextauth.token as any;
-        if (req.nextUrl.pathname.startsWith("/api/applications/") &&
-            (req.nextUrl.pathname.endsWith("/approve") || req.nextUrl.pathname.endsWith("/reject") ||
-                req.nextUrl.pathname.endsWith("/counter-offer") || req.nextUrl.pathname.endsWith("/review")) &&
-            !token.roles.includes("admin")) {
-            return NextResponse.redirect(new URL("/forbidden", req.url));
-        }
-        if (req.nextUrl.pathname.startsWith("/admin") && !token?.roles?.includes("admin")) {
+        if (req.nextUrl.pathname.startsWith("/api/admin") && !token?.roles?.includes("admin")) {
             return NextResponse.redirect(new URL("/forbidden", req.url));
         }
         return NextResponse.next();
