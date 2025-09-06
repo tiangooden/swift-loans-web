@@ -29,6 +29,8 @@ export const CACHE_KEY = {
     user: 'user',
     applications: 'applications',
     application: 'application',
+    socialMedias: 'social-medias',
+    references: 'references',
 }
 
 export const PAY_CYCLE = {
@@ -41,3 +43,7 @@ export const BANK_ACCOUNT_TYPE = {
     SAVINGS: "savings",
     CHECKING: "checking",
 } as const;
+
+export const CACHE_TIME = {
+    GENERAL: 60 * 60 * 24,
+}

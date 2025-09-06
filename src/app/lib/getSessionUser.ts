@@ -7,5 +7,5 @@ export default async function getSessionUser() {
     if (!session) {
         throw new UnauthorizedError('No session found');
     }
-    return session.user as any;
+    return session.user as { id: string, provider: string, name: string, email: string };
 }

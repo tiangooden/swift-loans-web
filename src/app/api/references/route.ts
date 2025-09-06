@@ -1,51 +1,61 @@
 import { NextResponse } from 'next/server';
-import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUser';
+import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUserFromRepo';
 import { ReferencesRepository } from './references.repository';
 import { referencesSchema } from './schema';
 import { withValidateBody } from '@/app/lib/withValidateBody';
+import { withRedisCacheAdd } from '@/app/lib/withRedisCacheAdd';
+import { CACHE_TIME, CACHE_KEY } from '@/app/lib/constants';
+import { withRedisCacheDel } from '@/app/lib/withRedisCacheDel';
 
-export async function GET() {
-  try {
-    const user = await persistSessionUserIfNotExists();
-    if (!user) {
-      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-    }
-    const references = await ReferencesRepository.findMany({
-      where: {
-        user_id: user.id,
-        is_deleted: false,
-      },
-    });
-    return NextResponse.json(references);
-  } catch (error) {
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
-  }
-}
-
-export const POST =
-  withValidateBody(referencesSchema)
+export const GET =
+  withRedisCacheAdd(CACHE_TIME.GENERAL, `${CACHE_KEY.references}`)
     (
-      async ({ data }: { data: any }) => {
+      async () => {
         try {
           const user = await persistSessionUserIfNotExists();
           if (!user) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
           }
-          const { name, email, phone, relationship } = data;
-          const newReference = await ReferencesRepository.create({
-            user: {
-              connect: {
-                id: user.id,
-              }
+          const references = await ReferencesRepository.findMany({
+            where: {
+              user_id: user.id,
+              is_deleted: false,
             },
-            name,
-            email,
-            phone,
-            relationship,
           });
-          return NextResponse.json(newReference, { status: 201 });
+          return NextResponse.json(references);
         } catch (error) {
           return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
         }
       }
+    )
+
+export const POST =
+  withValidateBody(referencesSchema)
+    (
+      withRedisCacheDel(`${CACHE_KEY.references}`)
+        (
+          async ({ data }: { data: any }) => {
+            try {
+              const user = await persistSessionUserIfNotExists();
+              if (!user) {
+                return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+              }
+              const { name, email, phone, relationship } = data;
+              const newReference = await ReferencesRepository.create({
+                user: {
+                  connect: {
+                    id: user.id,
+                  }
+                },
+                name,
+                email,
+                phone,
+                relationship,
+              });
+              return NextResponse.json(newReference, { status: 201 });
+            } catch (error) {
+              return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+            }
+          }
+        )
     );

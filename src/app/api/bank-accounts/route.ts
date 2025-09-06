@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUser';
+import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUserFromRepo';
 import { BankAccountsRepository } from './bank_accounts.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { bankAccountSchema } from './schema';

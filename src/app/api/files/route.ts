@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { Buffer } from 'buffer';
 import s3Client from '@/app/lib/s3client';
-import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUser';
+import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUserFromRepo';
 import cuid from 'cuid';
 import { DocumentsRepository } from './documents.repository';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
-import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUser';
+import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUserFromRepo';
 import DashboardContent from './DashboardContent';
 import formatDateString from '../lib/date';
 

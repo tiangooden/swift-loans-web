@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUser';
+import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUserFromRepo';
 import { OffersRepository } from '../offers.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { ApplicationsRepository } from '../../applications/applications.repository';
