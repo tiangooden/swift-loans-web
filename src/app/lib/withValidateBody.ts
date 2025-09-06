@@ -3,7 +3,7 @@ import z, { ZodSchema } from 'zod';
 
 export function withValidateBody<T extends ZodSchema<any>>(schema: T) {
     return (handler: ({ data, params }: { data: any, params: any }) => Promise<NextResponse>) =>
-        async (req: NextRequest, { params }: { params: { id: string } }) => {
+        async (req: NextRequest, { params }: { params: any }) => {
             try {
                 const data = await req.json();
                 schema.parse(data);

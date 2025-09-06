@@ -1,13 +1,13 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
-import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUserFromRepo';
+import getOrCreateSessionUser from '@/app/lib/getOrCreateSessionUser';
 import DashboardContent from './DashboardContent';
 import formatDateString from '../lib/date';
 
 const Dashboard = async () => {
   let userData;
   try {
-    const user = await persistSessionUserIfNotExists();
+    const user = await getOrCreateSessionUser();
     userData = {
       name: user.first_name
         ? `${user.first_name}`

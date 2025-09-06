@@ -1,18 +1,17 @@
 import { NextResponse } from 'next/server';
 import { socialMediasSchema } from './schema';
-import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUserFromRepo';
+import getOrCreateSessionUser from '@/app/lib/getOrCreateSessionUser';
 import { SocialMediasRepository } from './social_medias.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { withRedisCacheAdd } from '@/app/lib/withRedisCacheAdd';
 import { CACHE_KEY, CACHE_TIME } from '@/app/lib/constants';
-import getOrCreateSessionUserFromRepo from '@/app/lib/getOrCreateSessionUserFromRepo';
 import { withRedisCacheDel } from '@/app/lib/withRedisCacheDel';
 
 export const GET =
     withRedisCacheAdd(CACHE_TIME.GENERAL, `${CACHE_KEY.socialMedias}`)
         (
             async () => {
-                const user = await getOrCreateSessionUserFromRepo();
+                const user = await getOrCreateSessionUser();
                 const socialMedias = await SocialMediasRepository.findMany({
                     where: { user_id: user.id },
                 });
@@ -26,7 +25,7 @@ export const POST =
             withRedisCacheDel(`${CACHE_KEY.socialMedias}`)
                 (
                     async ({ data }: { data: any }) => {
-                        const user = await persistSessionUserIfNotExists();
+                        const user = await getOrCreateSessionUser();
                         const newSocialMedia = await SocialMediasRepository.create({
                             ...data,
                             user_id: user.id,

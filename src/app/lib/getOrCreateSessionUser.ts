@@ -1,7 +1,7 @@
 import { UsersRepository } from "../api/users/users.repository";
 import getSessionUser from "./getSessionUser";
 
-export default async function getOrCreateSessionUserFromRepo() {
+export default async function getOrCreateSessionUser() {
     const { id, provider, name, email } = await getSessionUser();
     let user = await UsersRepository.findByProviderId(`${provider}|${id}`);
     if (!user) {

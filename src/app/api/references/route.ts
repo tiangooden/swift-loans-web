@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUserFromRepo';
+import getOrCreateSessionUser from '@/app/lib/getOrCreateSessionUser';
 import { ReferencesRepository } from './references.repository';
 import { referencesSchema } from './schema';
 import { withValidateBody } from '@/app/lib/withValidateBody';
@@ -12,7 +12,7 @@ export const GET =
     (
       async () => {
         try {
-          const user = await persistSessionUserIfNotExists();
+          const user = await getOrCreateSessionUser();
           if (!user) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
           }
@@ -36,7 +36,7 @@ export const POST =
         (
           async ({ data }: { data: any }) => {
             try {
-              const user = await persistSessionUserIfNotExists();
+              const user = await getOrCreateSessionUser();
               if (!user) {
                 return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
               }

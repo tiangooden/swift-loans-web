@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUserFromRepo';
+import getOrCreateSessionUser from '@/app/lib/getOrCreateSessionUser';
 import { BankAccountsRepository } from './bank_accounts.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { bankAccountSchema } from './schema';
 
 export async function GET() {
-    const user = await persistSessionUserIfNotExists();
+    const user = await getOrCreateSessionUser();
     const bankAccounts = await BankAccountsRepository.find({
         where: { user_id: user.id, is_deleted: false },
     });
@@ -16,7 +16,7 @@ export const POST =
     withValidateBody(bankAccountSchema)
         (
             async ({ data }: { data: any }) => {
-                const user = await persistSessionUserIfNotExists();
+                const user = await getOrCreateSessionUser();
                 const newAccount = await BankAccountsRepository.create({
                     ...data,
                     user_id: user.id,

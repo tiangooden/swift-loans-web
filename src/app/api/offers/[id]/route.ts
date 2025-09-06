@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import persistSessionUserIfNotExists from '@/app/lib/getOrCreateSessionUserFromRepo';
+import getOrCreateSessionUser from '@/app/lib/getOrCreateSessionUser';
 import { OffersRepository } from '../offers.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { ApplicationsRepository } from '../../applications/applications.repository';
@@ -29,7 +29,7 @@ export const POST =
   withValidateBody(createOfferSchema)
     (
       async ({ data, params }: { data: any, params: any }) => {
-        const user = await persistSessionUserIfNotExists();
+        const user = await getOrCreateSessionUser();
         const { id } = params;
         const existingApplication = await ApplicationsRepository.findById(id);
         if (!existingApplication || existingApplication.user_id !== user.id) {
