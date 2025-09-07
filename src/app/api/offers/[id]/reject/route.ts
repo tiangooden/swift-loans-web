@@ -5,10 +5,6 @@ import { OFFER_STATUS } from '@/app/lib/constants';
 export async function PATCH({ params }: { params: { id: string } }) {
   const { id } = await params;
 
-  if (!id) {
-    return NextResponse.json({ error: 'Offer ID is required' }, { status: 400 });
-  }
-
   try {
     await OffersRepository.update({
       where: { id: id },

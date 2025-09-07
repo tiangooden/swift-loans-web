@@ -4,9 +4,6 @@ import { OffersRepository } from '../../../offers.repository';
 export async function PATCH({data, params }: { data: any, params: { id: string } }) {
   const { id } = await params;
   const { key } = data;
-  if (!id) {
-    return NextResponse.json({ error: 'Offer ID is required' }, { status: 400 });
-  }
   try {
     await OffersRepository.update({
       where: { id: id },

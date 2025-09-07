@@ -6,7 +6,7 @@ import getOrCreateSessionUser from '@/app/lib/getOrCreateSessionUser';
 import cuid from 'cuid';
 import { DocumentsRepository } from './documents.repository';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const user = await getOrCreateSessionUser();
     if (!user) {

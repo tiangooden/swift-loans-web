@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import getOrCreateSessionUser from '@/app/lib/getOrCreateSessionUser';
 import { BankAccountsRepository } from './bank_accounts.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';

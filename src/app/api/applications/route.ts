@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { ApplicationsRepository } from './applications.repository';
 import { UsersRepository } from '../users/users.repository';
 import { getServerSession } from 'next-auth';
@@ -34,7 +34,7 @@ export const POST =
             withRedisCacheDel(`${CACHE_KEY.applications}`)
                 (
 
-                    async function post(request: NextRequest) {
+                    async function post({ data }) {
                         const session = await getServerSession(authOptions);
                         if (!session) {
                             return NextResponse.json({ error: 'No session found' }, { status: 401 });
@@ -64,7 +64,6 @@ export const POST =
                         } catch (e: any) {
                             return NextResponse.json(e.errors, { status: 400 });
                         }
-                        const data = await request.json();;
                         const application = await ApplicationsRepository.create({
                             ...data,
                             user: { connect: { id: user?.id } },

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import redis from './redis';
 import { RedisKey } from 'ioredis';
 import { getServerSession } from 'next-auth';

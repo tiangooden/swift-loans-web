@@ -48,10 +48,6 @@ export const DELETE =
             return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
           }
 
-          if (!id) {
-            return NextResponse.json({ message: 'Reference ID is required' }, { status: 400 });
-          }
-
           await ReferencesRepository.update({
             where: {
               id,

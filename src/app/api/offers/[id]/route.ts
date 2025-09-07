@@ -61,9 +61,6 @@ export const POST =
 
 export async function DELETE({ params }: { params: { id: string } }) {
   const { id } = await params;
-  if (!id) {
-    return NextResponse.json({ error: 'Offer ID is required' }, { status: 400 });
-  }
   try {
     await OffersRepository.delete({ id: id });
     return NextResponse.json({ message: 'Offer deleted successfully' }, { status: 200 });
