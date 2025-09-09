@@ -5,58 +5,74 @@ import s3Client from '@/app/lib/s3client';
 import getOrCreateSessionUser from '@/app/lib/getOrCreateSessionUser';
 import cuid from 'cuid';
 import { DocumentsRepository } from './documents.repository';
+import { CACHE_TIME } from '@/app/lib/constants';
+import { withRedisCacheAdd } from '@/app/lib/withRedisCacheAdd';
+import { withRedisCacheDel } from '@/app/lib/withRedisCacheDel';
+import { withValidateBody } from '@/app/lib/withValidateBody';
+import { documentsSchema } from './schema';
 
-export async function GET() {
-  try {
-    const user = await getOrCreateSessionUser();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-    const documents = await DocumentsRepository.findMany({ where: { user_id: user.id } });
-    return NextResponse.json(documents);
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch documents' }, { status: 500 });
-  }
-}
-
-export async function POST(req: NextRequest) {
-  try {
-    const user = await getOrCreateSessionUser();
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const formData = await req.formData();
-    const files = formData.getAll('files') as File[];
-    if (!files || files.length === 0) {
-      return NextResponse.json({ error: 'No files uploaded' }, { status: 400 });
-    }
-
-    const id = cuid();
-    await Promise.all(files.map(async (file) => {
-      const arrayBuffer = await file.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const command = new PutObjectCommand({
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: id,
-        Body: buffer,
-        ContentType: file.type,
-      });
-      await s3Client.send(command);
-      await DocumentsRepository.create({
-        key: id,
-        name: file.name,
-        type: file.type,
-        size: file.size,
-        user: {
-          connect: {
-            id: user.id
+export const GET =
+  withRedisCacheAdd(CACHE_TIME.GENERAL, 'documents')
+    (
+      async () => {
+        try {
+          const user = await getOrCreateSessionUser();
+          if (!user) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
           }
-        },
-      });;
-    }));
-    return NextResponse.json({ key: id, });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
-  }
-}
+          const documents = await DocumentsRepository.findMany({ where: { user_id: user.id } });
+          return NextResponse.json(documents);
+        } catch (error) {
+          return NextResponse.json({ error: 'Failed to fetch documents' }, { status: 500 });
+        }
+      }
+    );
+
+export const POST =
+  withValidateBody(documentsSchema)
+    (
+      withRedisCacheDel('documents')
+        (
+          async ({ req }: { req: NextRequest }) => {
+            try {
+              const user = await getOrCreateSessionUser();
+              if (!user) {
+                return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+              }
+
+              const formData = await req.formData();
+              const files = formData.getAll('files') as File[];
+              if (!files || files.length === 0) {
+                return NextResponse.json({ error: 'No files uploaded' }, { status: 400 });
+              }
+
+              const id = cuid();
+              await Promise.all(files.map(async (file) => {
+                const arrayBuffer = await file.arrayBuffer();
+                const buffer = Buffer.from(arrayBuffer);
+                const command = new PutObjectCommand({
+                  Bucket: process.env.AWS_S3_BUCKET_NAME,
+                  Key: id,
+                  Body: buffer,
+                  ContentType: file.type,
+                });
+                await s3Client.send(command);
+                await DocumentsRepository.create({
+                  key: id,
+                  name: file.name,
+                  type: file.type,
+                  size: file.size,
+                  user: {
+                    connect: {
+                      id: user.id
+                    }
+                  },
+                });;
+              }));
+              return NextResponse.json({ key: id, });
+            } catch (error) {
+              return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
+            }
+          }
+        )
+    );

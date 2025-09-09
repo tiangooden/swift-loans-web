@@ -2,25 +2,29 @@ import { NextResponse } from 'next/server';
 import { BankAccountsRepository } from '../bank_accounts.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { bankAccountSchema } from '../schema';
+import { withRedisCacheDel } from '@/app/lib/withRedisCacheDel';
 
 export const PUT =
     withValidateBody(bankAccountSchema)
         (
-            async ({ data, params }: { params: { id: string }, data: any }) => {
-                const { id } = await params;
-                const updatedAccount = await BankAccountsRepository.update({
-                    where: { id: id },
-                    data: {
-                        bank_name: data.bank_name,
-                        branch_name: data.branch_name,
-                        account_number: data.account_number,
-                        account_name: data.account_name,
-                        account_type: data.account_type,
-                        updated_at: new Date(),
-                    },
-                });
-                return NextResponse.json(updatedAccount);
-            }
+            withRedisCacheDel('bank_accounts')
+                (
+                    async ({ data, params }: { params: { id: string }, data: any }) => {
+                        const { id } = await params;
+                        const updatedAccount = await BankAccountsRepository.update({
+                            where: { id: id },
+                            data: {
+                                bank_name: data.bank_name,
+                                branch_name: data.branch_name,
+                                account_number: data.account_number,
+                                account_name: data.account_name,
+                                account_type: data.account_type,
+                                updated_at: new Date(),
+                            },
+                        });
+                        return NextResponse.json(updatedAccount);
+                    }
+                )
         );
 
 export async function DELETE({ params }: { params: { id: string } }) {
