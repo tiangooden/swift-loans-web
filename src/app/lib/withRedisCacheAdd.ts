@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import redis from './redis';
 import { RedisKey } from 'ioredis';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
+import { getCache, setCache } from './cache';
 
 export function withRedisCacheAdd(ttl = 60, cacheKey: RedisKey) {
     return (handler: (...args: any[]) => Promise<NextResponse>) =>
@@ -13,13 +13,13 @@ export function withRedisCacheAdd(ttl = 60, cacheKey: RedisKey) {
             }
             const { id } = session.user as any;
             const userCacheKey = `user:${id}:${cacheKey}`;
-            const cached = await redis.get(userCacheKey);
+            const cached = await getCache(userCacheKey);
             if (cached) {
                 return NextResponse.json(JSON.parse(cached));
             }
             const response = await handler(...args);
             const data = await response.json();
-            await redis.set(userCacheKey, JSON.stringify(data), 'EX', ttl);
+            await setCache(userCacheKey, JSON.stringify(data), ttl);
             return response;
         };
 }

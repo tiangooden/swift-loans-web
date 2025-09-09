@@ -1,13 +1,13 @@
 import redis from "./redis";
 
-export async function getCache(key: string) {
-    return JSON.parse(await redis.get(key) || '{}');
+export const getCache = async (key: string): Promise<string | null> => {
+    return await redis.get(key);
 }
 
-export async function setCache(key: string, value: string, ttl: number) {
-    return redis.set(key, JSON.stringify(value), 'EX', ttl);
+export const setCache = async (key: string, value: string, ttl?: number): Promise<string> => {
+    return await redis.set(key, value, 'EX', ttl || 60);
 }
 
-export async function delCache(key: string | string[]) {
-    return Array.isArray(key) ? redis.del(...key) : redis.del(key);
+export const delCache = async (key: string | string[]): Promise<void> => {
+    Array.isArray(key) ? await redis.del(...key) : await redis.del(key);
 }

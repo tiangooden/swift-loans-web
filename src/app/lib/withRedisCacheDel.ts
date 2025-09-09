@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import redis from "./redis";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import { delCache } from "./cache";
 
 export function withRedisCacheDel(keys: string | string[]) {
     return (handler: (...args: any[]) => Promise<NextResponse>) =>
@@ -16,11 +16,11 @@ export function withRedisCacheDel(keys: string | string[]) {
                 if (Array.isArray(keys)) {
                     for (const key of keys) {
                         const userCacheKey = `user:${id}:${key}`;
-                        await redis.del(userCacheKey);
+                        await delCache(userCacheKey);
                     }
                 } else {
                     const userCacheKey = `user:${id}:${keys}`;
-                    await redis.del(userCacheKey);
+                    await delCache(userCacheKey);
                 }
             } catch (e) {
                 console.error("Redis purge failed:", e);
