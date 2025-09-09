@@ -9,7 +9,7 @@ export function useUpdateUser() {
   const { mutateAsync, isPending, error } = useMutation<any, Error, User>({
     mutationFn: async (formData: User) => {
       try {
-        const res = await axios.put(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/users`, formData);
+        const res = await axios.put(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/users/${formData.id}`, formData);
         queryClient.invalidateQueries({ queryKey: [useFetchUserKey] });
         return res.data;
       } catch (e: any) {
