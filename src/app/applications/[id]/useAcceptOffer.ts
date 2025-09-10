@@ -6,9 +6,9 @@ import { HttpError } from '@/app/lib/httpErrors';
 export function useAcceptOffer() {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending, error } = useMutation({
-    mutationFn: async (offerId: string) => {
+    mutationFn: async (id: string) => {
       try {
-        const res = await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/accept`);
+        const res = await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${id}/accept`);
         queryClient.invalidateQueries({ queryKey: [useFetchApplicationKey] });
         return res.data;
       } catch (e: any) {

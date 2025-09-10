@@ -6,9 +6,9 @@ import { HttpError } from '@/app/lib/httpErrors';
 export const useDeleteOffer = () => {
     const queryClient = useQueryClient();
     const { mutateAsync, isPending, error } = useMutation<void, Error, string>({
-        mutationFn: async (offerId) => {
+        mutationFn: async (id: string) => {
             try {
-                const res = await axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}`);
+                const res = await axios.delete(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${id}`);
                 queryClient.invalidateQueries({ queryKey: [useFetchApplicationReviewsKey] });
                 return res.data;
             } catch (e: any) {

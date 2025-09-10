@@ -4,9 +4,9 @@ import axios from 'axios';
 
 export function useGenerateApprovalLetter() {
   const { mutateAsync, isPending, error } = useMutation({
-    mutationFn: async (offerId: string) => {
+    mutationFn: async (id: string) => {
       try {
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/approval`, {}, {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${id}/approval`, undefined, {
           responseType: 'blob',
         });
         return res;

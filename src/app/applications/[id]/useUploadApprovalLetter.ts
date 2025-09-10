@@ -5,9 +5,9 @@ import axios from 'axios';
 export function useUploadApprovalLetter() {
     const queryClient = useQueryClient();
     const { mutateAsync, isPending, error } = useMutation({
-        mutationFn: async ({ offerId, key }: { offerId: string, key: { key: string } }) => {
+        mutationFn: async ({ id, key }: { id: string, key: { key: string } }) => {
             try {
-                const res = await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${offerId}/approval/upload`, key);
+                const res = await axios.patch(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/offers/${id}/approval/upload`, key);
                 queryClient.invalidateQueries({ queryKey: ['application'] });
                 return res;
             } catch (e: any) {

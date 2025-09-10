@@ -2,26 +2,31 @@ import { NextResponse } from 'next/server';
 import { ApplicationsRepository } from '../applications.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { createApplicationRequestSchema } from '../schema';
+import { withRequest } from '@/app/lib/withRequest';
 
-export async function GET({ params }: { params: { id: string } }) {
-    const { id } = await params;
-    const loanApplication = await ApplicationsRepository.findById(id, {
-        id: true,
-        amount_requested: true,
-        term_in_days: true,
-        purpose: true,
-        status: true,
-        offers: {
-            orderBy: {
-                created_at: 'desc',
+export const GET =
+    withRequest()
+        (
+            async ({ params }: { params: { id: string } }) => {
+                const { id } = await params;
+                const loanApplication = await ApplicationsRepository.findById(id, {
+                    id: true,
+                    amount_requested: true,
+                    term_in_days: true,
+                    purpose: true,
+                    status: true,
+                    offers: {
+                        orderBy: {
+                            created_at: 'desc',
+                        }
+                    }
+                });
+                if (!loanApplication) {
+                    return NextResponse.json({ error: 'Loan application not found' }, { status: 404 });
+                }
+                return NextResponse.json(loanApplication);
             }
-        }
-    });
-    if (!loanApplication) {
-        return NextResponse.json({ error: 'Loan application not found' }, { status: 404 });
-    }
-    return NextResponse.json(loanApplication);
-}
+        );
 
 export const PUT =
     withValidateBody(createApplicationRequestSchema)

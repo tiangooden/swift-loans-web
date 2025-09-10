@@ -6,24 +6,24 @@ import { ApplicationsRepository } from '../../applications/applications.reposito
 import { APPLICATION_STATUS, OFFER_STATUS } from '@/app/lib/constants';
 import { createOfferSchema } from '../schema';
 
-export async function GET({ params }: { params: { id: string } }) {
-  const { id } = params;
-  try {
-    const loanOffers = await OffersRepository.findMany({
-      where: {
-        application: {
-          id: id
-        },
-      },
-      orderBy: {
-        created_at: 'desc',
-      },
-    });
-    return NextResponse.json(loanOffers);
-  } catch (error: any) {
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
-}
+// export async function GET({ params }: { params: { id: string } }) {
+//   const { id } = params;
+//   try {
+//     const loanOffers = await OffersRepository.findMany({
+//       where: {
+//         application: {
+//           id: id
+//         },
+//       },
+//       orderBy: {
+//         created_at: 'desc',
+//       },
+//     });
+//     return NextResponse.json(loanOffers);
+//   } catch (error: any) {
+//     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+//   }
+// }
 
 export const POST =
   withValidateBody(createOfferSchema)

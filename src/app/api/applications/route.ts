@@ -1,32 +1,26 @@
 import { NextResponse } from 'next/server';
 import { ApplicationsRepository } from './applications.repository';
 import { UsersRepository } from '../users/users.repository';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
-import { UnauthorizedError } from '@/app/lib/httpErrors';
 import { validateSchema } from '@/app/lib/validation';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { createApplicationRequestSchema, createApplicationSchema } from './schema';
 import { withRedisCacheAdd } from '@/app/lib/withRedisCacheAdd';
 import { withRedisCacheDel } from '@/app/lib/withRedisCacheDel';
 import { CACHE_KEY } from '@/app/lib/constants';
+import getSessionUser from '@/app/lib/getSessionUser';
 
-export const GET = (withRedisCacheAdd(60, `${CACHE_KEY.applications}`))(get);
-
-async function get() {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        throw new UnauthorizedError('No session found');
-    }
-    const { id, provider } = session.user as any;
-    const user = await UsersRepository.findByProviderId(`${provider}|${id}`);
-
-    const applications = await ApplicationsRepository.findMany({
-        where: { user_id: user?.id, is_deleted: false },
-        orderBy: { submitted_at: 'desc' },
-    });
-    return NextResponse.json(applications);
-}
+export const GET =
+    withRedisCacheAdd(60, `${CACHE_KEY.applications}`)
+        (
+            async () => {
+                const user = await getSessionUser();
+                const applications = await ApplicationsRepository.findMany({
+                    where: { user_id: user?.id, is_deleted: false },
+                    orderBy: { submitted_at: 'desc' },
+                });
+                return NextResponse.json(applications);
+            }
+        );
 
 export const POST =
     withValidateBody(createApplicationRequestSchema)
@@ -35,11 +29,7 @@ export const POST =
                 (
 
                     async function post({ data }) {
-                        const session = await getServerSession(authOptions);
-                        if (!session) {
-                            return NextResponse.json({ error: 'No session found' }, { status: 401 });
-                        }
-                        const { id, provider } = session.user as any;
+                        const { id, provider } = await getSessionUser();
                         const user = await UsersRepository.findByProviderId(`${provider}|${id}`, {
                             alias: true,
                             first_name: true,
