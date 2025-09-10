@@ -6,11 +6,11 @@ import { withValidateBody } from '@/app/lib/withValidateBody';
 import { createApplicationRequestSchema, createApplicationSchema } from './schema';
 import { withRedisCacheAdd } from '@/app/lib/withRedisCacheAdd';
 import { withRedisCacheDel } from '@/app/lib/withRedisCacheDel';
-import { CACHE_KEY } from '@/app/lib/constants';
+import { CACHE_KEY, CACHE_TIME } from '@/app/lib/constants';
 import getSessionUser from '@/app/lib/getSessionUser';
 
 export const GET =
-    withRedisCacheAdd(60, `${CACHE_KEY.applications}`)
+    withRedisCacheAdd(CACHE_TIME.GENERAL, `${CACHE_KEY.applications}`)
         (
             async () => {
                 const user = await getSessionUser();

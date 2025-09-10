@@ -3,49 +3,62 @@ import { ApplicationsRepository } from '../applications.repository';
 import { withValidateBody } from '@/app/lib/withValidateBody';
 import { createApplicationRequestSchema } from '../schema';
 import { withRequest } from '@/app/lib/withRequest';
+import { CACHE_TIME, CACHE_KEY } from '@/app/lib/constants';
+import { withRedisCacheAdd } from '@/app/lib/withRedisCacheAdd';
+import { withRedisCacheDel } from '@/app/lib/withRedisCacheDel';
 
 export const GET =
     withRequest()
         (
-            async ({ params }: { params: { id: string } }) => {
-                const { id } = await params;
-                const loanApplication = await ApplicationsRepository.findById(id, {
-                    id: true,
-                    amount_requested: true,
-                    term_in_days: true,
-                    purpose: true,
-                    status: true,
-                    offers: {
-                        orderBy: {
-                            created_at: 'desc',
+            withRedisCacheAdd(CACHE_TIME.GENERAL, `${CACHE_KEY.application}`)
+                (
+                    async ({ params }: { params: { id: string } }) => {
+                        const { id } = await params;
+                        const loanApplication = await ApplicationsRepository.findById(id, {
+                            id: true,
+                            amount_requested: true,
+                            term_in_days: true,
+                            purpose: true,
+                            status: true,
+                            offers: {
+                                orderBy: {
+                                    created_at: 'desc',
+                                }
+                            }
+                        });
+                        if (!loanApplication) {
+                            return NextResponse.json({ error: 'Loan application not found' }, { status: 404 });
                         }
+                        return NextResponse.json(loanApplication);
                     }
-                });
-                if (!loanApplication) {
-                    return NextResponse.json({ error: 'Loan application not found' }, { status: 404 });
-                }
-                return NextResponse.json(loanApplication);
-            }
+                )
         );
 
 export const PUT =
     withValidateBody(createApplicationRequestSchema)
         (
-            async ({ data, params }: { data: any, params: any }) => {
-                const { id } = params;
-                const updatedApplication = await ApplicationsRepository.update({
-                    where: { id },
-                    data: { ...data, updated_at: new Date() },
-                });
-                return NextResponse.json(updatedApplication);
-            }
+            withRedisCacheDel([`${CACHE_KEY.application}`, `${CACHE_KEY.applications}`])
+                (
+                    async ({ data, params }: { data: any, params: any }) => {
+                        const { id } = params;
+                        const updatedApplication = await ApplicationsRepository.update({
+                            where: { id },
+                            data: { ...data, updated_at: new Date() },
+                        });
+                        return NextResponse.json(updatedApplication);
+                    }
+                )
         );
 
-export async function DELETE({ params }: { params: any }) {
-    const { id } = await params;
-    await ApplicationsRepository.update({
-        where: { id },
-        data: { is_deleted: true, deleted_at: new Date(), },
-    });
-    return NextResponse.json({ message: 'Application deleted successfully' });
-}
+export const DELETE =
+    withRedisCacheDel([`${CACHE_KEY.application}`, `${CACHE_KEY.applications}`])
+        (
+            async ({ params }: { params: any }) => {
+                const { id } = await params;
+                await ApplicationsRepository.update({
+                    where: { id },
+                    data: { is_deleted: true, deleted_at: new Date(), },
+                });
+                return NextResponse.json({ message: 'Application deleted successfully' });
+            }
+        )
