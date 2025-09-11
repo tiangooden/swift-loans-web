@@ -11,7 +11,9 @@ export const employmentsSchema = z.object({
 
     job_title: z.string().min(2, "Job title required"),
 
-    date_of_employment: z.date({ error: "Invalid date format", }),
+    date_of_employment: z
+        .coerce
+        .date({ error: "Invalid date format", }),
 
     gross_salary: z
         .coerce

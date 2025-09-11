@@ -12,9 +12,10 @@ export const PUT =
                 (
                     async ({ data, params }: { data: any, params: { id: string } }) => {
                         const user = await getOrCreateSessionUser();
+                        const { id } = await params;
                         const updatedEmployment = await EmploymentsRepository.update({
                             where: {
-                                id: params.id,
+                                id: id,
                                 user_id: user.id,
                             },
                             data: {
