@@ -9,7 +9,12 @@ export function useSaveEmployment() {
     const { mutateAsync, isPending, error } = useMutation<any, Error, Employment>({
         mutationFn: async (updatedEmployment: Employment) => {
             try {
-                const res = await axios.put(`${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment`, updatedEmployment);
+                const url = updatedEmployment.id
+                    ? `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment/${updatedEmployment.id}`
+                    : `${process.env.NEXT_PUBLIC_SWIFT_LOANS_API}/api/employment`;
+                const res = updatedEmployment.id
+                    ? await axios.put(url, updatedEmployment)
+                    : await axios.post(url, updatedEmployment);
                 queryClient.invalidateQueries({ queryKey: [useFetchEmploymentKey] });
                 return res.data;
             } catch (e: any) {
