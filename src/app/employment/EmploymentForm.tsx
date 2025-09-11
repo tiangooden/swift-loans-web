@@ -62,6 +62,7 @@ export default function EmploymentForm({ onSave, formData, handleChange, errors 
         <div>
           <FormInput
             label={"Gross Salary"}
+            type={'number'}
             name={"gross_salary"}
             value={formData.gross_salary || ''}
             onChange={handleChange}
@@ -94,6 +95,7 @@ export default function EmploymentForm({ onSave, formData, handleChange, errors 
         <div>
           <FormInput
             label={"Total Expenses Per Cycle"}
+            type={'number'}
             name={"total_expenses_per_cycle"}
             value={formData.total_expenses_per_cycle || ''}
             onChange={handleChange}

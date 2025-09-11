@@ -17,9 +17,10 @@ export const UsersRepository = {
     cursor?: Prisma.usersWhereUniqueInput;
     where?: Prisma.usersWhereInput;
     orderBy?: Prisma.usersOrderByWithRelationInput;
+    select?: Prisma.usersSelect
   }): Promise<users[]> => {
-    const { skip, take, cursor, where, orderBy } = params;
-    return prisma.users.findMany({ skip, take, cursor, where, orderBy });
+    const { skip, take, cursor, where, orderBy, select } = params;
+    return prisma.users.findMany({ skip, take, cursor, where, orderBy, select });
   },
 
   update: async (params: {

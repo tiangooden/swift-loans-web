@@ -14,6 +14,7 @@ export const employmentsSchema = z.object({
     date_of_employment: z.date({ error: "Invalid date format", }),
 
     gross_salary: z
+        .coerce
         .number({ message: "Gross salary is required" })
         .positive("Gross salary must be greater than 0"),
 
@@ -29,6 +30,7 @@ export const employmentsSchema = z.object({
     ),
 
     total_expenses_per_cycle: z
+        .coerce
         .number({ message: "Total expenses per cycle is required" })
         .min(0, "Total expenses per cycle must be 0 or greater"),
 });

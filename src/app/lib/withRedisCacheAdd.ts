@@ -1,17 +1,12 @@
 import { NextResponse } from 'next/server';
 import { RedisKey } from 'ioredis';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
 import { getCache, setCache } from './cache';
+import getSessionUser from './getSessionUser';
 
 export function withRedisCacheAdd(ttl = 60, cacheKey: RedisKey) {
     return (handler: (...args: any[]) => Promise<NextResponse>) =>
         async (...args: any[]) => {
-            const session = await getServerSession(authOptions);
-            if (!session) {
-                return NextResponse.json({ error: 'Unauthorized - No session found' }, { status: 401 });
-            }
-            const { id } = session.user as any;
+            const { id } = await getSessionUser();
             const userCacheKey = `user:${id}:${cacheKey}`;
             const cached = await getCache(userCacheKey);
             if (cached) {

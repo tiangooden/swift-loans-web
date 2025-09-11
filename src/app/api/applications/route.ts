@@ -13,9 +13,17 @@ export const GET =
     withRedisCacheAdd(CACHE_TIME.GENERAL, `${CACHE_KEY.applications}`)
         (
             async () => {
-                const user = await getSessionUser();
+                const sUser = await getSessionUser();
+                const user = await UsersRepository.findMany({
+                    where: {
+                        identity: `${sUser?.provider}|${sUser?.id}`,
+                    },
+                    select: {
+                        id: true,
+                    }
+                });
                 const applications = await ApplicationsRepository.findMany({
-                    where: { user_id: user?.id, is_deleted: false },
+                    where: { user_id: user?.[0].id, is_deleted: false },
                     orderBy: { submitted_at: 'desc' },
                 });
                 return NextResponse.json(applications);
@@ -31,6 +39,7 @@ export const POST =
                     async function post({ data }) {
                         const { id, provider } = await getSessionUser();
                         const user = await UsersRepository.findByProviderId(`${provider}|${id}`, {
+                            id: true,
                             alias: true,
                             first_name: true,
                             middle_name: true,
@@ -57,7 +66,7 @@ export const POST =
                         const application = await ApplicationsRepository.create({
                             ...data,
                             user: { connect: { id: user?.id } },
-                            details: JSON.stringify(user)
+                            details: user
                         });
                         return NextResponse.json(application, { status: 201 });
                     }

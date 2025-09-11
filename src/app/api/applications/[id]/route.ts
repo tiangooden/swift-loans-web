@@ -8,8 +8,8 @@ import { withRedisCacheAdd } from '@/app/lib/withRedisCacheAdd';
 import { withRedisCacheDel } from '@/app/lib/withRedisCacheDel';
 
 export const GET =
-    withRequest()
-        (
+    // withRequest()
+    //     (
             withRedisCacheAdd(CACHE_TIME.GENERAL, `${CACHE_KEY.application}`)
                 (
                     async ({ params }: { params: { id: string } }) => {
@@ -32,7 +32,7 @@ export const GET =
                         return NextResponse.json(loanApplication);
                     }
                 )
-        );
+        // );
 
 export const PUT =
     withValidateBody(createApplicationRequestSchema)

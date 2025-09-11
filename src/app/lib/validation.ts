@@ -3,6 +3,7 @@ import { BadRequestError } from "./httpErrors";
 
 export const validateSchema = (data: unknown, schema: ZodObject) => {
     try {
+        console.log(data);
         schema.parse(data);
     } catch (e: any) {
         throw new BadRequestError('Validation failed',

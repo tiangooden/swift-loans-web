@@ -30,8 +30,8 @@ export const createApplicationSchema = z.object({
     city: z.string().min(2, "City is required"),
     country: z.string().min(2, "Country is required"),
     social_medias: z.array(socialMediasSchema).min(1, "Must provide at least 1 social media"),
-    employment: z.array(employmentsSchema).min(1, "Must provide employment details"),
+    employment: employmentsSchema,
     references: z.array(referencesSchema).min(2, "Must provide at least 2 references"),
-    bank_account: z.array(bankAccountsSchema).min(1, "Must provide bank account details"),
+    bank_account: bankAccountsSchema,
     documents: z.array(documentsSchema).min(1, "Must provide documents"),
 });
